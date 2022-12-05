@@ -24,7 +24,7 @@ int main()
     //print other relevant class attributes of the CA object
     std::cout << "Printing other relevant info about CellularAutomata object" << std::endl;
     std::cout << "Number of States: " << CA.num_states << std::endl;
-    std::cout << "Boundary Radius: " << CA.b_radius << std::endl;
+    std::cout << "Boundary Radius: " << CA.boundary_radius << std::endl;
     std::cout << "Short Radius: " << CA.shortr_weight << std::endl;
     std::cout << "Long Radius: " << CA.longr_weight << std::endl;
 

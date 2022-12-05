@@ -19,10 +19,10 @@ CellularAutomata::CellularAutomata(int n, int m)
     this->n = n;
     this->m = m;
     num_states = 2;
-    boundary b_type = None;
-    b_radius = 1;
-    neighborhood n_type = VonNeumann;
-    rule r_type = Majority;
+    boundary boundary_type = None;
+    boundary_radius = 1;
+    neighborhood neighborhood_type = VonNeumann;
+    rule rule_type = Majority;
     this->shortr_weight = 1;
     this->longr_weight = 2;
 
@@ -59,7 +59,7 @@ CellularAutomata::~CellularAutomata()
 //      neighboorhood_type:     type of neighborhood, described as enum with choices (VonNeumann or Moore)
 int CellularAutomata::setup_neighborhood(neighborhood neighborhood_type)
 {
-    this->n_type = neighborhood_type;
+    this->neighborhood_type = neighborhood_type;
 }
 
 //function: setup boundary
@@ -67,8 +67,8 @@ int CellularAutomata::setup_neighborhood(neighborhood neighborhood_type)
 //      bound_type:     type of boundary described as enum with choices (None, Periodic, Walled, CutOff)
 int CellularAutomata::setup_boundary(boundary bound_type, int radius)
 {
-    this->b_type = bound_type;
-    this->b_radius = radius;
+    this->boundary_type = bound_type;
+    this->boundary_radius = radius;
 }
 
 //function:  setup_cell_states
@@ -104,11 +104,6 @@ int CellularAutomata::init_condition(int x_state, double prob)
     }
 }
 
-int CellularAutomata::init_cond_rewrite(int x_state, double prob)
-{
-
-
-}
 
 //function:     setup_rule_short_long
 //function to set the short and long weights used in the majority rule
@@ -127,7 +122,7 @@ int CellularAutomata::setup_rule_short_long(double shortr_weight, double longr_w
 //      rule_type:      enum rule representing the rule type. choose from (Majority, Parity)
 int CellularAutomata::setup_rule(rule rule_type)
 {
-    this->r_type = rule_type;
+    this->rule_type = rule_type;
 }
 
 //function:     print_grid

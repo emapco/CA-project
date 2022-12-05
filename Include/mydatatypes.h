@@ -21,12 +21,12 @@ class CellularAutomata         // The CA datastructure
 {
     public:   
 
-        boundary b_type;     //enum code to hold boundary
-        int b_radius;       //declare a radius for the boundary
-        neighborhood n_type;     //enum code to hold neighboorhood type 
+        boundary boundary_type;     //enum code to hold boundary
+        int boundary_radius;       //declare a radius for the boundary
+        neighborhood neighborhood_type;     //enum code to hold neighboorhood type 
         int num_states;         //integer code for number of states
         
-        rule r_type;          //enum code for rule type 
+        rule rule_type;          //enum code for rule type 
         double shortr_weight;   //double for short radius
         double longr_weight;        //double for long radius
         int n;              //count of cells in first dimension
@@ -48,9 +48,6 @@ class CellularAutomata         // The CA datastructure
 
         //provide a function to initialize the beginning state of the grid
         int init_condition(int x_state, double prob);
-
-        //provide a function to setup more cell states based on initial condition
-        int init_cond_rewrite(int x_state, double prob);
 
         int setup_rule_short_long(double shortr_weight, double longr_weight);
 
