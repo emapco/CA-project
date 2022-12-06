@@ -1,7 +1,7 @@
 # Chem 274B - Cellular Automata Final Project
 # Trevor Oldham
 # Created: 12/03/2022
-# This creates object files for datatypes in mydatatypes.h
+# This creates object files for datatypes in CAdatatypes.h
 
 
 # GNU C++ Compiler
@@ -20,7 +20,7 @@ BIN_DIR     = ../../Bindir
 # The next line contains the list of object files created by this Makefile.
 DATATYPES = cellularautomata.o
 
-cellularautomata.o:  $(INC_DIR)/mydatatypes.h
+cellularautomata.o:  $(INC_DIR)/CAdatatypes.h
 	$(CPP) $(CPPFLAGS) cellularautomata.cpp -I$(INC_DIR)
 	mv cellularautomata.o $(LIB_DIR)
 
