@@ -1,7 +1,7 @@
 # Chem 274B - Cellular Automata Final Project
-# Trevor Oldham
-# Created: 12/03/2022
-# This creates object files for datatypes in CAdatatypes.h
+# Emmanuel Cortes
+# Created: 12/06/2022
+# This creates object files for utility functions in CAutils.h
 
 
 # GNU C++ Compiler
@@ -11,20 +11,19 @@ CPP         = g++
 CPPFLAGS    =-Wall -Wextra -O0 -c
 
 # The directory where the include files needed to create the library objects are
-INC_DIR = ../../Include
+INC_DIR = ../Include
 
 # The directory where all object files are going to be moved after creation
-LIB_DIR     = ../../Libdir
-BIN_DIR     = ../../Bindir
+LIB_DIR     = ../Libdir
 
 # The next line contains the list of object files created by this Makefile.
-DATATYPES = cellularautomata.o
+OBJS = CAutils.o
 
-cellularautomata.o:  $(INC_DIR)/CAdatatypes.h $(INC_DIR)/CAutils.h
-	$(CPP) $(CPPFLAGS) cellularautomata.cpp -I$(INC_DIR)
-	mv cellularautomata.o $(LIB_DIR)
+CAutils.o:  $(INC_DIR)/CAutils.h
+	$(CPP) $(CPPFLAGS) CAutils.cpp -I$(INC_DIR)
+	mv CAutils.o $(LIB_DIR)
 
-all: $(DATATYPES)
+all: $(OBJS)
 
 cleanall:
-	cd $(LIB_DIR); rm $(DATATYPES)
+	cd $(LIB_DIR); rm $(OBJS)

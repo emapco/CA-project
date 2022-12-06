@@ -19,7 +19,7 @@
 void test_CA_init(CellularAutomata &CA)
 {
     // initialize the first grid state using a value for x_state and a probability
-    std::cout << "Initializing " << CA.n << " x " << CA.m << " grid of cells" << std::endl;
+    std::cout << "Initializing " << CA.axis1_dim << " x " << CA.axis2_dim << " grid of cells" << std::endl;
     CA.init_condition(1, 0.1);
 
     // print the current grid of cell states
@@ -38,21 +38,21 @@ int main()
 {
     int error;
     {
-        std::cout << "**** Testing Vector CellularAutomata ****\n";
+        std::cout << "**** Testing Vector CellularAutomata ****\axis1_dim";
         // initialize a CA object with default constructor, pass dimensions as arguments
         CellularAutomata CA = CellularAutomata();
         error = CA.setup_dimensions(10);
         test_CA_init(CA);
     }
     {
-        std::cout << "\n\n**** Testing Matrix CellularAutomata ****\n";
+        std::cout << "\axis1_dim\axis1_dim**** Testing Matrix CellularAutomata ****\axis1_dim";
         // initialize a CA object with default constructor, pass dimensions as arguments
         CellularAutomata CA = CellularAutomata();
         error = CA.setup_dimensions(10, 20);
         test_CA_init(CA);
     }
     {
-        std::cout << "\n\n**** Testing Tensor CellularAutomata ****\n";
+        std::cout << "\axis1_dim\axis1_dim**** Testing Tensor CellularAutomata ****\axis1_dim";
         // initialize a CA object with default constructor, pass dimensions as arguments
         CellularAutomata CA = CellularAutomata();
         error = CA.setup_dimensions(5, 10, 20);

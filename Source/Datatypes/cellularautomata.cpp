@@ -7,6 +7,7 @@
  * @date 2022-12-03
  */
 #include "CAdatatypes.h"
+#include "CAutils.h"
 #include <iostream>
 #include <array>
 #include <random>
@@ -19,9 +20,9 @@
  */
 CellularAutomata::CellularAutomata()
 {
-    this->n = 10;
-    this->m = 10;
-    this->p = 10;
+    this->axis1_dim = 10;
+    this->axis2_dim = 10;
+    this->axis3_dim = 10;
     num_states = 2;
     boundary boundary_type = None;
     boundary_radius = 1;
@@ -29,9 +30,13 @@ CellularAutomata::CellularAutomata()
     rule rule_type = Majority;
     this->shortr_weight = 1;
     this->longr_weight = 2;
+    steps_taken = 0;
     vector = nullptr;
+    next_vector == nullptr;
     matrix = nullptr;
+    next_matrix == nullptr;
     tensor = nullptr;
+    next_tensor == nullptr;
 }
 
 /**
@@ -42,62 +47,69 @@ CellularAutomata::CellularAutomata()
 CellularAutomata::~CellularAutomata()
 {
     // Free each sub-array
-    if (ndims == 1)
+    if (vector != nullptr)
     {
         // Free the array of pointers
         delete[] vector;
+        delete[] next_vector;
     }
 
-    if (ndims == 2)
+    if (matrix != nullptr)
     {
         // Free each sub-array
-        for (int i = 0; i < n; ++i)
+        for (int i = 0; i < axis1_dim; ++i)
         {
             delete[] matrix[i];
+            delete[] next_matrix[i];
         }
         // Free the array of pointers
         delete[] matrix;
+        delete[] next_matrix;
     }
 
-    if (ndims == 3)
+    if (tensor != nullptr)
     {
         // Free each sub-array
-        for (int i = 0; i < n; ++i)
+        for (int i = 0; i < axis1_dim; ++i)
         {
-            for (int j = 0; j < m; j++)
+            for (int j = 0; j < axis2_dim; j++)
             {
                 delete[] tensor[i][j];
+                delete[] next_tensor[i][j];
             }
 
             delete[] tensor[i];
+            delete[] next_tensor[i];
         }
 
         // Free the array of pointers
         delete[] tensor;
+        delete[] next_tensor;
     }
 }
 
 /**
  * @brief Construct a new CellularAutomata::setup_dimensions object
  *
- * @param n the size of a one dimensional vector
+ * @param axis1_dim the size of a one dimensional vector
  * @returns the error code (-1: vector is already allocated) (0: no errors)
  */
-int CellularAutomata::setup_dimensions(int n)
+int CellularAutomata::setup_dimensions(int axis1_dim)
 {
     if (vector != nullptr)
     {
         return CellsAlreadyInitialized;
     }
 
-    this->ndims = 1;
-    this->n = n;
-    vector = new (nothrow) int[n];
+    this->axis1_dim = axis1_dim;
+    vector = new (nothrow) int[axis1_dim];
+    next_vector = new (nothrow) int[axis1_dim];
 
     // initialize vector filled with zeros
-    for (int j = 0; j < n; j++)
+    for (int j = 0; j < axis1_dim; j++)
     {
         vector[j] = 0;
+        next_vector[j] = 0;
     }
 
     return 0;
@@ -106,31 +118,34 @@ int CellularAutomata::setup_dimensions(int n)
 /**
  * @brief Construct a new CellularAutomata::setup_dimensions object
  *
- * @param n  The size of the first dimension
- * @param m  The size of the second dimension
+ * @param axis1_dim  The size of the first dimension
+ * @param axis2_dim  The size of the second dimension
  * @returns error code (-1: matrix is already allocated) (0: no error)
  */
-int CellularAutomata::setup_dimensions(int n, int m)
+int CellularAutomata::setup_dimensions(int axis1_dim, int axis2_dim)
 {
     if (matrix != nullptr)
     {
         return CellsAlreadyInitialized;
     }
-    this->ndims = 2;
-    this->n = n;
-    this->m = m;
-    matrix = new (nothrow) int *[n];
-    for (int i = 0; i < n; i++)
+
+    this->axis1_dim = axis1_dim;
+    this->axis2_dim = axis2_dim;
+    matrix = new (nothrow) int *[axis1_dim];
+    next_matrix = new (nothrow) int *[axis1_dim];
+    for (int i = 0; i < axis1_dim; i++)
     {
-        matrix[i] = new (nothrow) int[m];
+        matrix[i] = new (nothrow) int[axis2_dim];
+        next_matrix[i] = new (nothrow) int[axis2_dim];
     }
 
     // initialize matrix filled with zeros
-    for (int j = 0; j < n; j++)
+    for (int j = 0; j < axis1_dim; j++)
     {
-        for (int k = 0; k < m; k++)
+        for (int k = 0; k < axis2_dim; k++)
         {
             matrix[j][k] = 0;
+            next_matrix[j][k] = 0;
         }
     }
 
@@ -140,42 +155,44 @@ int CellularAutomata::setup_dimensions(int n, int m)
 /**
  * @brief Construct a new CellularAutomata::setup_dimensions object
  *
- * @param n The size of the first dimension
- * @param m The size of the second dimension
- * @param p The size of the third dimension
+ * @param axis1_dim The size of the first dimension
+ * @param axis2_dim The size of the second dimension
+ * @param axis3_dim The size of the third dimension
  * @returns error code (-1: tensor was already allocated) (0: no error)
  */
-int CellularAutomata::setup_dimensions(int n, int m, int p)
+int CellularAutomata::setup_dimensions(int axis1_dim, int axis2_dim, int axis3_dim)
 {
     if (tensor != nullptr)
     {
         return CellsAlreadyInitialized;
     }
 
-    this->ndims = 3;
-    this->n = n;
-    this->m = m;
-    this->p = p;
-    tensor = new (nothrow) int **[n];
-    for (int i = 0; i < n; i++)
+    this->axis1_dim = axis1_dim;
+    this->axis2_dim = axis2_dim;
+    this->axis3_dim = axis3_dim;
+    tensor = new (nothrow) int **[axis1_dim];
+    next_tensor = new (nothrow) int **[axis1_dim];
+    for (int i = 0; i < axis1_dim; i++)
     {
-        tensor[i] = new (nothrow) int *[m];
+        tensor[i] = new (nothrow) int *[axis2_dim];
+        next_tensor[i] = new (nothrow) int *[axis2_dim];
 
-        for (int j = 0; j < m; j++)
+        for (int j = 0; j < axis2_dim; j++)
         {
-
-            tensor[i][j] = new (nothrow) int[p];
+            tensor[i][j] = new (nothrow) int[axis3_dim];
+            next_tensor[i][j] = new (nothrow) int[axis3_dim];
         }
     }
 
     // initialize matrix filled with zeros
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < axis1_dim; i++)
     {
-        for (int j = 0; j < m; j++)
+        for (int j = 0; j < axis2_dim; j++)
         {
-            for (int k = 0; k < p; k++)
+            for (int k = 0; k < axis3_dim; k++)
             {
                 tensor[i][j][k] = 0;
+                next_tensor[i][j][k] = 0;
             }
         }
     }
@@ -236,7 +253,7 @@ int CellularAutomata::init_condition(int x_state, double prob)
 
     if (vector != nullptr)
     {
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < axis1_dim; i++)
         {
             random_cell_value = (double)rand() / RAND_MAX;
             if (random_cell_value < prob)
@@ -247,9 +264,9 @@ int CellularAutomata::init_condition(int x_state, double prob)
     }
     else if (matrix != nullptr)
     {
-        for (int j = 0; j < n; j++)
+        for (int j = 0; j < axis1_dim; j++)
         {
-            for (int k = 0; k < m; k++)
+            for (int k = 0; k < axis2_dim; k++)
             {
                 random_cell_value = (double)rand() / RAND_MAX;
                 if (random_cell_value < prob)
@@ -261,11 +278,11 @@ int CellularAutomata::init_condition(int x_state, double prob)
     }
     else if (tensor != nullptr)
     {
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < axis1_dim; i++)
         {
-            for (int j = 0; j < m; j++)
+            for (int j = 0; j < axis2_dim; j++)
             {
-                for (int k = 0; k < p; k++)
+                for (int k = 0; k < axis3_dim; k++)
                 {
                     random_cell_value = (double)rand() / RAND_MAX;
                     if (random_cell_value < prob)
@@ -309,6 +326,133 @@ int CellularAutomata::setup_rule(rule rule_type)
     return 0;
 }
 
+int CellularAutomata::get_state_from_neighborhood(int axis1_dim, int &new_cell_state)
+{
+    if (neighborhood_type == VonNeumann)
+    {
+        switch (boundary_type)
+        {
+        case None:
+            break;
+        case Periodic:
+            break;
+        case Walled:
+            break;
+        case CutOff:
+            break;
+        }
+    }
+    else if (neighborhood_type == Moore)
+    {
+    }
+    return 0;
+}
+
+int CellularAutomata::get_state_from_neighborhood(int axis1_dim, int axis2_dim, int &new_cell_state)
+{
+    if (neighborhood_type == VonNeumann)
+    {
+        switch (boundary_type)
+        {
+        case None:
+            break;
+        case Periodic:
+            break;
+        case Walled:
+            break;
+        case CutOff:
+            break;
+        }
+    }
+    else if (neighborhood_type == Moore)
+    {
+    }
+    return 0;
+}
+
+int CellularAutomata::get_state_from_neighborhood(int axis1_dim, int axis2_dim, int axis3_dim, int &new_cell_state)
+{
+    if (neighborhood_type == VonNeumann)
+    {
+        switch (boundary_type)
+        {
+        case None:
+            break;
+        case Periodic:
+            break;
+        case Walled:
+            break;
+        case CutOff:
+            break;
+        }
+    }
+    else if (neighborhood_type == Moore)
+    {
+    }
+    return 0;
+}
+
+int CellularAutomata::step()
+{
+    int new_cell_state;
+    int error = 0;
+    if (vector != nullptr)
+    {
+        for (int i = 0; i < axis1_dim; i++)
+        {
+            error = get_state_from_neighborhood(i, new_cell_state);
+            if (error < 0)
+            {
+                return error;
+            }
+            next_vector[i] = new_cell_state;
+        }
+        swap_states(vector, next_vector, axis1_dim);
+    }
+    else if (matrix != nullptr)
+    {
+        for (int j = 0; j < axis1_dim; j++)
+        {
+            for (int k = 0; k < axis2_dim; k++)
+            {
+                error = get_state_from_neighborhood(j, k, new_cell_state);
+                if (error < 0)
+                {
+                    return error;
+                }
+                next_matrix[j][k] = new_cell_state;
+            }
+        }
+        swap_states(matrix, next_matrix, axis1_dim, axis2_dim);
+    }
+    else if (tensor != nullptr)
+    {
+        for (int i = 0; i < axis1_dim; i++)
+        {
+            for (int j = 0; j < axis2_dim; j++)
+            {
+                for (int k = 0; k < axis3_dim; k++)
+                {
+                    error = get_state_from_neighborhood(i, j, k, new_cell_state);
+                    if (error < 0)
+                    {
+                        return error;
+                    }
+                    next_tensor[i][j][k] = new_cell_state;
+                }
+            }
+        }
+        swap_states(tensor, next_tensor, axis1_dim, axis2_dim, axis3_dim);
+    }
+    else
+    {
+        return CellsAreNull;
+    }
+
+    steps_taken++;
+    return 0;
+}
+
 /**
  * @brief print the current state of the grid
  *
@@ -318,7 +462,7 @@ int CellularAutomata::print_grid()
 {
     if (vector != nullptr)
     {
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < axis1_dim; i++)
         {
             std::cout << vector[i] << " ";
         }
@@ -326,9 +470,9 @@ int CellularAutomata::print_grid()
     }
     else if (matrix != nullptr)
     {
-        for (int j = 0; j < n; j++)
+        for (int j = 0; j < axis1_dim; j++)
         {
-            for (int k = 0; k < m; k++)
+            for (int k = 0; k < axis2_dim; k++)
             {
                 std::cout << matrix[j][k] << " ";
             }
@@ -337,12 +481,12 @@ int CellularAutomata::print_grid()
     }
     else if (tensor != nullptr)
     {
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < axis1_dim; i++)
         {
             std::cout << "Printing " << i << "'th slice of Tensor" << std::endl;
-            for (int j = 0; j < m; j++)
+            for (int j = 0; j < axis2_dim; j++)
             {
-                for (int k = 0; k < p; k++)
+                for (int k = 0; k < axis3_dim; k++)
                 {
                     std::cout << tensor[i][j][k] << " ";
                 }
