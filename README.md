@@ -4,5 +4,5 @@
 # CA-project
 
 ## updates:
-    12/3/2022:  Trevor: added basic directory structure, added /Include/mydatatypes.h , added /Source/cellularautomata.cpp class functionality, added test_CA.cpp in Tests, added makefiles in /Tests and /Source/Datatypes
+    12/3/2022:  Trevor: added basic directory structure, added /Include/CAdatatypes.h , added /Source/cellularautomata.cpp class functionality, added test_CA.cpp in Tests, added makefiles in /Tests and /Source/Datatypes
 

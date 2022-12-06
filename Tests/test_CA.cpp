@@ -5,13 +5,17 @@
 //this file creates a new CA object and tests the basic functionality to prove correctness
 
 #include<iostream>
-#include<mydatatypes.h>
+#include<CAdatatypes.h>
 #include<array>
 
 int main()
 {
     //initialize a CA object with default constructor, pass dimensions as arguments
-    CellularAutomata CA = CellularAutomata(20, 20);
+    CellularAutomata CA = CellularAutomata();
+
+    int error;
+
+    error = CA.setup_dimensions(10, 20, 5);
     
     //initialize the first grid state using a value for x_state and a probability
     std::cout << "Initializing " << CA.n << " x " << CA.m << " grid of cells" << std::endl;
