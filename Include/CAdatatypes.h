@@ -1,69 +1,95 @@
+/**
+ * @file CAdatatypes.h
+ * @author Trevor Oldham (trevoldham@berkeley.edu)
+ *
+ * <b>Contributor(s)</b> <br> &emsp;&emsp; Emmanuel Cortes
+ * @brief  This file contains the custom datatypes used
+ * in the Cellular Automata project
+ * @date 2022-12-03
+ */
 
-//  UC Berkeley - MSSE Program
-//  Chem 279-B  Introduction to Software Engineering
-//  Fall 2022
-//
-// his file contains the custom datatypes used in the Cellular Automata project
-//
-#pragma once    // Ensures that this file is only included once
-                // during compilation
+#pragma once // Ensures that this file is only included once
+             // during compilation
 
 #include <array>
 using namespace std;
 
-enum neighborhood{VonNeumann, Moore};
-
-enum boundary{None, Periodic, Walled, CutOff};
-
-enum rule{Majority, Parity};
-
-class CellularAutomata         // The CA datastructure
+enum neighborhood
 {
-    public:   
+    VonNeumann,
+    Moore
+};
 
-        boundary boundary_type;     //!<enum code to hold boundary
-        int boundary_radius;       //!<declare a radius for the boundary
-        neighborhood neighborhood_type;     //!<enum code to hold neighboorhood type 
-        int num_states;         //!<integer code for number of states
-        
-        rule rule_type;          //!<enum code for rule type 
-        double shortr_weight;   //!<double for short radius
-        double longr_weight;        //!<double for long radius
-        int ndims;          //!<int for number of dimensions
-        int n;              //!<count of cells in first dimension
-        int m;              //!<count of cellls in second dimension
-        int p;              //!<count of cells in third dimension
-        int *vector;        //!<vector for one dimensional grid of cells
-        int **matrix;        //!<pointer to 2d array for grid cells holding a state 
-        int ***tensor;      //!<tensor for three dimensional grid of cells
+enum boundary
+{
+    None,
+    Periodic,
+    Walled,
+    CutOff
+};
 
-        ///////////////////////////////////////////    
-        CellularAutomata();              //!< Default constructor 
-        ~CellularAutomata();                        // !<Destructor
+enum rule
+{
+    Majority,
+    Parity
+};
 
-        //provide a setup function to choose from two neighborhood types
-        int setup_neighborhood(neighborhood neighborhood_type);
+enum error_codes
+{
+    CellsAlreadyInitialized = -1,
+    CellsAreNull = -2,
+};
 
-        int setup_dimensions(int n);
+class CellularAutomata // The CA data structure
+{
+public:
+    boundary boundary_type;         //!< enum code to hold boundary
+    int boundary_radius;            //!< declare a radius for the boundary
+    neighborhood neighborhood_type; //!< enum code to hold neighborhood type
+    int num_states;                 //!< integer code for number of states
 
-        int setup_dimensions(int n, int m);
+    rule rule_type;       //!< enum code for rule type
+    double shortr_weight; //!< double for short radius
+    double longr_weight;  //!< double for long radius
+    int ndims;            //!< int for number of dimensions
+    int n;                //!< count of cells in first dimension
+    int m;                //!< count of cells in second dimension
+    int p;                //!< count of cells in third dimension
+    int *vector;          //!< vector for one dimensional grid of cells
+    int **matrix;         //!< pointer to 2d array for grid cells holding a state
+    int ***tensor;        //!< tensor for three dimensional grid of cells
 
-        int setup_dimensions(int n, int m, int p);
+    ///////////////////////////////////////////
+    CellularAutomata();
+    ~CellularAutomata();
 
-        //provide a setup function to choose from four boundary types
-        int setup_boundary(boundary bound_type, int radius);
+    // provide a setup function to choose from two neighborhood types
+    int setup_neighborhood(neighborhood neighborhood_type);
 
-        //provide a setup function to choose the number of states
-        int setup_cell_states(int n_states);
+    // provide a setup function for setting the vector dimension
+    int setup_dimensions(int n);
 
-        //provide a function to initialize the beginning state of the grid
-        int init_condition(int x_state, double prob);
+    // provide a setup function for setting the matrix's dimensions
+    int setup_dimensions(int n, int m);
 
-        int setup_rule_short_long(double shortr_weight, double longr_weight);
+    // provide a setup function for setting the tensor's dimensions
+    int setup_dimensions(int n, int m, int p);
 
-        int setup_rule(rule rule_type);
+    // provide a setup function to choose from four boundary types
+    int setup_boundary(boundary bound_type, int radius);
 
-        //provide a function to print the current grid
-        int print_grid();
+    // provide a setup function to choose the number of states
+    int setup_cell_states(int n_states);
 
+    // provide a function to initialize the beginning state of the grid
+    int init_condition(int x_state, double prob);
+
+    // provide a function for setting the Majority rule radii
+    int setup_rule_short_long(double shortr_weight, double longr_weight);
+
+    // provide a function for setting the rule type
+    int setup_rule(rule rule_type);
+
+    // provide a function to print the current grid
+    int print_grid();
 };

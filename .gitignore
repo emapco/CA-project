@@ -1,2 +1,6 @@
 #Git Ignore List
 .vscode/*
+Bindir/*
+!Bindir/README.md
+Libdir/*
+!Libdir/README.md
