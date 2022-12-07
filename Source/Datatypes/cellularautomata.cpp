@@ -10,8 +10,11 @@
 #include "CAutils.h"
 #include <iostream>
 #include <array>
-#include <random>
-#include <ctime>
+#include <random>        // srand, rand
+#include <ctime>         // time
+#include <unordered_map> // unordered_map
+#include <utility>       // make_pair
+#include <algorithm>     // max_element
 
 /**
  * @brief Construct a new Cellular Automata:: Cellular Automata object.
@@ -20,16 +23,17 @@
  */
 CellularAutomata::CellularAutomata()
 {
-    this->axis1_dim = 10;
-    this->axis2_dim = 10;
-    this->axis3_dim = 10;
+    axis1_dim = 10;
+    axis2_dim = 10;
+    axis3_dim = 10;
     num_states = 2;
-    boundary boundary_type = None;
+    boundary_type = Periodic;
     boundary_radius = 1;
-    neighborhood neighborhood_type = VonNeumann;
-    rule rule_type = Majority;
-    this->shortr_weight = 1;
-    this->longr_weight = 2;
+    long_boundary_radius = 2;
+    neighborhood_type = VonNeumann;
+    rule_type = Majority;
+    shortr_weight = 1;
+    longr_weight = 2;
     steps_taken = 0;
     vector = nullptr;
     next_vector == nullptr;
@@ -227,6 +231,23 @@ int CellularAutomata::setup_boundary(boundary bound_type, int radius)
 }
 
 /**
+ * @brief setup boundary with enum values from boundary
+ * include long-range and short-range boundary radius used by Majority rule
+ *
+ * @param bound_type enum value for boundary (None, Periodic, Walled, CutOff)
+ * @param short_radius short radius for the boundary
+ * @param long_radius long radius for the boundary
+ * @return int error code
+ */
+int CellularAutomata::setup_boundary(boundary bound_type, int short_radius, int long_radius)
+{
+    this->boundary_type = bound_type;
+    this->boundary_radius = short_radius;
+    this->long_boundary_radius = long_radius;
+    return 0;
+}
+
+/**
  * @brief describes the range of cell states to be used in the CA object
  *
  * @param n_states describing the range of numbers to use for cell states
@@ -326,14 +347,92 @@ int CellularAutomata::setup_rule(rule rule_type)
     return 0;
 }
 
-int CellularAutomata::get_state_from_neighborhood(int axis1_dim, int &new_cell_state)
+int CellularAutomata::get_cell_state(int sum, const unordered_map<int, int> &votes_counter)
+{
+    int new_cell_state = 0;
+    switch (rule_type)
+    {
+    case Parity:
+        new_cell_state = sum % num_states;
+        break;
+    case Majority:
+        auto max_elem = max_element(votes_counter.begin(), votes_counter.end(),
+                                    [](const std::pair<int, int> &a, const std::pair<int, int> &b)
+                                    { return a.second < b.second; });
+
+        new_cell_state = max_elem->first;
+        break;
+    }
+    return new_cell_state;
+}
+
+int CellularAutomata::get_state_from_neighborhood(int i, int &new_cell_state)
+{
+    int sum = 0;                           // sum of cells within boundary_radius for Parity rule
+    int index;                             // stores periodic index
+    unordered_map<int, int> votes_counter; // counter to keep track of votes for Majority rule
+    // sets the votes_counter for every state to 0
+    for (int j = 0; j < num_states; j++)
+    {
+        votes_counter.insert(make_pair(j, 0));
+    }
+
+    // VonNeumann and Moore do not differ for 1d (vector) case
+    switch (boundary_type)
+    {
+    case Periodic:
+        for (int di = -boundary_radius; di <= boundary_radius; di++)
+        {
+            // periodic index
+            index = (i + di + axis1_dim) % axis1_dim;
+            // update sum with current cell value
+            sum += vector[index];
+            // increment the cells value number of votes
+            auto it = votes_counter.find(vector[index]);
+            if (it != votes_counter.end())
+            {
+                it->second++;
+            }
+        }
+        new_cell_state = get_cell_state(sum, votes_counter);
+        break;
+    case Walled:
+        // check if i is a boundary cell
+        if (i == 0 || i == axis1_dim)
+        {
+            // in walled boundaries the edge cells never change
+            new_cell_state = vector[i]; // keep boundary cell state
+            break;
+        }
+        // fall-through to CutOff case when cell isn't a boundary cell
+    case CutOff:
+        for (int di = -boundary_radius; di <= boundary_radius; di++)
+        {
+            if (di <= 0 || di >= axis1_dim)
+            {
+                continue; // outside bounds so don't include them in the sum/counter
+            }
+            // update sum with current cell value
+            sum += vector[di];
+            // increment the cells value number of votes
+            auto it = votes_counter.find(vector[di]);
+            if (it != votes_counter.end())
+            {
+                it->second++;
+            }
+        }
+        new_cell_state = get_cell_state(sum, votes_counter);
+        break;
+    }
+    return 0;
+}
+
+int CellularAutomata::get_state_from_neighborhood(int i, int j, int &new_cell_state)
 {
     if (neighborhood_type == VonNeumann)
     {
         switch (boundary_type)
         {
-        case None:
-            break;
         case Periodic:
             break;
         case Walled:
@@ -348,36 +447,12 @@ int CellularAutomata::get_state_from_neighborhood(int axis1_dim, int &new_cell_s
     return 0;
 }
 
-int CellularAutomata::get_state_from_neighborhood(int axis1_dim, int axis2_dim, int &new_cell_state)
+int CellularAutomata::get_state_from_neighborhood(int i, int j, int k, int &new_cell_state)
 {
     if (neighborhood_type == VonNeumann)
     {
         switch (boundary_type)
         {
-        case None:
-            break;
-        case Periodic:
-            break;
-        case Walled:
-            break;
-        case CutOff:
-            break;
-        }
-    }
-    else if (neighborhood_type == Moore)
-    {
-    }
-    return 0;
-}
-
-int CellularAutomata::get_state_from_neighborhood(int axis1_dim, int axis2_dim, int axis3_dim, int &new_cell_state)
-{
-    if (neighborhood_type == VonNeumann)
-    {
-        switch (boundary_type)
-        {
-        case None:
-            break;
         case Periodic:
             break;
         case Walled:

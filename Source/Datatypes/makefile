@@ -1,5 +1,6 @@
 # Chem 274B - Cellular Automata Final Project
 # Trevor Oldham
+# Contributor: Emmanuel Cortes
 # Created: 12/03/2022
 # This creates object files for datatypes in CAdatatypes.h
 
@@ -8,7 +9,7 @@
 CPP         = g++      
 
 # compiler flags -g debug, -O3 optimized version -c create a library object
-CPPFLAGS    =-Wall -Wextra -O0 -c
+CPPFLAGS    =-Wall -Wextra -O0 -c -g
 
 # The directory where the include files needed to create the library objects are
 INC_DIR = ../../Include

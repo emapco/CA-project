@@ -8,7 +8,7 @@
 CPP         = g++      
 
 # compiler flags -g debug, -O3 optimized version -c create a library object
-CPPFLAGS    =-Wall -Wextra -O0 -c
+CPPFLAGS    =-Wall -Wextra -O0 -c -g
 
 # The directory where the include files needed to create the library objects are
 INC_DIR = ../Include

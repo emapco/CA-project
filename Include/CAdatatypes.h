@@ -12,6 +12,7 @@
              // during compilation
 
 #include <array>
+#include <unordered_map>
 using namespace std;
 
 /**
@@ -32,7 +33,6 @@ enum neighborhood
  */
 enum boundary
 {
-    None,
     Periodic,
     Walled,
     CutOff
@@ -45,8 +45,7 @@ enum boundary
 enum rule
 {
     Majority,
-    Parity,
-    Custom,
+    Parity
 };
 
 /**
@@ -70,19 +69,21 @@ private:
     int **next_matrix;  //!< pointer to 2d array for grid cells holding the next state
     int ***tensor;      //!< tensor for three dimensional grid of cells
     int ***next_tensor; //!< tensor for three dimensional grid of cells holding the next state
-    int steps_taken;          //!< the number of steps the CA has taken
+    int steps_taken;    //!< the number of steps the CA has taken
 public:
     boundary boundary_type;         //!< enum code to hold boundary
-    int boundary_radius;            //!< declare a radius for the boundary
+    int boundary_radius;      //!< declare a radius for the boundary
+    int long_boundary_radius;       //!< declare a radius for a long range boundary
     neighborhood neighborhood_type; //!< enum code to hold neighborhood type
     int num_states;                 //!< integer code for number of states
 
     rule rule_type;       //!< enum code for rule type
     double shortr_weight; //!< double for short radius
     double longr_weight;  //!< double for long radius
-    int axis1_dim;                //!< count of cells in first dimension
-    int axis2_dim;                //!< count of cells in second dimension
-    int axis3_dim;                //!< count of cells in third dimension
+
+    int axis1_dim; //!< count of cells in first dimension
+    int axis2_dim; //!< count of cells in second dimension
+    int axis3_dim; //!< count of cells in third dimension
 
     ///////////////////////////////////////////
     CellularAutomata();
@@ -100,8 +101,12 @@ public:
     // provide a setup function for setting the tensor's dimensions
     int setup_dimensions(int axis1_dim, int axis2_dim, int axis3_dim);
 
-    // provide a setup function to choose from four boundary types
+    // provide a setup function to choose from three boundary types
     int setup_boundary(boundary bound_type, int radius);
+
+    // provide a setup function to choose from three boundary types
+    // with a long and short radius
+    int setup_boundary(boundary bound_type, int long_radius, int short_radius);
 
     // provide a setup function to choose the number of states
     int setup_cell_states(int n_states);
@@ -115,11 +120,13 @@ public:
     // provide a function for setting the rule type
     int setup_rule(rule rule_type);
 
-    int get_state_from_neighborhood(int axis1_dim, int &new_cell_state);
+    int get_cell_state(int sum, const unordered_map<int, int> &votes_counter);
 
-    int get_state_from_neighborhood(int axis1_dim, int axis2_dim, int &new_cell_state);
-    
-    int get_state_from_neighborhood(int axis1_dim, int axis2_dim, int axis3_dim, int &new_cell_state);
+    int get_state_from_neighborhood(int i, int &new_cell_state);
+
+    int get_state_from_neighborhood(int i, int j, int &new_cell_state);
+
+    int get_state_from_neighborhood(int i, int j, int k, int &new_cell_state);
 
     int step();
 
