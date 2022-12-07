@@ -23,9 +23,9 @@
  */
 CellularAutomata::CellularAutomata()
 {
-    axis1_dim = 10;
-    axis2_dim = 10;
-    axis3_dim = 10;
+    axis1_dim = 0;
+    axis2_dim = 0;
+    axis3_dim = 0;
     num_states = 2;
     boundary_type = Periodic;
     boundary_radius = 1;
@@ -250,12 +250,39 @@ int CellularAutomata::setup_boundary(boundary bound_type, int short_radius, int 
 /**
  * @brief describes the range of cell states to be used in the CA object
  *
- * @param n_states describing the range of numbers to use for cell states
+ * @param num_states describing the range of numbers to use for cell states
  * @return int error code
  */
-int CellularAutomata::setup_cell_states(int n_states)
+int CellularAutomata::setup_cell_states(int num_states)
 {
-    this->num_states = n_states;
+    this->num_states = num_states;
+    return 0;
+}
+
+/**
+ * @brief set the short and long weights used in the majority rule
+ *
+ * @param shortr_weight the short weight
+ * @param longr_weight the long weight
+ * @return int error code
+ */
+int CellularAutomata::setup_rule_short_long(double shortr_weight, double longr_weight)
+{
+    this->shortr_weight = shortr_weight;
+    this->longr_weight = longr_weight;
+    return 0;
+}
+
+/**
+ * @brief setup the rule choice
+ * used to specify the rule type to be used in CA object
+ * @param rule_type enum rule representing the rule type. choose from (Majority, Parity)
+ * @return int error code
+ */
+int CellularAutomata::setup_rule(rule rule_type)
+{
+    this->rule_type = rule_type;
+    return 0;
 }
 
 /**
@@ -263,12 +290,18 @@ int CellularAutomata::setup_cell_states(int n_states)
  *
  * @param x_state choose the cell state to initialize the grid with.
  * @param prob the probability of a cell to turn to state given from x_state
- * @return int error code (-2: tensor not initialized) (0: no error)
+ * @return int error code
+ * (CellsAreNull: tensor not initialized)
+ * (InvalidCellState: x_state must be less than num_states)
+ * (0: no error)
  */
 int CellularAutomata::init_condition(int x_state, double prob)
 {
-    // initialize values in matrix
-    // initialize matrix filled with random cell values
+    if (!(x_state < num_states))
+    {
+        return InvalidCellState;
+    }
+
     srand(time(NULL));
     double random_cell_value;
 
@@ -322,45 +355,33 @@ int CellularAutomata::init_condition(int x_state, double prob)
 }
 
 /**
- * @brief set the short and long weights used in the majority rule
+ * @brief initializes the counter used for determining which cell state is the majority
  *
- * @param shortr_weight the short weight
- * @param longr_weight the long weight
- * @return int error code
+ * @param counter keeps track of each state's occupancies
  */
-int CellularAutomata::setup_rule_short_long(double shortr_weight, double longr_weight)
+void CellularAutomata::initialize_majority_rule_counter(MajorityCounter &counter)
 {
-    this->shortr_weight = shortr_weight;
-    this->longr_weight = longr_weight;
-    return 0;
+    // sets the votes_counter for every state to 0
+    for (int j = 0; j < num_states; j++)
+    {
+        counter.insert(make_pair(j, 0));
+    }
 }
 
-/**
- * @brief setup the rule choice
- * used to specify the rule type to be used in CA object
- * @param rule_type enum rule representing the rule type. choose from (Majority, Parity)
- * @return int error code
- */
-int CellularAutomata::setup_rule(rule rule_type)
-{
-    this->rule_type = rule_type;
-    return 0;
-}
-
-int CellularAutomata::get_cell_state(int sum, const unordered_map<int, int> &votes_counter)
+int CellularAutomata::get_cell_state(int sum, const MajorityCounter &votes_counter)
 {
     int new_cell_state = 0;
     switch (rule_type)
     {
     case Parity:
-        new_cell_state = sum % num_states;
+        new_cell_state = sum % num_states; // computed and store the parity state
         break;
     case Majority:
+        // find the max_element in the counter based on the pairs' second variable
         auto max_elem = max_element(votes_counter.begin(), votes_counter.end(),
                                     [](const std::pair<int, int> &a, const std::pair<int, int> &b)
                                     { return a.second < b.second; });
-
-        new_cell_state = max_elem->first;
+        new_cell_state = max_elem->first; // set the majority state as the new state
         break;
     }
     return new_cell_state;
@@ -368,14 +389,11 @@ int CellularAutomata::get_cell_state(int sum, const unordered_map<int, int> &vot
 
 int CellularAutomata::get_state_from_neighborhood(int i, int &new_cell_state)
 {
-    int sum = 0;                           // sum of cells within boundary_radius for Parity rule
-    int index;                             // stores periodic index
-    unordered_map<int, int> votes_counter; // counter to keep track of votes for Majority rule
-    // sets the votes_counter for every state to 0
-    for (int j = 0; j < num_states; j++)
-    {
-        votes_counter.insert(make_pair(j, 0));
-    }
+    int sum = 0;                   // sum of cells within boundary_radius for Parity rule
+    int periodic_index;            // used by Periodic boundary type
+    int current_state;             // store the cell's current state
+    MajorityCounter votes_counter; // counter to keep track of votes for Majority rule
+    initialize_majority_rule_counter(votes_counter);
 
     // VonNeumann and Moore do not differ for 1d (vector) case
     switch (boundary_type)
@@ -383,12 +401,12 @@ int CellularAutomata::get_state_from_neighborhood(int i, int &new_cell_state)
     case Periodic:
         for (int di = -boundary_radius; di <= boundary_radius; di++)
         {
-            // periodic index
-            index = (i + di + axis1_dim) % axis1_dim;
+            periodic_index = (i + di + axis1_dim) % axis1_dim;
+            int current_state = vector[periodic_index];
             // update sum with current cell value
-            sum += vector[index];
-            // increment the cells value number of votes
-            auto it = votes_counter.find(vector[index]);
+            sum += current_state;
+            // increment the cell state's number of votes
+            auto it = votes_counter.find(current_state);
             if (it != votes_counter.end())
             {
                 it->second++;
@@ -398,9 +416,9 @@ int CellularAutomata::get_state_from_neighborhood(int i, int &new_cell_state)
         break;
     case Walled:
         // check if i is a boundary cell
-        if (i == 0 || i == axis1_dim)
+        if (i == 0 || i == axis1_dim - 1)
         {
-            // in walled boundaries the edge cells never change
+            // with walled boundaries the edge cells never change
             new_cell_state = vector[i]; // keep boundary cell state
             break;
         }
@@ -408,14 +426,17 @@ int CellularAutomata::get_state_from_neighborhood(int i, int &new_cell_state)
     case CutOff:
         for (int di = -boundary_radius; di <= boundary_radius; di++)
         {
+            // exclude cells that are out of bounds
             if (di <= 0 || di >= axis1_dim)
             {
-                continue; // outside bounds so don't include them in the sum/counter
+                // outside bounds; don't include cell state in the sum/counter
+                continue;
             }
+            int current_state = vector[di];
             // update sum with current cell value
-            sum += vector[di];
+            sum += current_state;
             // increment the cells value number of votes
-            auto it = votes_counter.find(vector[di]);
+            auto it = votes_counter.find(current_state);
             if (it != votes_counter.end())
             {
                 it->second++;
@@ -429,40 +450,168 @@ int CellularAutomata::get_state_from_neighborhood(int i, int &new_cell_state)
 
 int CellularAutomata::get_state_from_neighborhood(int i, int j, int &new_cell_state)
 {
-    if (neighborhood_type == VonNeumann)
+    int sum = 0;                   // sum of cells within boundary_radius for Parity rule
+    int periodic_index1;           // axis1_dim index used by Periodic boundary type
+    int periodic_index2;           // axis2_dim index used by Periodic boundary type
+    int current_state;             // store the cell's current state
+    MajorityCounter votes_counter; // counter to keep track of votes for Majority rule
+    initialize_majority_rule_counter(votes_counter);
+
+    switch (boundary_type)
     {
-        switch (boundary_type)
+    case Periodic:
+        for (int di = -boundary_radius; di <= boundary_radius; di++)
         {
-        case Periodic:
-            break;
-        case Walled:
-            break;
-        case CutOff:
+            for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
+            {
+                // exclude diagonal cells from Moore neighborhood when VonNeumann is selected
+                if ((neighborhood_type == VonNeumann) && (di != 0 && dj != 0))
+                {
+                    // current di,dj cell is a diagonal neighbour so exclude it
+                    continue;
+                }
+                periodic_index1 = (i + di + axis1_dim) % axis1_dim;
+                periodic_index2 = (j + dj + axis2_dim) % axis2_dim;
+                current_state = matrix[periodic_index1][periodic_index2];
+                // update sum with current cell value
+                sum += current_state;
+                // increment the cell state's number of votes
+                auto it = votes_counter.find(current_state);
+                if (it != votes_counter.end())
+                {
+                    it->second++;
+                }
+            }
+        }
+        new_cell_state = get_cell_state(sum, votes_counter);
+        break;
+    case Walled:
+        // check if i,j is a boundary cell
+        if ((i == 0 || i == axis1_dim - 1) || (j == 0 || j == axis2_dim - 1))
+        {
+            // with walled boundaries the edge cells never change
+            new_cell_state = matrix[i][j]; // keep boundary cell state
             break;
         }
-    }
-    else if (neighborhood_type == Moore)
-    {
+        // fall-through to CutOff case when cell isn't a boundary cell
+    case CutOff:
+        for (int di = -boundary_radius; di <= boundary_radius; di++)
+        {
+            for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
+            {
+                // exclude diagonal cells from Moore neighborhood when VonNeumann is selected
+                if ((neighborhood_type == VonNeumann) && (di != 0 && dj != 0))
+                {
+                    // current di,dj cell is a diagonal neighbour so exclude it
+                    continue;
+                }
+                // exclude cells that are out of bounds
+                if ((di <= 0 || di >= axis1_dim) || (dj <= 0 || dj >= axis2_dim))
+                {
+                    // outside bounds; don't include cell state in the sum/counter
+                    continue;
+                }
+                int current_state = matrix[di][dj];
+                // update sum with current cell value
+                sum += current_state;
+                // increment the cells value number of votes
+                auto it = votes_counter.find(current_state);
+                if (it != votes_counter.end())
+                {
+                    it->second++;
+                }
+            }
+        }
+        new_cell_state = get_cell_state(sum, votes_counter);
+        break;
     }
     return 0;
 }
 
 int CellularAutomata::get_state_from_neighborhood(int i, int j, int k, int &new_cell_state)
 {
-    if (neighborhood_type == VonNeumann)
+    int sum = 0;                   // sum of cells within boundary_radius for Parity rule
+    int periodic_index1;           // axis1_dim index used by Periodic boundary type
+    int periodic_index2;           // axis2_dim index used by Periodic boundary type
+    int periodic_index3;           // axis3_dim index used by Periodic boundary type
+    int current_state;             // store the cell's current state
+    MajorityCounter votes_counter; // counter to keep track of votes for Majority rule
+    initialize_majority_rule_counter(votes_counter);
+
+    switch (boundary_type)
     {
-        switch (boundary_type)
+    case Periodic:
+        for (int di = -boundary_radius; di <= boundary_radius; di++)
         {
-        case Periodic:
-            break;
-        case Walled:
-            break;
-        case CutOff:
+            for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
+            {
+                for (int dk = -boundary_radius; dk <= boundary_radius; dk++)
+                {
+                    // exclude diagonal cells from Moore neighborhood when VonNeumann is selected
+                    if ((neighborhood_type == VonNeumann) && (di != 0 && dj != 0 && dk != 0))
+                    {
+                        // current di,dj,dk cell is a diagonal neighbour so exclude it
+                        continue;
+                    }
+                    periodic_index1 = (i + di + axis1_dim) % axis1_dim;
+                    periodic_index2 = (j + dj + axis2_dim) % axis2_dim;
+                    periodic_index3 = (k + dk + axis3_dim) % axis3_dim;
+                    current_state = tensor[periodic_index1][periodic_index2][periodic_index3];
+                    // update sum with current cell value
+                    sum += current_state;
+                    // increment the cell state's number of votes
+                    auto it = votes_counter.find(current_state);
+                    if (it != votes_counter.end())
+                    {
+                        it->second++;
+                    }
+                }
+            }
+        }
+        new_cell_state = get_cell_state(sum, votes_counter);
+        break;
+    case Walled:
+        // check if i,j,k is a boundary cell
+        if ((i == 0 || i == axis1_dim - 1) || (j == 0 || j == axis2_dim - 1) || (k == 0 || j == axis3_dim - 1))
+        {
+            // with walled boundaries the edge cells never change
+            new_cell_state = tensor[i][j][k]; // keep boundary cell state
             break;
         }
-    }
-    else if (neighborhood_type == Moore)
-    {
+        // fall-through to CutOff case when cell isn't a boundary cell
+    case CutOff:
+        for (int di = -boundary_radius; di <= boundary_radius; di++)
+        {
+            for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
+            {
+                for (int dk = -boundary_radius; dk <= boundary_radius; dk++)
+                {
+                    // exclude diagonal cells from Moore neighborhood when VonNeumann is selected
+                    if ((neighborhood_type == VonNeumann) && (di != 0 && dj != 0 && dk != 0))
+                    {
+                        // current di,dj,dk cell is a diagonal neighbour so exclude it
+                        continue;
+                    }
+                    // exclude cells that are out of bounds
+                    if ((di <= 0 || di >= axis1_dim) || (dj <= 0 || dj >= axis2_dim) || (dk <= 0 || dk >= axis3_dim))
+                    {
+                        // outside bounds; don't include cell state in the sum/counter
+                        continue;
+                    }
+                    int current_state = tensor[di][dj][dk];
+                    // update sum with current cell value
+                    sum += current_state;
+                    // increment the cells value number of votes
+                    auto it = votes_counter.find(current_state);
+                    if (it != votes_counter.end())
+                    {
+                        it->second++;
+                    }
+                }
+            }
+        }
+        new_cell_state = get_cell_state(sum, votes_counter);
+        break;
     }
     return 0;
 }

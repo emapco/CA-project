@@ -58,8 +58,16 @@ enum error_codes
     CellsAlreadyInitialized = -1,
     CellsAreNull = -2,
     InvalidNeighborhood = -3,
+    InvalidCellState = -4
 };
 
+/**
+ * @brief counter type for determining which cell state is the majority
+ *
+ */
+using MajorityCounter = unordered_map<int, int>;
+
+/*! A CellularAutomata class for simulating cellular automata models */
 class CellularAutomata // The CA data structure
 {
 private:
@@ -70,9 +78,13 @@ private:
     int ***tensor;      //!< tensor for three dimensional grid of cells
     int ***next_tensor; //!< tensor for three dimensional grid of cells holding the next state
     int steps_taken;    //!< the number of steps the CA has taken
+
+    // provide function for initializing a MajorityCounter for Majority rule
+    void initialize_majority_rule_counter(MajorityCounter &counter);
+
 public:
     boundary boundary_type;         //!< enum code to hold boundary
-    int boundary_radius;      //!< declare a radius for the boundary
+    int boundary_radius;            //!< declare a radius for the boundary
     int long_boundary_radius;       //!< declare a radius for a long range boundary
     neighborhood neighborhood_type; //!< enum code to hold neighborhood type
     int num_states;                 //!< integer code for number of states
@@ -120,7 +132,7 @@ public:
     // provide a function for setting the rule type
     int setup_rule(rule rule_type);
 
-    int get_cell_state(int sum, const unordered_map<int, int> &votes_counter);
+    int get_cell_state(int sum, const MajorityCounter &votes_counter);
 
     int get_state_from_neighborhood(int i, int &new_cell_state);
 
