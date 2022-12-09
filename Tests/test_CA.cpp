@@ -12,15 +12,33 @@
 #include <array>
 
 /**
+ * @brief Test custom rule function for setting a new cell state for the cell at cell_index
+ *
+ * @param cell_index array of cell indices that we are going to update it state for
+ * @param index_size number of indices need to address the cell
+ * @param neighborhood_cells array of neighboring cells
+ * @param neighborhood_size size of neighborhood_cells array
+ * @param new_cell_state reference to the new cell state
+ */
+void custom_rule(int *cell_index, const int index_size,
+                 int *neighborhood_cells, const int neighborhood_size,
+                 int &new_cell_state)
+{
+    new_cell_state = 1;
+}
+
+/**
  * @brief Tests the initialization of CellularAutomata instances.
- * 
- * @param CA 
+ *
+ * @param CA the CellularAutomata instance
  */
 void test_CA_init(CellularAutomata &CA)
 {
     // initialize the first grid state using a value for x_state and a probability
-    std::cout << "Initializing " << CA.n << " x " << CA.m << " grid of cells" << std::endl;
-    CA.init_condition(1, 0.1);
+    std::cout << "Initializing " << CA.axis1_dim
+              << " x " << CA.axis2_dim
+              << " x " << CA.axis3_dim << " grid of cells" << std::endl;
+    CA.init_condition(1, 0.5);
 
     // print the current grid of cell states
     std::cout << "Printing the current grid of cell states" << std::endl;
@@ -30,34 +48,124 @@ void test_CA_init(CellularAutomata &CA)
     std::cout << "Printing other relevant info about CellularAutomata object" << std::endl;
     std::cout << "Number of States: " << CA.num_states << std::endl;
     std::cout << "Boundary Radius: " << CA.boundary_radius << std::endl;
-    std::cout << "Short Radius: " << CA.shortr_weight << std::endl;
-    std::cout << "Long Radius: " << CA.longr_weight << std::endl;
+}
+
+/**
+ * @brief Tests the CellularAutomata instances's step function
+ *
+ * @param CA the CellularAutomata instance
+ */
+void test_CA_step(CellularAutomata &CA)
+{
+    for (int i = 0; i < 1; i++)
+    {
+        CA.step(custom_rule);
+        CA.print_grid();
+    }
+}
+
+/**
+ * @brief Main testing function that calls all other types of tests
+ *
+ * @param CA the CellularAutomata instance
+ */
+void test_CA(CellularAutomata &CA)
+{
+    test_CA_init(CA);
+    test_CA_step(CA);
+}
+
+/**
+ * @brief Tests the implementation of the CA with vector of cells
+ *
+ */
+void test_CA_vector()
+{
+    {
+        std::cout << "**** Testing Vector CellularAutomata: PERIODIC PARITY ****\n";
+        // initialize a CA object with default constructor
+        CellularAutomata CA = CellularAutomata();
+        CA.setup_dimensions(10);
+        CA.setup_rule(CellularAutomata::Parity);
+        test_CA(CA);
+    }
+    {
+        std::cout << "**** Testing Vector CellularAutomata: PERIODIC MAJORITY ****\n";
+        CellularAutomata CA = CellularAutomata();
+        CA.setup_dimensions(10);
+        test_CA(CA);
+    }
+    {
+        std::cout << "**** Testing Vector CellularAutomata: PERIODIC CUSTOM ****\n";
+        CellularAutomata CA = CellularAutomata();
+        CA.setup_dimensions(10);
+        CA.setup_rule(CellularAutomata::Custom);
+        test_CA(CA);
+    }
+}
+
+/**
+ * @brief Tests the implementation of the CA with a matrix of cells
+ *
+ */
+void test_CA_matrix()
+{
+    {
+        std::cout << "\n**** Testing Matrix CellularAutomata: PERIODIC PARITY ****\n";
+        // initialize a CA object with default constructor
+        CellularAutomata CA = CellularAutomata();
+        CA.setup_dimensions(5, 10);
+        CA.setup_rule(CellularAutomata::Parity);
+        test_CA(CA);
+    }
+    {
+        std::cout << "\n**** Testing Matrix CellularAutomata: PERIODIC MAJORITY ****\n";
+        CellularAutomata CA = CellularAutomata();
+        CA.setup_dimensions(5, 10);
+        test_CA(CA);
+    }
+    {
+        std::cout << "**** Testing Vector CellularAutomata: PERIODIC CUSTOM ****\n";
+        CellularAutomata CA = CellularAutomata();
+        CA.setup_dimensions(5, 10);
+        CA.setup_rule(CellularAutomata::Custom);
+        test_CA(CA);
+    }
+}
+
+/**
+ * @brief Tests the implementation of the CA with a tensor of cells
+ *
+ */
+void test_CA_tensor()
+{
+    {
+        std::cout << "\n**** Testing Tensor CellularAutomata: PERIODIC PARITY ****\n";
+        // initialize a CA object with default constructor
+        CellularAutomata CA = CellularAutomata();
+        CA.setup_dimensions(5, 5, 10);
+        CA.setup_rule(CellularAutomata::Parity);
+        test_CA(CA);
+    }
+    {
+        std::cout << "\n**** Testing Tensor CellularAutomata: PERIODIC MAJORITY ****\n";
+        CellularAutomata CA = CellularAutomata();
+        CA.setup_dimensions(5, 5, 10);
+        test_CA(CA);
+    }
+    {
+        std::cout << "**** Testing Vector CellularAutomata: PERIODIC CUSTOM ****\n";
+        CellularAutomata CA = CellularAutomata();
+        CA.setup_dimensions(5, 5, 10);
+        CA.setup_rule(CellularAutomata::Custom);
+        test_CA(CA);
+    }
 }
 
 int main()
 {
-    int error;
-    {
-        std::cout << "**** Testing Vector CellularAutomata ****\n";
-        // initialize a CA object with default constructor, pass dimensions as arguments
-        CellularAutomata CA = CellularAutomata();
-        error = CA.setup_dimensions(10);
-        test_CA_init(CA);
-    }
-    {
-        std::cout << "\n\n**** Testing Matrix CellularAutomata ****\n";
-        // initialize a CA object with default constructor, pass dimensions as arguments
-        CellularAutomata CA = CellularAutomata();
-        error = CA.setup_dimensions(10, 20);
-        test_CA_init(CA);
-    }
-    {
-        std::cout << "\n\n**** Testing Tensor CellularAutomata ****\n";
-        // initialize a CA object with default constructor, pass dimensions as arguments
-        CellularAutomata CA = CellularAutomata();
-        error = CA.setup_dimensions(5, 10, 20);
-        test_CA_init(CA);
-    }
-
+    test_CA_vector();
+    test_CA_matrix();
+    test_CA_tensor();
     return 0;
 }

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['p_0',['p',['../classCellularAutomata.html#a3a28d96b825defa1c1aa7d5eaac19a7b',1,'CellularAutomata']]]
+  ['rule_5ftype_0',['rule_type',['../classCellularAutomata.html#af21d184c9d9a7d0e983f330db0f68de5',1,'CellularAutomata']]]
 ];

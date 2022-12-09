@@ -6,11 +6,15 @@
 
 SOURCE_DIR = Source/Datatypes
 TEST_DIR = Tests
+UTILS_DIR = Utils
 
 all:                       
 	cd $(SOURCE_DIR); make all
+	cd $(UTILS_DIR); make all
 	cd $(TEST_DIR); make all
 
 cleanall:
 	cd $(SOURCE_DIR); make cleanall
+	cd $(UTILS_DIR); make cleanall
 	cd $(TEST_DIR); make cleanall
+
