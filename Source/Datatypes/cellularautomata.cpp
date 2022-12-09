@@ -361,7 +361,7 @@ int CellularAutomata::init_condition(int x_state, double prob)
 /**
  * @brief Sets the new_cell_state variable based on the specified rule.
  *
- * @param cell_index cell of interest's index
+ * @param cell_index cell of interest's index; can be modified for dynamic models
  * @param index_size size of cell_index array
  * @param neighborhood_cells flatten array of all neighboring cells
  * @param neighborhood_size size of neighborhood_cells array
@@ -431,7 +431,7 @@ int CellularAutomata::set_new_cell_state(int *cell_index, int index_size,
  * @brief Generates an array of neighboring cells and then calls set_new_cell_state to set the state.
  * This method supports a vector of cell states.
  *
- * @param cell_index cell of interest's index
+ * @param cell_index cell of interest's index; can be modified for dynamic models
  * @param index_size size of cell_index array
  * @param new_cell_state reference variable for setting the new state
  * @param custom_rule function that is called when a Custom rule type is specified
@@ -445,16 +445,16 @@ int CellularAutomata::get_state_from_neighborhood_1d(int *cell_index, int index_
     int error_code = 0;         // store error code return by other methods
     int i = cell_index[0];      // get i-th index from array
     int periodic_index;         // used by Periodic boundary type
-    int neighborhood_size;      // number of neighbors in neighborhood
+    int max_neighborhood_size;  // number of neighbors in neighborhood
     int neighborhood_index = 0; // keep track of neighborhood array as we iterate through CA cells
 
     /*
      * Generate a flatten array of the cell's neighborhood.
      * The neighborhood array can then be utilized for Majority, Parity, or Custom rule
      */
-    neighborhood_size = get_neighborhood_size(index_size, boundary_radius, neighborhood_type);
+    max_neighborhood_size = get_neighborhood_size(index_size, boundary_radius, neighborhood_type);
     // allocate memory and check if operation was successful
-    int *neighborhood_cells = new (std::nothrow) int[neighborhood_size];
+    int *neighborhood_cells = new (std::nothrow) int[max_neighborhood_size];
     if (neighborhood_cells == nullptr)
     {
         return NeighborhoodCellsMalloc;
@@ -471,7 +471,7 @@ int CellularAutomata::get_state_from_neighborhood_1d(int *cell_index, int index_
             neighborhood_cells[neighborhood_index] = vector[periodic_index];
             neighborhood_index++;
         }
-        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state, custom_rule);
+        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_index, new_cell_state, custom_rule);
         break;
     case Walled: // with walled boundaries the edge cells never change
         // check if i is a boundary cell
@@ -494,7 +494,7 @@ int CellularAutomata::get_state_from_neighborhood_1d(int *cell_index, int index_
             neighborhood_cells[neighborhood_index] = vector[di];
             neighborhood_index++;
         }
-        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state, custom_rule);
+        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_index, new_cell_state, custom_rule);
         break;
     }
     delete[] neighborhood_cells;
@@ -505,7 +505,7 @@ int CellularAutomata::get_state_from_neighborhood_1d(int *cell_index, int index_
  * @brief Generates an array of neighboring cells and then calls set_new_cell_state to set the state.
  * This method supports a matrix of cell states.
  *
- * @param cell_index cell of interest's index
+ * @param cell_index cell of interest's index; can be modified for dynamic models
  * @param index_size size of cell_index array
  * @param new_cell_state reference variable for setting the new state
  * @param custom_rule function that is called when a Custom rule type is specified
@@ -521,16 +521,16 @@ int CellularAutomata::get_state_from_neighborhood_2d(int *cell_index, int index_
     int j = cell_index[1];      // get j-th index from array
     int periodic_index1;        // axis1_dim index used by Periodic boundary type
     int periodic_index2;        // axis2_dim index used by Periodic boundary type
-    int neighborhood_size;      // number of neighbors in neighborhood
+    int max_neighborhood_size;  // number of neighbors in neighborhood
     int neighborhood_index = 0; // keep track of neighborhood array as we iterate through CA cells
 
     /*
      * Generate a flatten array of the cell's neighborhood.
      * The neighborhood array can then be utilized for Majority, Parity, or Custom rule
      */
-    neighborhood_size = get_neighborhood_size(index_size, boundary_radius, neighborhood_type);
+    max_neighborhood_size = get_neighborhood_size(index_size, boundary_radius, neighborhood_type);
     // allocate memory and check if operation was successful
-    int *neighborhood_cells = new (std::nothrow) int[neighborhood_size];
+    int *neighborhood_cells = new (std::nothrow) int[max_neighborhood_size];
     if (neighborhood_cells == nullptr)
     {
         return NeighborhoodCellsMalloc;
@@ -556,7 +556,7 @@ int CellularAutomata::get_state_from_neighborhood_2d(int *cell_index, int index_
                 neighborhood_index++;
             }
         }
-        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state, custom_rule);
+        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_index, new_cell_state, custom_rule);
         break;
     case Walled: // with walled boundaries the edge cells never change
         // check if i,j is a boundary cell
@@ -588,7 +588,7 @@ int CellularAutomata::get_state_from_neighborhood_2d(int *cell_index, int index_
                 neighborhood_index++;
             }
         }
-        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state, custom_rule);
+        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_index, new_cell_state, custom_rule);
         break;
     }
     delete[] neighborhood_cells;
@@ -599,7 +599,7 @@ int CellularAutomata::get_state_from_neighborhood_2d(int *cell_index, int index_
  * @brief Generates an array of neighboring cells and then calls set_new_cell_state to set the state.
  * This method supports a tensor of cell states.
  *
- * @param cell_index cell of interest's index
+ * @param cell_index cell of interest's index; can be modified for dynamic models
  * @param index_size size of cell_index array
  * @param new_cell_state reference variable for setting the new state
  * @param custom_rule function that is called when a Custom rule type is specified
@@ -617,16 +617,16 @@ int CellularAutomata::get_state_from_neighborhood_3d(int *cell_index, int index_
     int periodic_index1;        // axis1_dim index used by Periodic boundary type
     int periodic_index2;        // axis2_dim index used by Periodic boundary type
     int periodic_index3;        // axis3_dim index used by Periodic boundary type
-    int neighborhood_size;      // number of neighbors in neighborhood
+    int max_neighborhood_size;  // number of neighbors in neighborhood
     int neighborhood_index = 0; // keep track of neighborhood array as we iterate through CA cells
 
     /*
      * Generate a flatten array of the cell's neighborhood.
      * The neighborhood array can then be utilized for Majority, Parity, or Custom rule
      */
-    neighborhood_size = get_neighborhood_size(index_size, boundary_radius, neighborhood_type);
+    max_neighborhood_size = get_neighborhood_size(index_size, boundary_radius, neighborhood_type);
     // allocate memory and check if operation was successful
-    int *neighborhood_cells = new (std::nothrow) int[neighborhood_size];
+    int *neighborhood_cells = new (std::nothrow) int[max_neighborhood_size];
     if (neighborhood_cells == nullptr)
     {
         return NeighborhoodCellsMalloc;
@@ -656,7 +656,7 @@ int CellularAutomata::get_state_from_neighborhood_3d(int *cell_index, int index_
                 }
             }
         }
-        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state, custom_rule);
+        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_index, new_cell_state, custom_rule);
         break;
     case Walled:
         // check if i,j,k is a boundary cell
@@ -692,7 +692,7 @@ int CellularAutomata::get_state_from_neighborhood_3d(int *cell_index, int index_
                 }
             }
         }
-        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state, custom_rule);
+        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_index, new_cell_state, custom_rule);
         break;
     }
     delete[] neighborhood_cells;
@@ -730,7 +730,7 @@ int CellularAutomata::step(void(custom_rule)(int *, int, int *, int, int &))
             {
                 return error_code;
             }
-            next_vector[i] = new_cell_state;
+            next_vector[cell_index[0]] = new_cell_state;
         }
         // store next cell state to the current cell state for the next time step
         swap_states(vector, next_vector, axis1_dim);
@@ -751,7 +751,7 @@ int CellularAutomata::step(void(custom_rule)(int *, int, int *, int, int &))
                 {
                     return error_code;
                 }
-                next_matrix[i][j] = new_cell_state;
+                next_matrix[cell_index[0]][cell_index[1]] = new_cell_state;
             }
         }
         // store next cell state to the current cell state for the next time step
@@ -776,7 +776,7 @@ int CellularAutomata::step(void(custom_rule)(int *, int, int *, int, int &))
                     {
                         return error_code;
                     }
-                    next_tensor[i][j][k] = new_cell_state;
+                    next_tensor[cell_index[0]][cell_index[1]][cell_index[2]] = new_cell_state;
                 }
             }
         }

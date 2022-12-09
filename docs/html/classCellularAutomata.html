@@ -344,7 +344,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>axis3_dim</b></td></tr
 <p >This method supports a vector of cell states.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">cell_index</td><td>cell of interest's index </td></tr>
+    <tr><td class="paramname">cell_index</td><td>cell of interest's index; can be modified for dynamic models </td></tr>
     <tr><td class="paramname">index_size</td><td>size of cell_index array </td></tr>
     <tr><td class="paramname">new_cell_state</td><td>reference variable for setting the new state </td></tr>
     <tr><td class="paramname">custom_rule</td><td>function that is called when a Custom rule type is specified </td></tr>
@@ -399,7 +399,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>axis3_dim</b></td></tr
 <p >This method supports a matrix of cell states.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">cell_index</td><td>cell of interest's index </td></tr>
+    <tr><td class="paramname">cell_index</td><td>cell of interest's index; can be modified for dynamic models </td></tr>
     <tr><td class="paramname">index_size</td><td>size of cell_index array </td></tr>
     <tr><td class="paramname">new_cell_state</td><td>reference variable for setting the new state </td></tr>
     <tr><td class="paramname">custom_rule</td><td>function that is called when a Custom rule type is specified </td></tr>
@@ -454,7 +454,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>axis3_dim</b></td></tr
 <p >This method supports a tensor of cell states.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">cell_index</td><td>cell of interest's index </td></tr>
+    <tr><td class="paramname">cell_index</td><td>cell of interest's index; can be modified for dynamic models </td></tr>
     <tr><td class="paramname">index_size</td><td>size of cell_index array </td></tr>
     <tr><td class="paramname">new_cell_state</td><td>reference variable for setting the new state </td></tr>
     <tr><td class="paramname">custom_rule</td><td>function that is called when a Custom rule type is specified </td></tr>
@@ -609,7 +609,7 @@ CellsAreNull: neither vector, matrix, nor tensor are initialized<br  />
 <p>Sets the new_cell_state variable based on the specified rule. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">cell_index</td><td>cell of interest's index </td></tr>
+    <tr><td class="paramname">cell_index</td><td>cell of interest's index; can be modified for dynamic models </td></tr>
     <tr><td class="paramname">index_size</td><td>size of cell_index array </td></tr>
     <tr><td class="paramname">neighborhood_cells</td><td>flatten array of all neighboring cells </td></tr>
     <tr><td class="paramname">neighborhood_size</td><td>size of neighborhood_cells array </td></tr>
