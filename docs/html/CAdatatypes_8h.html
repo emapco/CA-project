@@ -76,7 +76,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#enum-members">Enumerations</a>  </div>
+<a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle"><div class="title">CAdatatypes.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -84,6 +84,7 @@ $(function() {
 <p>This file contains the custom datatypes used in the Cellular Automata project.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;array&gt;</code><br />
+<code>#include &lt;unordered_map&gt;</code><br />
 </div>
 <p><a href="CAdatatypes_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -92,33 +93,35 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html">CellularAutomata</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
-Enumerations</h2></td></tr>
-<tr class="memitem:a58cbdd22d394d1c7b49cd6692c46a934"><td class="memItemLeft" align="right" valign="top"><a id="a58cbdd22d394d1c7b49cd6692c46a934" name="a58cbdd22d394d1c7b49cd6692c46a934"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>neighborhood</b> { <b>VonNeumann</b>
-, <b>Moore</b>
- }</td></tr>
-<tr class="separator:a58cbdd22d394d1c7b49cd6692c46a934"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23d35531b04e26bcae25360217ac8229"><td class="memItemLeft" align="right" valign="top"><a id="a23d35531b04e26bcae25360217ac8229" name="a23d35531b04e26bcae25360217ac8229"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>boundary</b> { <b>None</b>
-, <b>Periodic</b>
-, <b>Walled</b>
-, <b>CutOff</b>
- }</td></tr>
-<tr class="separator:a23d35531b04e26bcae25360217ac8229"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a623a1e6a865128c705d912f15f63df16"><td class="memItemLeft" align="right" valign="top"><a id="a623a1e6a865128c705d912f15f63df16" name="a623a1e6a865128c705d912f15f63df16"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>rule</b> { <b>Majority</b>
-, <b>Parity</b>
- }</td></tr>
-<tr class="separator:a623a1e6a865128c705d912f15f63df16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abfd51332ef0e0ba71f951a69e68e06be"><td class="memItemLeft" align="right" valign="top"><a id="abfd51332ef0e0ba71f951a69e68e06be" name="abfd51332ef0e0ba71f951a69e68e06be"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>error_codes</b> { <b>CellsAlreadyInitialized</b> = -1
-, <b>CellsAreNull</b> = -2
- }</td></tr>
-<tr class="separator:abfd51332ef0e0ba71f951a69e68e06be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:afcaeecaad0a03e216f79537596187398"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CAdatatypes_8h.html#afcaeecaad0a03e216f79537596187398">MajorityCounter</a> = std::unordered_map&lt; int, int &gt;</td></tr>
+<tr class="memdesc:afcaeecaad0a03e216f79537596187398"><td class="mdescLeft">&#160;</td><td class="mdescRight">counter type for determining which cell state is the majority  <a href="CAdatatypes_8h.html#afcaeecaad0a03e216f79537596187398">More...</a><br /></td></tr>
+<tr class="separator:afcaeecaad0a03e216f79537596187398"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >This file contains the custom datatypes used in the Cellular Automata project. </p>
 <dl class="section author"><dt>Author</dt><dd>Trevor Oldham (<a href="#" onclick="location.href='mai'+'lto:'+'tre'+'vo'+'ldh'+'am'+'@be'+'rk'+'ele'+'y.'+'edu'; return false;">trevo<span class="obfuscator">.nosp@m.</span>ldha<span class="obfuscator">.nosp@m.</span>m@ber<span class="obfuscator">.nosp@m.</span>kele<span class="obfuscator">.nosp@m.</span>y.edu</a>)</dd></dl>
 <p><b>Contributor(s)</b> <br  />
  &emsp;&emsp; Emmanuel Cortes </p><dl class="section date"><dt>Date</dt><dd>2022-12-03 </dd></dl>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Typedef Documentation</h2>
+<a id="afcaeecaad0a03e216f79537596187398" name="afcaeecaad0a03e216f79537596187398"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcaeecaad0a03e216f79537596187398">&#9670;&#160;</a></span>MajorityCounter</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="CAdatatypes_8h.html#afcaeecaad0a03e216f79537596187398">MajorityCounter</a> =  std::unordered_map&lt;int, int&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>counter type for determining which cell state is the majority </p>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5

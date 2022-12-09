@@ -13,3 +13,5 @@
     12/5/2022:  Emmanuel: Updated Doxyfile and renamed Docs/ to docs/ for GitHub Pages support. 
     Resolved bug encountered in test_CA.cpp when initializing a vector or tensor. 
     Miscellaneous changes to existing docstrings.
+
+    12/8/2022:  Emmanuel: Added step function and related functions for computing the next cellular automata state. The step function supports the ability to pass a custom rule function to allow the user to implement their own rules. Added guard clauses to various methods so that the class properly handles failure modes. Also defined a method for printing an error message depending on the error code given.

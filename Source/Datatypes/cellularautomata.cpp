@@ -18,7 +18,7 @@
 
 /**
  * @brief Construct a new Cellular Automata:: Cellular Automata object.
- * Sets the default value to all class attributes
+ * Sets the default value to all class attributes.
  *
  */
 CellularAutomata::CellularAutomata()
@@ -29,23 +29,20 @@ CellularAutomata::CellularAutomata()
     num_states = 2;
     boundary_type = Periodic;
     boundary_radius = 1;
-    long_boundary_radius = 2;
-    neighborhood_type = VonNeumann;
+    neighborhood_type = Moore;
     rule_type = Majority;
-    shortr_weight = 1;
-    longr_weight = 2;
     steps_taken = 0;
     vector = nullptr;
-    next_vector == nullptr;
+    next_vector = nullptr;
     matrix = nullptr;
-    next_matrix == nullptr;
+    next_matrix = nullptr;
     tensor = nullptr;
-    next_tensor == nullptr;
+    next_tensor = nullptr;
 }
 
 /**
  * @brief Destroy the Cellular Automata:: Cellular Automata object.
- * Deallocates memory reserved for vector/matrix/tensor
+ * Deallocates memory reserved for vector/matrix/tensor.
  *
  */
 CellularAutomata::~CellularAutomata()
@@ -93,10 +90,13 @@ CellularAutomata::~CellularAutomata()
 }
 
 /**
- * @brief Construct a new CellularAutomata::setup_dimensions object
+ * @brief Construct a new CellularAutomata::setup_dimensions object.
  *
  * @param axis1_dim the size of a one dimensional vector
- * @returns the error code (-1: vector is already allocated) (0: no errors)
+ * @return int - error code\n
+ * CellsAlreadyInitialized: vector was already allocated\n
+ * CellsMalloc: couldn't allocate memory for the specified vector size\n
+ * 0: no error
  */
 int CellularAutomata::setup_dimensions(int axis1_dim)
 {
@@ -106,8 +106,13 @@ int CellularAutomata::setup_dimensions(int axis1_dim)
     }
 
     this->axis1_dim = axis1_dim;
-    vector = new (nothrow) int[axis1_dim];
-    next_vector = new (nothrow) int[axis1_dim];
+    vector = new (std::nothrow) int[axis1_dim];
+    next_vector = new (std::nothrow) int[axis1_dim];
+
+    if (vector == nullptr || next_vector == nullptr)
+    {
+        return CellsMalloc;
+    }
 
     // initialize vector filled with zeros
     for (int j = 0; j < axis1_dim; j++)
@@ -120,11 +125,14 @@ int CellularAutomata::setup_dimensions(int axis1_dim)
 }
 
 /**
- * @brief Construct a new CellularAutomata::setup_dimensions object
+ * @brief Construct a new CellularAutomata::setup_dimensions object.
  *
  * @param axis1_dim  The size of the first dimension
  * @param axis2_dim  The size of the second dimension
- * @returns error code (-1: matrix is already allocated) (0: no error)
+ * @return int - error code\n
+ * CellsAlreadyInitialized: matrix was already allocated\n
+ * CellsMalloc: couldn't allocate memory for the specified matrix size\n
+ * 0: no error
  */
 int CellularAutomata::setup_dimensions(int axis1_dim, int axis2_dim)
 {
@@ -135,12 +143,18 @@ int CellularAutomata::setup_dimensions(int axis1_dim, int axis2_dim)
 
     this->axis1_dim = axis1_dim;
     this->axis2_dim = axis2_dim;
-    matrix = new (nothrow) int *[axis1_dim];
-    next_matrix = new (nothrow) int *[axis1_dim];
+    matrix = new (std::nothrow) int *[axis1_dim];
+    next_matrix = new (std::nothrow) int *[axis1_dim];
+
+    if (matrix == nullptr || next_matrix == nullptr)
+    {
+        return CellsMalloc;
+    }
+
     for (int i = 0; i < axis1_dim; i++)
     {
-        matrix[i] = new (nothrow) int[axis2_dim];
-        next_matrix[i] = new (nothrow) int[axis2_dim];
+        matrix[i] = new (std::nothrow) int[axis2_dim];
+        next_matrix[i] = new (std::nothrow) int[axis2_dim];
     }
 
     // initialize matrix filled with zeros
@@ -157,12 +171,15 @@ int CellularAutomata::setup_dimensions(int axis1_dim, int axis2_dim)
 }
 
 /**
- * @brief Construct a new CellularAutomata::setup_dimensions object
+ * @brief Construct a new CellularAutomata::setup_dimensions object.
  *
  * @param axis1_dim The size of the first dimension
  * @param axis2_dim The size of the second dimension
  * @param axis3_dim The size of the third dimension
- * @returns error code (-1: tensor was already allocated) (0: no error)
+ * @return int - error code\n
+ * CellsAlreadyInitialized: tensor was already allocated\n
+ * CellsMalloc: couldn't allocate memory for the specified tensor size\n
+ * 0: no error
  */
 int CellularAutomata::setup_dimensions(int axis1_dim, int axis2_dim, int axis3_dim)
 {
@@ -174,17 +191,23 @@ int CellularAutomata::setup_dimensions(int axis1_dim, int axis2_dim, int axis3_d
     this->axis1_dim = axis1_dim;
     this->axis2_dim = axis2_dim;
     this->axis3_dim = axis3_dim;
-    tensor = new (nothrow) int **[axis1_dim];
-    next_tensor = new (nothrow) int **[axis1_dim];
+    tensor = new (std::nothrow) int **[axis1_dim];
+    next_tensor = new (std::nothrow) int **[axis1_dim];
+
+    if (tensor == nullptr || next_tensor == nullptr)
+    {
+        return CellsMalloc;
+    }
+
     for (int i = 0; i < axis1_dim; i++)
     {
-        tensor[i] = new (nothrow) int *[axis2_dim];
-        next_tensor[i] = new (nothrow) int *[axis2_dim];
+        tensor[i] = new (std::nothrow) int *[axis2_dim];
+        next_tensor[i] = new (std::nothrow) int *[axis2_dim];
 
         for (int j = 0; j < axis2_dim; j++)
         {
-            tensor[i][j] = new (nothrow) int[axis3_dim];
-            next_tensor[i][j] = new (nothrow) int[axis3_dim];
+            tensor[i][j] = new (std::nothrow) int[axis3_dim];
+            next_tensor[i][j] = new (std::nothrow) int[axis3_dim];
         }
     }
 
@@ -205,7 +228,7 @@ int CellularAutomata::setup_dimensions(int axis1_dim, int axis2_dim, int axis3_d
 }
 
 /**
- * @brief setup neighborhood with values from enum neighborhood
+ * @brief Setup neighborhood with values from enum neighborhood.
  *
  * @param neighborhood_type enum value for neighborhood type (VonNeumann or Moore)
  * @return int error code
@@ -217,66 +240,47 @@ int CellularAutomata::setup_neighborhood(neighborhood neighborhood_type)
 }
 
 /**
- * @brief setup boundary with enum values from boundary, include boundary radius
+ * @brief Setup boundary with enum values from boundary and set the boundary radius.
  *
  * @param bound_type enum value for boundary (None, Periodic, Walled, CutOff)
  * @param radius radius for the boundary
- * @return int error code
+ * @return int - error code\n
+ * InvalidRadius: radius can't be less than equal to 0\n
+ * 0: no error
  */
 int CellularAutomata::setup_boundary(boundary bound_type, int radius)
 {
+    if (radius <= 0)
+    {
+        return InvalidRadius;
+    }
     this->boundary_type = bound_type;
     this->boundary_radius = radius;
     return 0;
 }
 
 /**
- * @brief setup boundary with enum values from boundary
- * include long-range and short-range boundary radius used by Majority rule
+ * @brief Defines the range of cell states to be used in the CA object.
  *
- * @param bound_type enum value for boundary (None, Periodic, Walled, CutOff)
- * @param short_radius short radius for the boundary
- * @param long_radius long radius for the boundary
- * @return int error code
- */
-int CellularAutomata::setup_boundary(boundary bound_type, int short_radius, int long_radius)
-{
-    this->boundary_type = bound_type;
-    this->boundary_radius = short_radius;
-    this->long_boundary_radius = long_radius;
-    return 0;
-}
-
-/**
- * @brief describes the range of cell states to be used in the CA object
- *
- * @param num_states describing the range of numbers to use for cell states
- * @return int error code
+ * @param num_states describes the range of numbers to use for cell states
+ * @return int - error code\n
+ * InvalidNumStates: num_states can't be less than to 2\n
+ * 0: no error
  */
 int CellularAutomata::setup_cell_states(int num_states)
 {
+    if (num_states < 2)
+    {
+        return InvalidNumStates;
+    }
     this->num_states = num_states;
     return 0;
 }
 
 /**
- * @brief set the short and long weights used in the majority rule
+ * @brief Setup the rule choice sed to specify the rule type to be used in CA object.
  *
- * @param shortr_weight the short weight
- * @param longr_weight the long weight
- * @return int error code
- */
-int CellularAutomata::setup_rule_short_long(double shortr_weight, double longr_weight)
-{
-    this->shortr_weight = shortr_weight;
-    this->longr_weight = longr_weight;
-    return 0;
-}
-
-/**
- * @brief setup the rule choice
- * used to specify the rule type to be used in CA object
- * @param rule_type enum rule representing the rule type. choose from (Majority, Parity)
+ * @param rule_type enum rule representing the rule type
  * @return int error code
  */
 int CellularAutomata::setup_rule(rule rule_type)
@@ -286,31 +290,31 @@ int CellularAutomata::setup_rule(rule rule_type)
 }
 
 /**
- * @brief initializes the first state of the grid using random numbers
+ * @brief Initializes the first state of the grid using random numbers.
  *
  * @param x_state choose the cell state to initialize the grid with.
  * @param prob the probability of a cell to turn to state given from x_state
- * @return int error code
- * (CellsAreNull: tensor not initialized)
- * (InvalidCellState: x_state must be less than num_states)
- * (0: no error)
+ *@return int - error code\n
+ * CellsAreNull: tensor not initialized\n
+ * InvalidCellStateCondition: x_state must be less than num_states\n
+ * 0: no error
  */
 int CellularAutomata::init_condition(int x_state, double prob)
 {
     if (!(x_state < num_states))
     {
-        return InvalidCellState;
+        return InvalidCellStateCondition;
     }
 
     srand(time(NULL));
-    double random_cell_value;
+    double random_cell_state;
 
     if (vector != nullptr)
     {
         for (int i = 0; i < axis1_dim; i++)
         {
-            random_cell_value = (double)rand() / RAND_MAX;
-            if (random_cell_value < prob)
+            random_cell_state = (double)rand() / RAND_MAX;
+            if (random_cell_state < prob)
             {
                 vector[i] = x_state;
             }
@@ -322,8 +326,8 @@ int CellularAutomata::init_condition(int x_state, double prob)
         {
             for (int k = 0; k < axis2_dim; k++)
             {
-                random_cell_value = (double)rand() / RAND_MAX;
-                if (random_cell_value < prob)
+                random_cell_state = (double)rand() / RAND_MAX;
+                if (random_cell_state < prob)
                 {
                     matrix[j][k] = x_state;
                 }
@@ -338,8 +342,8 @@ int CellularAutomata::init_condition(int x_state, double prob)
             {
                 for (int k = 0; k < axis3_dim; k++)
                 {
-                    random_cell_value = (double)rand() / RAND_MAX;
-                    if (random_cell_value < prob)
+                    random_cell_state = (double)rand() / RAND_MAX;
+                    if (random_cell_state < prob)
                     {
                         tensor[i][j][k] = x_state;
                     }
@@ -355,45 +359,106 @@ int CellularAutomata::init_condition(int x_state, double prob)
 }
 
 /**
- * @brief initializes the counter used for determining which cell state is the majority
+ * @brief Sets the new_cell_state variable based on the specified rule.
  *
- * @param counter keeps track of each state's occupancies
+ * @param cell_index cell of interest's index
+ * @param index_size size of cell_index array
+ * @param neighborhood_cells flatten array of all neighboring cells
+ * @param neighborhood_size size of neighborhood_cells array
+ * @param new_cell_state reference variable for setting the new state
+ * @param custom_rule function that is called when a Custom rule type is specified
+ *@return int - error code\n
+ * CellsAreNull: neither vector, matrix, nor tensor are initialized\n
+ * CustomRuleIsNull: given custom rule function is null\n
+ * 0: no error
  */
-void CellularAutomata::initialize_majority_rule_counter(MajorityCounter &counter)
+int CellularAutomata::set_new_cell_state(int *cell_index, int index_size,
+                                         int *neighborhood_cells, int neighborhood_size,
+                                         int &new_cell_state, void(custom_rule)(int *, int, int *, int, int &))
 {
-    // sets the votes_counter for every state to 0
-    for (int j = 0; j < num_states; j++)
-    {
-        counter.insert(make_pair(j, 0));
-    }
-}
+    int sum = 0;                         // sum of cells within boundary_radius for Parity rule
+    MajorityCounter state_votes_counter; // counter to keep track of votes for Majority rule
+    initialize_majority_rule_counter(state_votes_counter, num_states);
 
-int CellularAutomata::get_cell_state(int sum, const MajorityCounter &votes_counter)
-{
-    int new_cell_state = 0;
     switch (rule_type)
     {
+    case Custom:
+        if (vector == nullptr && matrix == nullptr && tensor == nullptr)
+        {
+            new_cell_state = -1;
+            return CellsAreNull;
+        }
+        if (custom_rule == nullptr)
+        {
+            new_cell_state = -1;
+            return CustomRuleIsNull;
+        }
+        else
+        {
+            // custom_rule should set the new_cell_state
+            custom_rule(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state);
+        }
+        break;
     case Parity:
-        new_cell_state = sum % num_states; // computed and store the parity state
+        for (int i = 0; i < neighborhood_size; i++)
+        {
+            // update sum with current cell value
+            sum += neighborhood_cells[i];
+        }
+        new_cell_state = sum % num_states; // store the parity state as the new state
         break;
     case Majority:
-        // find the max_element in the counter based on the pairs' second variable
-        auto max_elem = max_element(votes_counter.begin(), votes_counter.end(),
+        for (int i = 0; i < neighborhood_size; i++)
+        {
+            // increment the cell state's number of votes
+            auto it = state_votes_counter.find(neighborhood_cells[i]);
+            if (it != state_votes_counter.end())
+            {
+                it->second++;
+            }
+        }
+        // find the max_element in the counter based on the pairs' second variable (number of "votes")
+        auto max_elem = max_element(state_votes_counter.begin(), state_votes_counter.end(),
                                     [](const std::pair<int, int> &a, const std::pair<int, int> &b)
                                     { return a.second < b.second; });
         new_cell_state = max_elem->first; // set the majority state as the new state
         break;
     }
-    return new_cell_state;
+    return 0;
 }
 
-int CellularAutomata::get_state_from_neighborhood(int i, int &new_cell_state)
+/**
+ * @brief Generates an array of neighboring cells and then calls set_new_cell_state to set the state.
+ * This method supports a vector of cell states.
+ *
+ * @param cell_index cell of interest's index
+ * @param index_size size of cell_index array
+ * @param new_cell_state reference variable for setting the new state
+ * @param custom_rule function that is called when a Custom rule type is specified
+ *@return int - error code\n
+ * Error codes returned by set_new_cell_state\n
+ * 0: no error
+ */
+int CellularAutomata::get_state_from_neighborhood_1d(int *cell_index, int index_size, int &new_cell_state,
+                                                     void(custom_rule)(int *, int, int *, int, int &))
 {
-    int sum = 0;                   // sum of cells within boundary_radius for Parity rule
-    int periodic_index;            // used by Periodic boundary type
-    int current_state;             // store the cell's current state
-    MajorityCounter votes_counter; // counter to keep track of votes for Majority rule
-    initialize_majority_rule_counter(votes_counter);
+    int error_code = 0;         // store error code return by other methods
+    int i = cell_index[0];      // get i-th index from array
+    int periodic_index;         // used by Periodic boundary type
+    int neighborhood_size;      // number of neighbors in neighborhood
+    int neighborhood_index = 0; // keep track of neighborhood array as we iterate through CA cells
+
+    /*
+     * Generate a flatten array of the cell's neighborhood.
+     * The neighborhood array can then be utilized for Majority, Parity, or Custom rule
+     */
+    neighborhood_size = get_neighborhood_size(index_size, boundary_radius, neighborhood_type);
+    // allocate memory and check if operation was successful
+    int *neighborhood_cells = new (std::nothrow) int[neighborhood_size];
+    if (neighborhood_cells == nullptr)
+    {
+        return NeighborhoodCellsMalloc;
+    }
 
     // VonNeumann and Moore do not differ for 1d (vector) case
     switch (boundary_type)
@@ -401,24 +466,17 @@ int CellularAutomata::get_state_from_neighborhood(int i, int &new_cell_state)
     case Periodic:
         for (int di = -boundary_radius; di <= boundary_radius; di++)
         {
-            periodic_index = (i + di + axis1_dim) % axis1_dim;
-            int current_state = vector[periodic_index];
-            // update sum with current cell value
-            sum += current_state;
-            // increment the cell state's number of votes
-            auto it = votes_counter.find(current_state);
-            if (it != votes_counter.end())
-            {
-                it->second++;
-            }
+            periodic_index = get_periodic_index_axis(i, di, axis1_dim);
+            // add state to flattened array
+            neighborhood_cells[neighborhood_index] = vector[periodic_index];
+            neighborhood_index++;
         }
-        new_cell_state = get_cell_state(sum, votes_counter);
+        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state, custom_rule);
         break;
-    case Walled:
+    case Walled: // with walled boundaries the edge cells never change
         // check if i is a boundary cell
         if (i == 0 || i == axis1_dim - 1)
         {
-            // with walled boundaries the edge cells never change
             new_cell_state = vector[i]; // keep boundary cell state
             break;
         }
@@ -432,64 +490,78 @@ int CellularAutomata::get_state_from_neighborhood(int i, int &new_cell_state)
                 // outside bounds; don't include cell state in the sum/counter
                 continue;
             }
-            int current_state = vector[di];
-            // update sum with current cell value
-            sum += current_state;
-            // increment the cells value number of votes
-            auto it = votes_counter.find(current_state);
-            if (it != votes_counter.end())
-            {
-                it->second++;
-            }
+            // add state to flattened array
+            neighborhood_cells[neighborhood_index] = vector[di];
+            neighborhood_index++;
         }
-        new_cell_state = get_cell_state(sum, votes_counter);
+        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state, custom_rule);
         break;
     }
-    return 0;
+    delete[] neighborhood_cells;
+    return error_code;
 }
 
-int CellularAutomata::get_state_from_neighborhood(int i, int j, int &new_cell_state)
+/**
+ * @brief Generates an array of neighboring cells and then calls set_new_cell_state to set the state.
+ * This method supports a matrix of cell states.
+ *
+ * @param cell_index cell of interest's index
+ * @param index_size size of cell_index array
+ * @param new_cell_state reference variable for setting the new state
+ * @param custom_rule function that is called when a Custom rule type is specified
+ *@return int - error code\n
+ * Error codes returned by set_new_cell_state\n
+ * 0: no error
+ */
+int CellularAutomata::get_state_from_neighborhood_2d(int *cell_index, int index_size, int &new_cell_state,
+                                                     void(custom_rule)(int *, int, int *, int, int &))
 {
-    int sum = 0;                   // sum of cells within boundary_radius for Parity rule
-    int periodic_index1;           // axis1_dim index used by Periodic boundary type
-    int periodic_index2;           // axis2_dim index used by Periodic boundary type
-    int current_state;             // store the cell's current state
-    MajorityCounter votes_counter; // counter to keep track of votes for Majority rule
-    initialize_majority_rule_counter(votes_counter);
+    int error_code = 0;         // store error code return by other methods
+    int i = cell_index[0];      // get i-th index from array
+    int j = cell_index[1];      // get j-th index from array
+    int periodic_index1;        // axis1_dim index used by Periodic boundary type
+    int periodic_index2;        // axis2_dim index used by Periodic boundary type
+    int neighborhood_size;      // number of neighbors in neighborhood
+    int neighborhood_index = 0; // keep track of neighborhood array as we iterate through CA cells
+
+    /*
+     * Generate a flatten array of the cell's neighborhood.
+     * The neighborhood array can then be utilized for Majority, Parity, or Custom rule
+     */
+    neighborhood_size = get_neighborhood_size(index_size, boundary_radius, neighborhood_type);
+    // allocate memory and check if operation was successful
+    int *neighborhood_cells = new (std::nothrow) int[neighborhood_size];
+    if (neighborhood_cells == nullptr)
+    {
+        return NeighborhoodCellsMalloc;
+    }
 
     switch (boundary_type)
     {
     case Periodic:
         for (int di = -boundary_radius; di <= boundary_radius; di++)
         {
+            periodic_index1 = get_periodic_index_axis(i, di, axis1_dim);
             for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
             {
                 // exclude diagonal cells from Moore neighborhood when VonNeumann is selected
-                if ((neighborhood_type == VonNeumann) && (di != 0 && dj != 0))
+                if ((neighborhood_type == VonNeumann) && is_diagonal_neighboring_cell_2d(di, dj))
                 {
-                    // current di,dj cell is a diagonal neighbour so exclude it
+                    // current di,dj cell is a diagonal neighbor so exclude it
                     continue;
                 }
-                periodic_index1 = (i + di + axis1_dim) % axis1_dim;
-                periodic_index2 = (j + dj + axis2_dim) % axis2_dim;
-                current_state = matrix[periodic_index1][periodic_index2];
-                // update sum with current cell value
-                sum += current_state;
-                // increment the cell state's number of votes
-                auto it = votes_counter.find(current_state);
-                if (it != votes_counter.end())
-                {
-                    it->second++;
-                }
+                periodic_index2 = get_periodic_index_axis(j, dj, axis2_dim);
+                // add state to flattened array
+                neighborhood_cells[neighborhood_index] = matrix[periodic_index1][periodic_index2];
+                neighborhood_index++;
             }
         }
-        new_cell_state = get_cell_state(sum, votes_counter);
+        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state, custom_rule);
         break;
-    case Walled:
+    case Walled: // with walled boundaries the edge cells never change
         // check if i,j is a boundary cell
         if ((i == 0 || i == axis1_dim - 1) || (j == 0 || j == axis2_dim - 1))
         {
-            // with walled boundaries the edge cells never change
             new_cell_state = matrix[i][j]; // keep boundary cell state
             break;
         }
@@ -500,9 +572,9 @@ int CellularAutomata::get_state_from_neighborhood(int i, int j, int &new_cell_st
             for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
             {
                 // exclude diagonal cells from Moore neighborhood when VonNeumann is selected
-                if ((neighborhood_type == VonNeumann) && (di != 0 && dj != 0))
+                if ((neighborhood_type == VonNeumann) && is_diagonal_neighboring_cell_2d(di, dj))
                 {
-                    // current di,dj cell is a diagonal neighbour so exclude it
+                    // current di,dj cell is a diagonal neighbor so exclude it
                     continue;
                 }
                 // exclude cells that are out of bounds
@@ -511,64 +583,80 @@ int CellularAutomata::get_state_from_neighborhood(int i, int j, int &new_cell_st
                     // outside bounds; don't include cell state in the sum/counter
                     continue;
                 }
-                int current_state = matrix[di][dj];
-                // update sum with current cell value
-                sum += current_state;
-                // increment the cells value number of votes
-                auto it = votes_counter.find(current_state);
-                if (it != votes_counter.end())
-                {
-                    it->second++;
-                }
+                // add state to flattened array
+                neighborhood_cells[neighborhood_index] = matrix[di][dj];
+                neighborhood_index++;
             }
         }
-        new_cell_state = get_cell_state(sum, votes_counter);
+        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state, custom_rule);
         break;
     }
-    return 0;
+    delete[] neighborhood_cells;
+    return error_code;
 }
 
-int CellularAutomata::get_state_from_neighborhood(int i, int j, int k, int &new_cell_state)
+/**
+ * @brief Generates an array of neighboring cells and then calls set_new_cell_state to set the state.
+ * This method supports a tensor of cell states.
+ *
+ * @param cell_index cell of interest's index
+ * @param index_size size of cell_index array
+ * @param new_cell_state reference variable for setting the new state
+ * @param custom_rule function that is called when a Custom rule type is specified
+ *@return int - error code\n
+ * Error codes returned by set_new_cell_state\n
+ * 0: no error
+ */
+int CellularAutomata::get_state_from_neighborhood_3d(int *cell_index, int index_size, int &new_cell_state,
+                                                     void(custom_rule)(int *, int, int *, int, int &))
 {
-    int sum = 0;                   // sum of cells within boundary_radius for Parity rule
-    int periodic_index1;           // axis1_dim index used by Periodic boundary type
-    int periodic_index2;           // axis2_dim index used by Periodic boundary type
-    int periodic_index3;           // axis3_dim index used by Periodic boundary type
-    int current_state;             // store the cell's current state
-    MajorityCounter votes_counter; // counter to keep track of votes for Majority rule
-    initialize_majority_rule_counter(votes_counter);
+    int error_code = 0;         // store error code return by other methods
+    int i = cell_index[0];      // get i-th index from array
+    int j = cell_index[1];      // get j-th index from array
+    int k = cell_index[2];      // get k-th index from array
+    int periodic_index1;        // axis1_dim index used by Periodic boundary type
+    int periodic_index2;        // axis2_dim index used by Periodic boundary type
+    int periodic_index3;        // axis3_dim index used by Periodic boundary type
+    int neighborhood_size;      // number of neighbors in neighborhood
+    int neighborhood_index = 0; // keep track of neighborhood array as we iterate through CA cells
+
+    /*
+     * Generate a flatten array of the cell's neighborhood.
+     * The neighborhood array can then be utilized for Majority, Parity, or Custom rule
+     */
+    neighborhood_size = get_neighborhood_size(index_size, boundary_radius, neighborhood_type);
+    // allocate memory and check if operation was successful
+    int *neighborhood_cells = new (std::nothrow) int[neighborhood_size];
+    if (neighborhood_cells == nullptr)
+    {
+        return NeighborhoodCellsMalloc;
+    }
 
     switch (boundary_type)
     {
     case Periodic:
         for (int di = -boundary_radius; di <= boundary_radius; di++)
         {
+            periodic_index1 = get_periodic_index_axis(i, di, axis1_dim);
             for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
             {
+                periodic_index2 = get_periodic_index_axis(j, dj, axis2_dim);
                 for (int dk = -boundary_radius; dk <= boundary_radius; dk++)
                 {
                     // exclude diagonal cells from Moore neighborhood when VonNeumann is selected
-                    if ((neighborhood_type == VonNeumann) && (di != 0 && dj != 0 && dk != 0))
+                    if ((neighborhood_type == VonNeumann) && is_diagonal_neighboring_cell_3d(di, dj, dk))
                     {
-                        // current di,dj,dk cell is a diagonal neighbour so exclude it
+                        // current di,dj,dk cell is a diagonal neighbor so exclude it
                         continue;
                     }
-                    periodic_index1 = (i + di + axis1_dim) % axis1_dim;
-                    periodic_index2 = (j + dj + axis2_dim) % axis2_dim;
-                    periodic_index3 = (k + dk + axis3_dim) % axis3_dim;
-                    current_state = tensor[periodic_index1][periodic_index2][periodic_index3];
-                    // update sum with current cell value
-                    sum += current_state;
-                    // increment the cell state's number of votes
-                    auto it = votes_counter.find(current_state);
-                    if (it != votes_counter.end())
-                    {
-                        it->second++;
-                    }
+                    periodic_index3 = get_periodic_index_axis(k, dk, axis3_dim);
+                    // add state to flattened array
+                    neighborhood_cells[neighborhood_index] = tensor[periodic_index1][periodic_index2][periodic_index3];
+                    neighborhood_index++;
                 }
             }
         }
-        new_cell_state = get_cell_state(sum, votes_counter);
+        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state, custom_rule);
         break;
     case Walled:
         // check if i,j,k is a boundary cell
@@ -587,9 +675,9 @@ int CellularAutomata::get_state_from_neighborhood(int i, int j, int k, int &new_
                 for (int dk = -boundary_radius; dk <= boundary_radius; dk++)
                 {
                     // exclude diagonal cells from Moore neighborhood when VonNeumann is selected
-                    if ((neighborhood_type == VonNeumann) && (di != 0 && dj != 0 && dk != 0))
+                    if ((neighborhood_type == VonNeumann) && is_diagonal_neighboring_cell_3d(di, dj, dk))
                     {
-                        // current di,dj,dk cell is a diagonal neighbour so exclude it
+                        // current di,dj,dk cell is a diagonal neighbor so exclude it
                         continue;
                     }
                     // exclude cells that are out of bounds
@@ -598,74 +686,101 @@ int CellularAutomata::get_state_from_neighborhood(int i, int j, int k, int &new_
                         // outside bounds; don't include cell state in the sum/counter
                         continue;
                     }
-                    int current_state = tensor[di][dj][dk];
-                    // update sum with current cell value
-                    sum += current_state;
-                    // increment the cells value number of votes
-                    auto it = votes_counter.find(current_state);
-                    if (it != votes_counter.end())
-                    {
-                        it->second++;
-                    }
+                    // add state to flattened array
+                    neighborhood_cells[neighborhood_index] = tensor[di][dj][dk];
+                    neighborhood_index++;
                 }
             }
         }
-        new_cell_state = get_cell_state(sum, votes_counter);
+        error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state, custom_rule);
         break;
     }
-    return 0;
+    delete[] neighborhood_cells;
+    return error_code;
 }
 
-int CellularAutomata::step()
+/**
+ * @brief Simulates a cellular automata step. 
+ * A new state is generated and stored stored as the new state for subsequent calls to step method.
+ * 
+ * This method supports the use of a custom rule type.
+ *
+ * @param custom_rule function that is called when a Custom rule type is specified
+ *@return int - error code\n
+ * Error codes returned by get_state_from_neighborhood_Xd methods\n
+ * 0: no error
+ */
+int CellularAutomata::step(void(custom_rule)(int *, int, int *, int, int &))
 {
-    int new_cell_state;
-    int error = 0;
+    int error_code = 0; // store error code return by other methods
+    int new_cell_state; // stores the cell's new state
+    int index_size;     // number of indices required to address the cell
+
     if (vector != nullptr)
     {
+        // initialize index_size for a vector and declare the cell_index variable
+        index_size = 1;
+        int cell_index[index_size];
         for (int i = 0; i < axis1_dim; i++)
         {
-            error = get_state_from_neighborhood(i, new_cell_state);
-            if (error < 0)
+            cell_index[0] = i; // store the i-th index
+            // store the main cell's index (for custom rule type)
+            error_code = get_state_from_neighborhood_1d(cell_index, index_size, new_cell_state, custom_rule);
+            if (error_code < 0)
             {
-                return error;
+                return error_code;
             }
             next_vector[i] = new_cell_state;
         }
+        // store next cell state to the current cell state for the next time step
         swap_states(vector, next_vector, axis1_dim);
     }
     else if (matrix != nullptr)
     {
-        for (int j = 0; j < axis1_dim; j++)
+        // initialize index_size for a matrix and declare the cell_index variable
+        index_size = 2;
+        int cell_index[index_size];
+        for (int i = 0; i < axis1_dim; i++)
         {
-            for (int k = 0; k < axis2_dim; k++)
+            cell_index[0] = i; // store the i-th index
+            for (int j = 0; j < axis2_dim; j++)
             {
-                error = get_state_from_neighborhood(j, k, new_cell_state);
-                if (error < 0)
+                cell_index[1] = j; // store the j-th index
+                error_code = get_state_from_neighborhood_2d(cell_index, index_size, new_cell_state, custom_rule);
+                if (error_code < 0)
                 {
-                    return error;
+                    return error_code;
                 }
-                next_matrix[j][k] = new_cell_state;
+                next_matrix[i][j] = new_cell_state;
             }
         }
+        // store next cell state to the current cell state for the next time step
         swap_states(matrix, next_matrix, axis1_dim, axis2_dim);
     }
     else if (tensor != nullptr)
     {
+        // initialize index_size for a tensor and declare the cell_index variable
+        index_size = 3;
+        int cell_index[index_size];
         for (int i = 0; i < axis1_dim; i++)
         {
+            cell_index[0] = i; // store the i-th index
             for (int j = 0; j < axis2_dim; j++)
             {
+                cell_index[1] = j; // store the j-th index
                 for (int k = 0; k < axis3_dim; k++)
                 {
-                    error = get_state_from_neighborhood(i, j, k, new_cell_state);
-                    if (error < 0)
+                    cell_index[2] = k; // store the k-th index
+                    error_code = get_state_from_neighborhood_3d(cell_index, index_size, new_cell_state, custom_rule);
+                    if (error_code < 0)
                     {
-                        return error;
+                        return error_code;
                     }
                     next_tensor[i][j][k] = new_cell_state;
                 }
             }
         }
+        // store next cell state to the current cell state for the next time step
         swap_states(tensor, next_tensor, axis1_dim, axis2_dim, axis3_dim);
     }
     else
@@ -674,13 +789,28 @@ int CellularAutomata::step()
     }
 
     steps_taken++;
-    return 0;
+    return error_code;
 }
 
 /**
- * @brief print the current state of the grid
+ * @brief Simulates a cellular automata step.
+ * A new state is generated and stored stored as the new state for subsequent calls to step method.
  *
- * @return int error code (-2: tensor not initialized) (0: no error)
+ *@return int - error code\n
+ * Error codes returned by get_state_from_neighborhood_Xd methods\n
+ * 0: no error
+ */
+int CellularAutomata::step()
+{
+    return step(nullptr); // return step(func) error code
+}
+
+/**
+ * @brief Print the current state of the grid.
+ *
+ * @return int - error code\n
+ * CellsAreNull: neither vector, matrix, nor tensor are initialized\n
+ * 0: no error
  */
 int CellularAutomata::print_grid()
 {
@@ -723,4 +853,43 @@ int CellularAutomata::print_grid()
         return CellsAreNull;
     }
     return 0;
+}
+
+/**
+ * @brief Prints an error message for the given error code
+ *
+ * @param error error_code enum type
+ */
+void CellularAutomata::print_error_status(error_code error)
+{
+    switch (error)
+    {
+    case CellsAlreadyInitialized:
+        std::cout << "ERROR [" << error << "]: Can't reinitialize vector, matrix, nor tensor. \n";
+        break;
+    case CellsAreNull:
+        std::cout << "ERROR [" << error << "]: The vector, matrix, and tensor are null. \n";
+        break;
+    case CellsMalloc:
+        std::cout << "ERROR [" << error << "]: Could not allocate memory for either vector, matrix, or tensor. \n";
+        break;
+    case InvalidCellState:
+        std::cout << "ERROR [" << error << "]: Invalid cell state given. Must be greater than equal to 2. \n";
+        break;
+    case InvalidCellStateCondition:
+        std::cout << "ERROR [" << error << "]: Invalid cell state condition given. Must be less than the set number of states. \n";
+        break;
+    case InvalidRadius:
+        std::cout << "ERROR [" << error << "]: Invalid boundary radius given. \n";
+        break;
+    case InvalidNumStates:
+        std::cout << "ERROR [" << error << "]: Invalid number of states given. \n";
+        break;
+    case NeighborhoodCellsMalloc:
+        std::cout << "ERROR [" << error << "]: Could not allocate memory for neighborhood array. \n";
+        break;
+    case CustomRuleIsNull:
+        std::cout << "ERROR [" << error << "]: Custom rule function is null (none given). \n";
+        break;
+    }
 }
