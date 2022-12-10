@@ -6,6 +6,7 @@
  * @brief This header files contains utility functions used by CellularAutomata class.
  * @date 2022-12-06
  */
+#include "CAdatatypes.h"
 
 /**
  * @brief swaps the computed next_vector to the current vector

@@ -9,7 +9,7 @@
 CPP         = g++      
 
 # compiler flags -g debug, -O3 optimized version -c create a library object
-CPPFLAGS    =-O0 -g -o 
+CPPFLAGS    =-O0 -g 
 
 # The directory where the include files needed to create the library objects are
 INC_DIR = ../Include
@@ -21,9 +21,9 @@ BIN_DIR     = ../Bindir
 # The next line contains the list of object files created by this Makefile.
 EXECS = test_CA
 
-test_CA: $(INC_DIR)/CAdatatypes.h $(INC_DIR)/CAutils.h
-	$(CPP) $(CPPFLAGS) test_CA test_CA.cpp \
-	-I$(INC_DIR) $(LIB_DIR)/cellularautomata.o $(LIB_DIR)/CAutils.o
+test_CA:
+	$(CPP) $(CPPFLAGS) -I$(INC_DIR) test_CA.cpp -o test_CA \
+	 $(LIB_DIR)/cellularautomata.o $(LIB_DIR)/CAutils.o
 	mv test_CA $(BIN_DIR)
 
 all: $(EXECS)

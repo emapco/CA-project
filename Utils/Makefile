@@ -19,8 +19,8 @@ LIB_DIR     = ../Libdir
 # The next line contains the list of object files created by this Makefile.
 OBJS = CAutils.o
 
-CAutils.o:  $(INC_DIR)/CAutils.h
-	$(CPP) $(CPPFLAGS) CAutils.cpp -I$(INC_DIR)
+CAutils.o:
+	$(CPP) $(CPPFLAGS) -I$(INC_DIR) CAutils.cpp 
 	mv CAutils.o $(LIB_DIR)
 
 all: $(OBJS)

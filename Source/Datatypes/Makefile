@@ -21,8 +21,8 @@ BIN_DIR     = ../../Bindir
 # The next line contains the list of object files created by this Makefile.
 DATATYPES = cellularautomata.o
 
-cellularautomata.o:  $(INC_DIR)/CAdatatypes.h $(INC_DIR)/CAutils.h
-	$(CPP) $(CPPFLAGS) cellularautomata.cpp -I$(INC_DIR)
+cellularautomata.o:
+	$(CPP) $(CPPFLAGS) -I$(INC_DIR) cellularautomata.cpp 
 	mv cellularautomata.o $(LIB_DIR)
 
 all: $(DATATYPES)
