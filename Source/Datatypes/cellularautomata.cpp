@@ -419,8 +419,7 @@ int CellularAutomata::set_new_cell_state(int *cell_index, int index_size,
         }
         // find the max_element in the counter based on the pairs' second variable (number of "votes")
         auto max_elem = max_element(state_votes_counter.begin(), state_votes_counter.end(),
-                                    [](const std::pair<int, int> &a, const std::pair<int, int> &b)
-                                    { return a.second < b.second; });
+                                    less_than_votes);
         new_cell_state = max_elem->first; // set the majority state as the new state
         break;
     }

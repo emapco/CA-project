@@ -9,7 +9,7 @@
  * @date 2022-12-06
  */
 #include "CAdatatypes.h"
-#include <utility> // swap
+#include <utility> // swap, pair
 #include <cmath>   // pow
 
 void swap_states(int *vector, int *next_vector, int axis1_dim)
@@ -93,6 +93,11 @@ void initialize_majority_rule_counter(MajorityCounter &counter, int num_states)
     {
         counter.insert(std::make_pair(j, 0));
     }
+}
+
+bool less_than_votes(const std::pair<int, int> &a, const std::pair<int, int> &b)
+{
+    return a.second < b.second;
 }
 
 int get_periodic_index_axis(int i, int di, int axis_dim)

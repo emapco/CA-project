@@ -120,6 +120,9 @@ diagram of slice: 1 = diagonal cell<br  />
 <tr class="memitem:af62274ed0ea7eaa5580e0c6b7bef4196"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CAutils_8h.html#af62274ed0ea7eaa5580e0c6b7bef4196">initialize_majority_rule_counter</a> (<a class="el" href="CAdatatypes_8h.html#afcaeecaad0a03e216f79537596187398">MajorityCounter</a> &amp;counter, int num_states)</td></tr>
 <tr class="memdesc:af62274ed0ea7eaa5580e0c6b7bef4196"><td class="mdescLeft">&#160;</td><td class="mdescRight">initializes a MajorityCounter instance utilized by Majority rule  <a href="CAutils_8h.html#af62274ed0ea7eaa5580e0c6b7bef4196">More...</a><br /></td></tr>
 <tr class="separator:af62274ed0ea7eaa5580e0c6b7bef4196"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b65fd865bc8dc6c722fbef632384b0c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CAutils_8h.html#a6b65fd865bc8dc6c722fbef632384b0c">less_than_votes</a> (const std::pair&lt; int, int &gt; &amp;a, const std::pair&lt; int, int &gt; &amp;b)</td></tr>
+<tr class="memdesc:a6b65fd865bc8dc6c722fbef632384b0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if a has less votes than b.  <a href="CAutils_8h.html#a6b65fd865bc8dc6c722fbef632384b0c">More...</a><br /></td></tr>
+<tr class="separator:a6b65fd865bc8dc6c722fbef632384b0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bfb29c8d32770bb0a56b25e4a066b2f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CAutils_8h.html#a1bfb29c8d32770bb0a56b25e4a066b2f">get_periodic_index_axis</a> (int i, int di, int axis_dim)</td></tr>
 <tr class="memdesc:a1bfb29c8d32770bb0a56b25e4a066b2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the periodic index used for finding periodic boundary neighbors  <a href="CAutils_8h.html#a1bfb29c8d32770bb0a56b25e4a066b2f">More...</a><br /></td></tr>
 <tr class="separator:a1bfb29c8d32770bb0a56b25e4a066b2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -357,6 +360,44 @@ diagram of slice: 1 = diagonal cell<br  />
 <dl class="section return"><dt>Returns</dt><dd>true: cell is diagonal </dd>
 <dd>
 false: cell is not diagonal </dd></dl>
+
+</div>
+</div>
+<a id="a6b65fd865bc8dc6c722fbef632384b0c" name="a6b65fd865bc8dc6c722fbef632384b0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b65fd865bc8dc6c722fbef632384b0c">&#9670;&#160;</a></span>less_than_votes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool less_than_votes </td>
+          <td>(</td>
+          <td class="paramtype">const std::pair&lt; int, int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::pair&lt; int, int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Determines if a has less votes than b. </p>
+<p >Used to determine max element in a MajorityCounter instance.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>pair instance with the votes stored in the second property </td></tr>
+    <tr><td class="paramname">b</td><td>other pair with the votes stored in the second property </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['print_5ferror_5fstatus_0',['print_error_status',['../classCellularAutomata.html#aecf84011bd9c0a29d76fcc8315115891',1,'CellularAutomata']]],
-  ['print_5fgrid_1',['print_grid',['../classCellularAutomata.html#ad3b7f0b29d2eb243b0ee1637f352e242',1,'CellularAutomata']]]
+  ['neighborhood_0',['neighborhood',['../classCellularAutomata.html#a3a01bdc55c41e1aedf730efba84febe3',1,'CellularAutomata']]],
+  ['neighborhood_5ftype_1',['neighborhood_type',['../classCellularAutomata.html#a9a816123c678a6077678868a8cbfcd30',1,'CellularAutomata']]],
+  ['num_5fstates_2',['num_states',['../classCellularAutomata.html#a35ef1d53fc24b7c4072ebce4846e91b1',1,'CellularAutomata']]]
 ];
