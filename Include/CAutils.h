@@ -6,6 +6,7 @@
  * @brief This header files contains utility functions used by CellularAutomata class.
  * @date 2022-12-06
  */
+#include "CAdatatypes.h"
 
 /**
  * @brief swaps the computed next_vector to the current vector
@@ -92,6 +93,15 @@ bool is_diagonal_neighboring_cell_3d(int i, int j, int k);
 void initialize_majority_rule_counter(MajorityCounter &counter, int num_states);
 
 /**
+ * @brief Determines if a has less votes than b.
+ * Used to determine max element in a MajorityCounter instance.
+ *
+ * @param a pair instance with the votes stored in the second property
+ * @param b other pair with the votes stored in the second property
+ */
+bool less_than_votes(const std::pair<int, int> &a, const std::pair<int, int> &b);
+
+/**
  * @brief get the periodic index used for finding periodic boundary neighbors
  *
  * @param i cell's i-th index
@@ -99,4 +109,4 @@ void initialize_majority_rule_counter(MajorityCounter &counter, int num_states);
  * @param axis_dim dimension of i-th axis
  * @return int
  */
-int get_periodic_index_axis(int i, int di, int axis_dim);
+int get_periodic_index(int i, int di, int axis_dim);

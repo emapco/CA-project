@@ -15,6 +15,9 @@
 #include <unordered_map> // unordered_map
 #include <utility>       // make_pair
 #include <algorithm>     // max_element
+#ifdef ENABLE_OMP
+#include <omp.h>
+#endif
 
 /**
  * @brief Construct a new Cellular Automata:: Cellular Automata object.
@@ -419,8 +422,7 @@ int CellularAutomata::set_new_cell_state(int *cell_index, int index_size,
         }
         // find the max_element in the counter based on the pairs' second variable (number of "votes")
         auto max_elem = max_element(state_votes_counter.begin(), state_votes_counter.end(),
-                                    [](const std::pair<int, int> &a, const std::pair<int, int> &b)
-                                    { return a.second < b.second; });
+                                    less_than_votes);
         new_cell_state = max_elem->first; // set the majority state as the new state
         break;
     }
@@ -444,17 +446,10 @@ int CellularAutomata::get_state_from_neighborhood_1d(int *cell_index, int index_
 {
     int error_code = 0;         // store error code return by other methods
     int i = cell_index[0];      // get i-th index from array
-    int periodic_index;         // used by Periodic boundary type
-    int max_neighborhood_size;  // number of neighbors in neighborhood
     int neighborhood_index = 0; // keep track of neighborhood array as we iterate through CA cells
 
-    /*
-     * Generate a flatten array of the cell's neighborhood.
-     * The neighborhood array can then be utilized for Majority, Parity, or Custom rule
-     */
-    max_neighborhood_size = get_neighborhood_size(index_size, boundary_radius, neighborhood_type);
     // allocate memory and check if operation was successful
-    int *neighborhood_cells = new (std::nothrow) int[max_neighborhood_size];
+    int *neighborhood_cells = malloc_neighborhood_array(index_size);
     if (neighborhood_cells == nullptr)
     {
         return NeighborhoodCellsMalloc;
@@ -464,13 +459,7 @@ int CellularAutomata::get_state_from_neighborhood_1d(int *cell_index, int index_
     switch (boundary_type)
     {
     case Periodic:
-        for (int di = -boundary_radius; di <= boundary_radius; di++)
-        {
-            periodic_index = get_periodic_index_axis(i, di, axis1_dim);
-            // add state to flattened array
-            neighborhood_cells[neighborhood_index] = vector[periodic_index];
-            neighborhood_index++;
-        }
+        generate_periodic_neighborhood_1d(cell_index, neighborhood_cells, neighborhood_index);
         error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_index, new_cell_state, custom_rule);
         break;
     case Walled: // with walled boundaries the edge cells never change
@@ -482,18 +471,7 @@ int CellularAutomata::get_state_from_neighborhood_1d(int *cell_index, int index_
         }
         // fall-through to CutOff case when cell isn't a boundary cell
     case CutOff:
-        for (int di = -boundary_radius; di <= boundary_radius; di++)
-        {
-            // exclude cells that are out of bounds
-            if (di <= 0 || di >= axis1_dim)
-            {
-                // outside bounds; don't include cell state in the sum/counter
-                continue;
-            }
-            // add state to flattened array
-            neighborhood_cells[neighborhood_index] = vector[di];
-            neighborhood_index++;
-        }
+        generate_cutoff_neighborhood_1d(cell_index, neighborhood_cells, neighborhood_index);
         error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_index, new_cell_state, custom_rule);
         break;
     }
@@ -519,18 +497,10 @@ int CellularAutomata::get_state_from_neighborhood_2d(int *cell_index, int index_
     int error_code = 0;         // store error code return by other methods
     int i = cell_index[0];      // get i-th index from array
     int j = cell_index[1];      // get j-th index from array
-    int periodic_index1;        // axis1_dim index used by Periodic boundary type
-    int periodic_index2;        // axis2_dim index used by Periodic boundary type
-    int max_neighborhood_size;  // number of neighbors in neighborhood
     int neighborhood_index = 0; // keep track of neighborhood array as we iterate through CA cells
 
-    /*
-     * Generate a flatten array of the cell's neighborhood.
-     * The neighborhood array can then be utilized for Majority, Parity, or Custom rule
-     */
-    max_neighborhood_size = get_neighborhood_size(index_size, boundary_radius, neighborhood_type);
     // allocate memory and check if operation was successful
-    int *neighborhood_cells = new (std::nothrow) int[max_neighborhood_size];
+    int *neighborhood_cells = malloc_neighborhood_array(index_size);
     if (neighborhood_cells == nullptr)
     {
         return NeighborhoodCellsMalloc;
@@ -539,23 +509,7 @@ int CellularAutomata::get_state_from_neighborhood_2d(int *cell_index, int index_
     switch (boundary_type)
     {
     case Periodic:
-        for (int di = -boundary_radius; di <= boundary_radius; di++)
-        {
-            periodic_index1 = get_periodic_index_axis(i, di, axis1_dim);
-            for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
-            {
-                // exclude diagonal cells from Moore neighborhood when VonNeumann is selected
-                if ((neighborhood_type == VonNeumann) && is_diagonal_neighboring_cell_2d(di, dj))
-                {
-                    // current di,dj cell is a diagonal neighbor so exclude it
-                    continue;
-                }
-                periodic_index2 = get_periodic_index_axis(j, dj, axis2_dim);
-                // add state to flattened array
-                neighborhood_cells[neighborhood_index] = matrix[periodic_index1][periodic_index2];
-                neighborhood_index++;
-            }
-        }
+        generate_periodic_neighborhood_2d(cell_index, neighborhood_cells, neighborhood_index);
         error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_index, new_cell_state, custom_rule);
         break;
     case Walled: // with walled boundaries the edge cells never change
@@ -567,27 +521,7 @@ int CellularAutomata::get_state_from_neighborhood_2d(int *cell_index, int index_
         }
         // fall-through to CutOff case when cell isn't a boundary cell
     case CutOff:
-        for (int di = -boundary_radius; di <= boundary_radius; di++)
-        {
-            for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
-            {
-                // exclude diagonal cells from Moore neighborhood when VonNeumann is selected
-                if ((neighborhood_type == VonNeumann) && is_diagonal_neighboring_cell_2d(di, dj))
-                {
-                    // current di,dj cell is a diagonal neighbor so exclude it
-                    continue;
-                }
-                // exclude cells that are out of bounds
-                if ((di <= 0 || di >= axis1_dim) || (dj <= 0 || dj >= axis2_dim))
-                {
-                    // outside bounds; don't include cell state in the sum/counter
-                    continue;
-                }
-                // add state to flattened array
-                neighborhood_cells[neighborhood_index] = matrix[di][dj];
-                neighborhood_index++;
-            }
-        }
+        generate_cutoff_neighborhood_2d(cell_index, neighborhood_cells, neighborhood_index);
         error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_index, new_cell_state, custom_rule);
         break;
     }
@@ -614,19 +548,10 @@ int CellularAutomata::get_state_from_neighborhood_3d(int *cell_index, int index_
     int i = cell_index[0];      // get i-th index from array
     int j = cell_index[1];      // get j-th index from array
     int k = cell_index[2];      // get k-th index from array
-    int periodic_index1;        // axis1_dim index used by Periodic boundary type
-    int periodic_index2;        // axis2_dim index used by Periodic boundary type
-    int periodic_index3;        // axis3_dim index used by Periodic boundary type
-    int max_neighborhood_size;  // number of neighbors in neighborhood
     int neighborhood_index = 0; // keep track of neighborhood array as we iterate through CA cells
 
-    /*
-     * Generate a flatten array of the cell's neighborhood.
-     * The neighborhood array can then be utilized for Majority, Parity, or Custom rule
-     */
-    max_neighborhood_size = get_neighborhood_size(index_size, boundary_radius, neighborhood_type);
     // allocate memory and check if operation was successful
-    int *neighborhood_cells = new (std::nothrow) int[max_neighborhood_size];
+    int *neighborhood_cells = malloc_neighborhood_array(index_size);
     if (neighborhood_cells == nullptr)
     {
         return NeighborhoodCellsMalloc;
@@ -635,27 +560,7 @@ int CellularAutomata::get_state_from_neighborhood_3d(int *cell_index, int index_
     switch (boundary_type)
     {
     case Periodic:
-        for (int di = -boundary_radius; di <= boundary_radius; di++)
-        {
-            periodic_index1 = get_periodic_index_axis(i, di, axis1_dim);
-            for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
-            {
-                periodic_index2 = get_periodic_index_axis(j, dj, axis2_dim);
-                for (int dk = -boundary_radius; dk <= boundary_radius; dk++)
-                {
-                    // exclude diagonal cells from Moore neighborhood when VonNeumann is selected
-                    if ((neighborhood_type == VonNeumann) && is_diagonal_neighboring_cell_3d(di, dj, dk))
-                    {
-                        // current di,dj,dk cell is a diagonal neighbor so exclude it
-                        continue;
-                    }
-                    periodic_index3 = get_periodic_index_axis(k, dk, axis3_dim);
-                    // add state to flattened array
-                    neighborhood_cells[neighborhood_index] = tensor[periodic_index1][periodic_index2][periodic_index3];
-                    neighborhood_index++;
-                }
-            }
-        }
+        generate_periodic_neighborhood_3d(cell_index, neighborhood_cells, neighborhood_index);
         error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_index, new_cell_state, custom_rule);
         break;
     case Walled:
@@ -668,30 +573,7 @@ int CellularAutomata::get_state_from_neighborhood_3d(int *cell_index, int index_
         }
         // fall-through to CutOff case when cell isn't a boundary cell
     case CutOff:
-        for (int di = -boundary_radius; di <= boundary_radius; di++)
-        {
-            for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
-            {
-                for (int dk = -boundary_radius; dk <= boundary_radius; dk++)
-                {
-                    // exclude diagonal cells from Moore neighborhood when VonNeumann is selected
-                    if ((neighborhood_type == VonNeumann) && is_diagonal_neighboring_cell_3d(di, dj, dk))
-                    {
-                        // current di,dj,dk cell is a diagonal neighbor so exclude it
-                        continue;
-                    }
-                    // exclude cells that are out of bounds
-                    if ((di <= 0 || di >= axis1_dim) || (dj <= 0 || dj >= axis2_dim) || (dk <= 0 || dk >= axis3_dim))
-                    {
-                        // outside bounds; don't include cell state in the sum/counter
-                        continue;
-                    }
-                    // add state to flattened array
-                    neighborhood_cells[neighborhood_index] = tensor[di][dj][dk];
-                    neighborhood_index++;
-                }
-            }
-        }
+        generate_cutoff_neighborhood_3d(cell_index, neighborhood_cells, neighborhood_index);
         error_code = set_new_cell_state(cell_index, index_size, neighborhood_cells, neighborhood_index, new_cell_state, custom_rule);
         break;
     }
@@ -700,9 +582,9 @@ int CellularAutomata::get_state_from_neighborhood_3d(int *cell_index, int index_
 }
 
 /**
- * @brief Simulates a cellular automata step. 
+ * @brief Simulates a cellular automata step.
  * A new state is generated and stored stored as the new state for subsequent calls to step method.
- * 
+ *
  * This method supports the use of a custom rule type.
  *
  * @param custom_rule function that is called when a Custom rule type is specified
@@ -718,18 +600,32 @@ int CellularAutomata::step(void(custom_rule)(int *, int, int *, int, int &))
 
     if (vector != nullptr)
     {
-        // initialize index_size for a vector and declare the cell_index variable
+        // store the main cell's index in cell_index for custom rule type
         index_size = 1;
         int cell_index[index_size];
+#pragma omp parallel for firstprivate(error_code) private(new_cell_state, cell_index)
         for (int i = 0; i < axis1_dim; i++)
         {
             cell_index[0] = i; // store the i-th index
-            // store the main cell's index (for custom rule type)
             error_code = get_state_from_neighborhood_1d(cell_index, index_size, new_cell_state, custom_rule);
             if (error_code < 0)
             {
+#pragma omp cancel for
+#ifndef ENABLE_OMP
+                /**
+                 * Return error code when omp is not enabled
+                 * otherwise the above pragma will exit out of the for loop(s)
+                 */
                 return error_code;
+#endif
             }
+            /**
+             * The two following statements allow for dynamic systems to be modeled.
+             * If the cell does not move then we properly update it in the second statement.
+             * If the cell moves then the old cell index is zeroed
+             * and the new cell index will contain the newly computed cell state.
+             */
+            next_vector[i] = 0;
             next_vector[cell_index[0]] = new_cell_state;
         }
         // store next cell state to the current cell state for the next time step
@@ -737,9 +633,10 @@ int CellularAutomata::step(void(custom_rule)(int *, int, int *, int, int &))
     }
     else if (matrix != nullptr)
     {
-        // initialize index_size for a matrix and declare the cell_index variable
+        // store the main cell's index in cell_index for custom rule type
         index_size = 2;
         int cell_index[index_size];
+#pragma omp parallel for firstprivate(error_code) private(new_cell_state, cell_index)
         for (int i = 0; i < axis1_dim; i++)
         {
             cell_index[0] = i; // store the i-th index
@@ -749,8 +646,22 @@ int CellularAutomata::step(void(custom_rule)(int *, int, int *, int, int &))
                 error_code = get_state_from_neighborhood_2d(cell_index, index_size, new_cell_state, custom_rule);
                 if (error_code < 0)
                 {
+#pragma omp cancel for
+#ifndef ENABLE_OMP
+                    /**
+                     * Return error code when omp is not enabled
+                     * otherwise the above pragma will exit out of the for loop(s)
+                     */
                     return error_code;
+#endif
                 }
+                /**
+                 * The two following statements allow for dynamic systems to be modeled.
+                 * If the cell does not move then we properly update it in the second statement.
+                 * If the cell moves then the old cell index is zeroed
+                 * and the new cell index will contain the newly computed cell state.
+                 */
+                next_matrix[i][j] = 0;
                 next_matrix[cell_index[0]][cell_index[1]] = new_cell_state;
             }
         }
@@ -759,9 +670,10 @@ int CellularAutomata::step(void(custom_rule)(int *, int, int *, int, int &))
     }
     else if (tensor != nullptr)
     {
-        // initialize index_size for a tensor and declare the cell_index variable
+        // store the main cell's index in cell_index for custom rule type
         index_size = 3;
         int cell_index[index_size];
+#pragma omp parallel for firstprivate(error_code) private(new_cell_state, cell_index)
         for (int i = 0; i < axis1_dim; i++)
         {
             cell_index[0] = i; // store the i-th index
@@ -774,8 +686,22 @@ int CellularAutomata::step(void(custom_rule)(int *, int, int *, int, int &))
                     error_code = get_state_from_neighborhood_3d(cell_index, index_size, new_cell_state, custom_rule);
                     if (error_code < 0)
                     {
+#pragma omp cancel for
+#ifndef ENABLE_OMP
+                        /**
+                         * Return error code when omp is not enabled
+                         * otherwise the above pragma will exit out of the for loop(s)
+                         */
                         return error_code;
+#endif
                     }
+                    /**
+                     * The two following statements allow for dynamic systems to be modeled.
+                     * If the cell does not move then we properly update it in the second statement.
+                     * If the cell moves then the old cell index is zeroed
+                     * and the new cell index will contain the newly computed cell state.
+                     */
+                    next_tensor[i][j][k] = 0;
                     next_tensor[cell_index[0]][cell_index[1]][cell_index[2]] = new_cell_state;
                 }
             }
@@ -862,34 +788,355 @@ int CellularAutomata::print_grid()
  */
 void CellularAutomata::print_error_status(error_code error)
 {
+    std::cout << "ERROR [";
     switch (error)
     {
     case CellsAlreadyInitialized:
-        std::cout << "ERROR [" << error << "]: Can't reinitialize vector, matrix, nor tensor. \n";
+        std::cout << error << "]: Can't reinitialize vector, matrix, nor tensor. \n";
         break;
     case CellsAreNull:
-        std::cout << "ERROR [" << error << "]: The vector, matrix, and tensor are null. \n";
+        std::cout << error << "]: The vector, matrix, and tensor are null. \n";
         break;
     case CellsMalloc:
-        std::cout << "ERROR [" << error << "]: Could not allocate memory for either vector, matrix, or tensor. \n";
+        std::cout << error << "]: Could not allocate memory for either vector, matrix, or tensor. \n";
         break;
     case InvalidCellState:
-        std::cout << "ERROR [" << error << "]: Invalid cell state given. Must be greater than equal to 2. \n";
+        std::cout << error << "]: Invalid cell state given. Must be greater than equal to 2. \n";
         break;
     case InvalidCellStateCondition:
-        std::cout << "ERROR [" << error << "]: Invalid cell state condition given. Must be less than the set number of states. \n";
+        std::cout << error << "]: Invalid cell state condition given. Must be less than the set number of states. \n";
         break;
     case InvalidRadius:
-        std::cout << "ERROR [" << error << "]: Invalid boundary radius given. \n";
+        std::cout << error << "]: Invalid boundary radius given. \n";
         break;
     case InvalidNumStates:
-        std::cout << "ERROR [" << error << "]: Invalid number of states given. \n";
+        std::cout << error << "]: Invalid number of states given. \n";
         break;
     case NeighborhoodCellsMalloc:
-        std::cout << "ERROR [" << error << "]: Could not allocate memory for neighborhood array. \n";
+        std::cout << error << "]: Could not allocate memory for neighborhood array. \n";
         break;
     case CustomRuleIsNull:
-        std::cout << "ERROR [" << error << "]: Custom rule function is null (none given). \n";
+        std::cout << error << "]: Custom rule function is null (none given). \n";
         break;
     }
+}
+
+/**
+ * @brief Adds periodic neighboring cell state to neighborhood_cells array.
+ * Handles vector (1d) case.
+ *
+ * @param cell_index cell of interest's index
+ * @param neighborhood_cells array containing neighboring cell states
+ * @param neighborhood_index keep track of number of cell states added
+ */
+void CellularAutomata::generate_periodic_neighborhood_1d(int *cell_index, int *neighborhood_cells, int &neighborhood_index)
+{
+    int i = cell_index[0]; // get i-th index from array
+    int periodic_i;        // axis1_dim index used by Periodic boundary type
+
+    for (int di = -boundary_radius; di <= boundary_radius; di++)
+    {
+        periodic_i = get_periodic_index(i, di, axis1_dim);
+        // add state to flattened array
+        neighborhood_cells[neighborhood_index] = vector[periodic_i];
+        neighborhood_index++;
+    }
+}
+
+/**
+ * @brief Adds cutoff neighboring cell state to neighborhood_cells array.
+ * Handles vector (1d) case.
+ *
+ * @param cell_index cell of interest's index
+ * @param neighborhood_cells array containing neighboring cell states
+ * @param neighborhood_index keep track of number of cell states added
+ */
+void CellularAutomata::generate_cutoff_neighborhood_1d(int *cell_index, int *neighborhood_cells, int &neighborhood_index)
+{
+    int i = cell_index[0]; // get i-th index from array
+    int neighbor_i;        // neighboring cell's i-th index
+
+    for (int di = -boundary_radius; di <= boundary_radius; di++)
+    {
+        neighbor_i = di + i;
+        // exclude cells that are out of bounds
+        if (neighbor_i <= 0 || neighbor_i >= axis1_dim)
+        {
+            // outside bounds; don't include cell state in the sum/counter
+            continue;
+        }
+        // add state to flattened array
+        neighborhood_cells[neighborhood_index] = vector[di];
+        neighborhood_index++;
+    }
+}
+
+/**
+ * @brief Adds periodic neighboring cell state to neighborhood_cells array.
+ * Handles matrix (2d) case.
+ *
+ * @param cell_index cell of interest's index
+ * @param neighborhood_cells array containing neighboring cell states
+ * @param neighborhood_index keep track of number of cell states added
+ */
+void CellularAutomata::generate_periodic_neighborhood_2d(int *cell_index, int *neighborhood_cells, int &neighborhood_index)
+{
+    int i = cell_index[0]; // get i-th index from array
+    int j = cell_index[1]; // get j-th index from array
+    int periodic_i;        // axis1_dim index used by Periodic boundary type
+    int periodic_j;        // axis2_dim index used by Periodic boundary type
+
+    if (neighborhood_type == VonNeumann)
+    {
+        for (int di = -boundary_radius; di <= boundary_radius; di++)
+        {
+            periodic_i = get_periodic_index(i, di, axis1_dim);
+            for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
+            {
+                // exclude diagonal cells from neighborhood when VonNeumann is selected
+                if (is_diagonal_neighboring_cell_2d(di, dj))
+                {
+                    // current di,dj cell is a diagonal neighbor so exclude it
+                    continue;
+                }
+                periodic_j = get_periodic_index(j, dj, axis2_dim);
+                // add state to flattened array
+                neighborhood_cells[neighborhood_index] = matrix[periodic_i][periodic_j];
+                neighborhood_index++;
+            }
+        }
+    }
+    else // Moore neighborhood
+    {
+        for (int di = -boundary_radius; di <= boundary_radius; di++)
+        {
+            periodic_i = get_periodic_index(i, di, axis1_dim);
+            for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
+            {
+                periodic_j = get_periodic_index(j, dj, axis2_dim);
+                // add state to flattened array
+                neighborhood_cells[neighborhood_index] = matrix[periodic_i][periodic_j];
+                neighborhood_index++;
+            }
+        }
+    }
+}
+
+/**
+ * @brief Adds cutoff neighboring cell state to neighborhood_cells array.
+ * Handles matrix (2d) case.
+ *
+ * @param cell_index cell of interest's index
+ * @param neighborhood_cells array containing neighboring cell states
+ * @param neighborhood_index keep track of number of cell states added
+ */
+void CellularAutomata::generate_cutoff_neighborhood_2d(int *cell_index, int *neighborhood_cells, int &neighborhood_index)
+{
+    int i = cell_index[0]; // get i-th index from array
+    int j = cell_index[1]; // get j-th index from array
+    int neighbor_i;        // neighboring cell's i-th index
+    int neighbor_j;        // neighboring cell's j-th index
+
+    if (neighborhood_type == VonNeumann)
+    {
+        for (int di = -boundary_radius; di <= boundary_radius; di++)
+        {
+            neighbor_i = di + i;
+            for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
+            {
+                neighbor_j = dj + j;
+                // exclude diagonal cells from neighborhood when VonNeumann is selected
+                if (is_diagonal_neighboring_cell_2d(di, dj))
+                {
+                    // current di,dj cell is a diagonal neighbor so exclude it
+                    continue;
+                }
+                // exclude cells that are out of bounds
+                if ((neighbor_i <= 0 || neighbor_i >= axis1_dim) || (neighbor_j <= 0 || neighbor_j >= axis2_dim))
+                {
+                    // outside bounds; don't include cell state in the sum/counter
+                    continue;
+                }
+                // add state to flattened array
+                neighborhood_cells[neighborhood_index] = matrix[neighbor_i][neighbor_j];
+                neighborhood_index++;
+            }
+        }
+    }
+    else // Moore neighborhood
+    {
+        for (int di = -boundary_radius; di <= boundary_radius; di++)
+        {
+            neighbor_i = di + i;
+            for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
+            {
+                neighbor_j = dj + j;
+                // exclude cells that are out of bounds
+                if ((neighbor_i <= 0 || neighbor_i >= axis1_dim) || (neighbor_j <= 0 || neighbor_j >= axis2_dim))
+                {
+                    // outside bounds; don't include cell state in the sum/counter
+                    continue;
+                }
+                // add state to flattened array
+                neighborhood_cells[neighborhood_index] = matrix[neighbor_i][neighbor_j];
+                neighborhood_index++;
+            }
+        }
+    }
+}
+
+/**
+ * @brief Adds periodic neighboring cell state to neighborhood_cells array.
+ * Handles tensor (3d) case.
+ *
+ * @param cell_index cell of interest's index
+ * @param neighborhood_cells array containing neighboring cell states
+ * @param neighborhood_index keep track of number of cell states added
+ */
+void CellularAutomata::generate_periodic_neighborhood_3d(int *cell_index, int *neighborhood_cells, int &neighborhood_index)
+{
+    int i = cell_index[0]; // get i-th index from array
+    int j = cell_index[1]; // get j-th index from array
+    int k = cell_index[2]; // get k-th index from array
+    int periodic_i;        // axis1_dim index used by Periodic boundary type
+    int periodic_j;        // axis2_dim index used by Periodic boundary type
+    int periodic_k;        // axis3_dim index used by Periodic boundary type
+
+    if (neighborhood_type == VonNeumann)
+    {
+        for (int di = -boundary_radius; di <= boundary_radius; di++)
+        {
+            periodic_i = get_periodic_index(i, di, axis1_dim);
+            for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
+            {
+                periodic_j = get_periodic_index(j, dj, axis2_dim);
+                for (int dk = -boundary_radius; dk <= boundary_radius; dk++)
+                {
+                    // exclude diagonal cells from neighborhood when VonNeumann is selected
+                    if (is_diagonal_neighboring_cell_3d(di, dj, dk))
+                    {
+                        // current di,dj,dk cell is a diagonal neighbor so exclude it
+                        continue;
+                    }
+                    periodic_k = get_periodic_index(k, dk, axis3_dim);
+                    // add state to flattened array
+                    neighborhood_cells[neighborhood_index] = tensor[periodic_i][periodic_j][periodic_k];
+                    neighborhood_index++;
+                }
+            }
+        }
+    }
+    else // Moore neighborhood
+    {
+        for (int di = -boundary_radius; di <= boundary_radius; di++)
+        {
+            periodic_i = get_periodic_index(i, di, axis1_dim);
+            for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
+            {
+                periodic_j = get_periodic_index(j, dj, axis2_dim);
+                for (int dk = -boundary_radius; dk <= boundary_radius; dk++)
+                {
+                    periodic_k = get_periodic_index(k, dk, axis3_dim);
+                    // add state to flattened array
+                    neighborhood_cells[neighborhood_index] = tensor[periodic_i][periodic_j][periodic_k];
+                    neighborhood_index++;
+                }
+            }
+        }
+    }
+}
+
+/**
+ * @brief Adds cutoff neighboring cell state to neighborhood_cells array.
+ * Handles tensor (3d) case.
+ *
+ * @param cell_index cell of interest's index
+ * @param neighborhood_cells array containing neighboring cell states
+ * @param neighborhood_index keep track of number of cell states added
+ */
+void CellularAutomata::generate_cutoff_neighborhood_3d(int *cell_index, int *neighborhood_cells, int &neighborhood_index)
+{
+    int i = cell_index[0]; // get i-th index from array
+    int j = cell_index[1]; // get j-th index from array
+    int k = cell_index[2]; // get k-th index from array
+    int neighbor_i;        // neighboring cell's i-th index
+    int neighbor_j;        // neighboring cell's j-th index
+    int neighbor_k;        // neighboring cell's k-th index
+
+    if (neighborhood_type == VonNeumann)
+    {
+        for (int di = -boundary_radius; di <= boundary_radius; di++)
+        {
+            neighbor_i = di + i;
+            for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
+            {
+                neighbor_j = dj + j;
+                for (int dk = -boundary_radius; dk <= boundary_radius; dk++)
+                {
+                    neighbor_k = dk + k;
+                    // exclude diagonal cells from neighborhood when VonNeumann is selected
+                    if (is_diagonal_neighboring_cell_3d(di, dj, dk))
+                    {
+                        // current di,dj,dk cell is a diagonal neighbor so exclude it
+                        continue;
+                    }
+                    // exclude cells that are out of bounds
+                    if ((neighbor_i <= 0 || neighbor_i >= axis1_dim) ||
+                        (neighbor_j <= 0 || neighbor_j >= axis2_dim) ||
+                        (neighbor_k <= 0 || neighbor_k >= axis3_dim))
+                    {
+                        // outside bounds; don't include cell state in the sum/counter
+                        continue;
+                    }
+                    // add state to flattened array
+                    neighborhood_cells[neighborhood_index] = tensor[neighbor_i][neighbor_j][neighbor_k];
+                    neighborhood_index++;
+                }
+            }
+        }
+    }
+    else // Moore neighborhood
+    {
+        for (int di = -boundary_radius; di <= boundary_radius; di++)
+        {
+            neighbor_i = di + i;
+            for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
+            {
+                neighbor_j = dj + j;
+                for (int dk = -boundary_radius; dk <= boundary_radius; dk++)
+                {
+                    neighbor_k = dk + k;
+                    // exclude cells that are out of bounds
+                    if ((neighbor_i <= 0 || neighbor_i >= axis1_dim) ||
+                        (neighbor_j <= 0 || neighbor_j >= axis2_dim) ||
+                        (neighbor_k <= 0 || neighbor_k >= axis3_dim))
+                    {
+                        // outside bounds; don't include cell state in the sum/counter
+                        continue;
+                    }
+                    // add state to flattened array
+                    neighborhood_cells[neighborhood_index] = tensor[neighbor_i][neighbor_j][neighbor_k];
+                    neighborhood_index++;
+                }
+            }
+        }
+    }
+}
+
+/**
+ * @brief Dynamically allocates an array that will contain the neighborhood cell states.
+ *
+ * @param rank rank of the cells data
+ * @return int* pointer to the dynamic array
+ */
+int *CellularAutomata::malloc_neighborhood_array(int rank)
+{
+    /*
+     * Generate a flatten array of the cell's neighborhood.
+     * The neighborhood array can then be utilized for Majority, Parity, or Custom rule
+     */
+    int max_neighborhood_size = get_neighborhood_size(rank, boundary_radius, neighborhood_type);
+    // allocate memory and check if operation was successful
+    int *neighborhood_cells = new (std::nothrow) int[max_neighborhood_size];
+    return neighborhood_cells;
 }

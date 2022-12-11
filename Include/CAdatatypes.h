@@ -32,6 +32,44 @@ private:
     int ***next_tensor; //!< tensor for three dimensional grid of cells holding the next state
     int steps_taken;    //!< the number of steps the CA has taken
 
+    // function for setting the new cell state based on the specified rule
+    int set_new_cell_state(int *cell_index, int index_size,
+                           int *neighborhood_cells, int neighborhood_size,
+                           int &new_cell_state, void(custom_rule)(int *, int, int *, int, int &));
+
+    // function for setting the cell state with generated neighborhood array; vector case
+    int get_state_from_neighborhood_1d(int *cell_index, int index_size, int &new_cell_state,
+                                       void(custom_rule)(int *, int, int *, int, int &));
+
+    // function for setting the cell state with generated neighborhood array; matrix case
+    int get_state_from_neighborhood_2d(int *cell_index, int index_size, int &new_cell_state,
+                                       void(custom_rule)(int *, int, int *, int, int &));
+
+    // function for setting the cell state with generated neighborhood array; tensor case
+    int get_state_from_neighborhood_3d(int *cell_index, int index_size, int &new_cell_state,
+                                       void(custom_rule)(int *, int, int *, int, int &));
+
+    // method for generating periodic neighborhood around cell_index (matrix case)
+    void generate_periodic_neighborhood_1d(int *cell_index, int *neighborhood_cells, int &neighborhood_index);
+
+    // method for generating cutoff neighborhood around cell_index (matrix case)
+    void generate_cutoff_neighborhood_1d(int *cell_index, int *neighborhood_cells, int &neighborhood_index);
+
+    // method for generating periodic neighborhood around cell_index (matrix case)
+    void generate_periodic_neighborhood_2d(int *cell_index, int *neighborhood_cells, int &neighborhood_index);
+
+    // method for generating cutoff neighborhood around cell_index (matrix case)
+    void generate_cutoff_neighborhood_2d(int *cell_index, int *neighborhood_cells, int &neighborhood_index);
+
+    // method for generating periodic neighborhood around cell_index (tensor case)
+    void generate_periodic_neighborhood_3d(int *cell_index, int *neighborhood_cells, int &neighborhood_index);
+
+    // method for generating cutoff neighborhood around cell_index (tensor case)
+    void generate_cutoff_neighborhood_3d(int *cell_index, int *neighborhood_cells, int &neighborhood_index);
+
+    // returns a pointer to dynamic neighborhood array
+    int *malloc_neighborhood_array(int rank);
+
 public:
     /**
      * @brief enum containing the different type of neighborhoods
@@ -120,23 +158,6 @@ public:
 
     // provide a function for setting the rule type
     int setup_rule(rule rule_type);
-
-    // function for setting the new cell state based on the specified rule
-    int set_new_cell_state(int *cell_index, int index_size,
-                           int *neighborhood_cells, int neighborhood_size,
-                           int &new_cell_state, void(custom_rule)(int *, int, int *, int, int &));
-
-    // function for setting the cell state with generated neighborhood array; vector case
-    int get_state_from_neighborhood_1d(int *cell_index, int index_size, int &new_cell_state,
-                                       void(custom_rule)(int *, int, int *, int, int &));
-
-    // function for setting the cell state with generated neighborhood array; matrix case
-    int get_state_from_neighborhood_2d(int *cell_index, int index_size, int &new_cell_state,
-                                       void(custom_rule)(int *, int, int *, int, int &));
-
-    // function for setting the cell state with generated neighborhood array; tensor case
-    int get_state_from_neighborhood_3d(int *cell_index, int index_size, int &new_cell_state,
-                                       void(custom_rule)(int *, int, int *, int, int &));
 
     // simulates a CA step
     int step();

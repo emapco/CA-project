@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['majoritycounter_0',['MajorityCounter',['../CAdatatypes_8h.html#afcaeecaad0a03e216f79537596187398',1,'CAdatatypes.h']]]
+  ['less_5fthan_5fvotes_0',['less_than_votes',['../CAutils_8h.html#a6b65fd865bc8dc6c722fbef632384b0c',1,'CA_utils.cpp']]]
 ];

@@ -9,7 +9,15 @@
 CPP         = g++      
 
 # compiler flags -g debug, -O3 optimized version -c create a library object
-CPPFLAGS    =-O0 -g -o 
+CPPFLAGS    =-O0 -g 
+OMPFLAGS    =-fopenmp -DENABLE_OMP
+LDFLAGS     =
+
+# Add additional flags for Mac OS X
+ifeq ($(detected_OS),Darwin)
+OMPFLAGS    +=-Xclang 
+LDFLAGS     +=-L/usr/local/opt/llvm/lib -lomp
+endif
 
 # The directory where the include files needed to create the library objects are
 INC_DIR = ../Include
@@ -19,12 +27,17 @@ LIB_DIR     = ../Libdir
 BIN_DIR     = ../Bindir
 
 # The next line contains the list of object files created by this Makefile.
-EXECS = test_CA
+EXECS = test_CA test_CA_omp
 
-test_CA: $(INC_DIR)/CAdatatypes.h $(INC_DIR)/CAutils.h
-	$(CPP) $(CPPFLAGS) test_CA test_CA.cpp \
-	-I$(INC_DIR) $(LIB_DIR)/cellularautomata.o $(LIB_DIR)/CAutils.o
+test_CA:
+	$(CPP) $(CPPFLAGS) -I$(INC_DIR) test_CA.cpp -o test_CA \
+	 $(LIB_DIR)/cellularautomata.a
 	mv test_CA $(BIN_DIR)
+
+test_CA_omp:
+	$(CPP) $(CPPFLAGS) $(OMPFLAGS) $(LDFLAGS) -I$(INC_DIR) test_CA.cpp \
+	-o test_CA_omp $(LIB_DIR)/cellularautomata_omp.a
+	mv test_CA_omp $(BIN_DIR)
 
 all: $(EXECS)
 
