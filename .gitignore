@@ -4,3 +4,4 @@ Bindir/*
 !Bindir/README.md
 Libdir/*
 !Libdir/README.md
+!Libdir/Makefile

@@ -15,6 +15,9 @@
 #include <unordered_map> // unordered_map
 #include <utility>       // make_pair
 #include <algorithm>     // max_element
+#ifdef ENABLE_OMP
+#include <omp.h>
+#endif
 
 /**
  * @brief Construct a new Cellular Automata:: Cellular Automata object.
@@ -443,8 +446,6 @@ int CellularAutomata::get_state_from_neighborhood_1d(int *cell_index, int index_
 {
     int error_code = 0;         // store error code return by other methods
     int i = cell_index[0];      // get i-th index from array
-    int periodic_i;             // used by Periodic boundary type
-    int neighbor_i;             // neighboring cell's i-th index
     int neighborhood_index = 0; // keep track of neighborhood array as we iterate through CA cells
 
     // allocate memory and check if operation was successful
@@ -599,18 +600,32 @@ int CellularAutomata::step(void(custom_rule)(int *, int, int *, int, int &))
 
     if (vector != nullptr)
     {
-        // initialize index_size for a vector and declare the cell_index variable
+        // store the main cell's index in cell_index for custom rule type
         index_size = 1;
         int cell_index[index_size];
+#pragma omp parallel for firstprivate(error_code) private(new_cell_state, cell_index)
         for (int i = 0; i < axis1_dim; i++)
         {
             cell_index[0] = i; // store the i-th index
-            // store the main cell's index (for custom rule type)
             error_code = get_state_from_neighborhood_1d(cell_index, index_size, new_cell_state, custom_rule);
             if (error_code < 0)
             {
+#pragma omp cancel for
+#ifndef ENABLE_OMP
+                /**
+                 * Return error code when omp is not enabled
+                 * otherwise the above pragma will exit out of the for loop(s)
+                 */
                 return error_code;
+#endif
             }
+            /**
+             * The two following statements allow for dynamic systems to be modeled.
+             * If the cell does not move then we properly update it in the second statement.
+             * If the cell moves then the old cell index is zeroed
+             * and the new cell index will contain the newly computed cell state.
+             */
+            next_vector[i] = 0;
             next_vector[cell_index[0]] = new_cell_state;
         }
         // store next cell state to the current cell state for the next time step
@@ -618,9 +633,10 @@ int CellularAutomata::step(void(custom_rule)(int *, int, int *, int, int &))
     }
     else if (matrix != nullptr)
     {
-        // initialize index_size for a matrix and declare the cell_index variable
+        // store the main cell's index in cell_index for custom rule type
         index_size = 2;
         int cell_index[index_size];
+#pragma omp parallel for firstprivate(error_code) private(new_cell_state, cell_index)
         for (int i = 0; i < axis1_dim; i++)
         {
             cell_index[0] = i; // store the i-th index
@@ -630,8 +646,22 @@ int CellularAutomata::step(void(custom_rule)(int *, int, int *, int, int &))
                 error_code = get_state_from_neighborhood_2d(cell_index, index_size, new_cell_state, custom_rule);
                 if (error_code < 0)
                 {
+#pragma omp cancel for
+#ifndef ENABLE_OMP
+                    /**
+                     * Return error code when omp is not enabled
+                     * otherwise the above pragma will exit out of the for loop(s)
+                     */
                     return error_code;
+#endif
                 }
+                /**
+                 * The two following statements allow for dynamic systems to be modeled.
+                 * If the cell does not move then we properly update it in the second statement.
+                 * If the cell moves then the old cell index is zeroed
+                 * and the new cell index will contain the newly computed cell state.
+                 */
+                next_matrix[i][j] = 0;
                 next_matrix[cell_index[0]][cell_index[1]] = new_cell_state;
             }
         }
@@ -640,9 +670,10 @@ int CellularAutomata::step(void(custom_rule)(int *, int, int *, int, int &))
     }
     else if (tensor != nullptr)
     {
-        // initialize index_size for a tensor and declare the cell_index variable
+        // store the main cell's index in cell_index for custom rule type
         index_size = 3;
         int cell_index[index_size];
+#pragma omp parallel for firstprivate(error_code) private(new_cell_state, cell_index)
         for (int i = 0; i < axis1_dim; i++)
         {
             cell_index[0] = i; // store the i-th index
@@ -655,8 +686,22 @@ int CellularAutomata::step(void(custom_rule)(int *, int, int *, int, int &))
                     error_code = get_state_from_neighborhood_3d(cell_index, index_size, new_cell_state, custom_rule);
                     if (error_code < 0)
                     {
+#pragma omp cancel for
+#ifndef ENABLE_OMP
+                        /**
+                         * Return error code when omp is not enabled
+                         * otherwise the above pragma will exit out of the for loop(s)
+                         */
                         return error_code;
+#endif
                     }
+                    /**
+                     * The two following statements allow for dynamic systems to be modeled.
+                     * If the cell does not move then we properly update it in the second statement.
+                     * If the cell moves then the old cell index is zeroed
+                     * and the new cell index will contain the newly computed cell state.
+                     */
+                    next_tensor[i][j][k] = 0;
                     next_tensor[cell_index[0]][cell_index[1]][cell_index[2]] = new_cell_state;
                 }
             }
@@ -743,34 +788,35 @@ int CellularAutomata::print_grid()
  */
 void CellularAutomata::print_error_status(error_code error)
 {
+    std::cout << "ERROR [";
     switch (error)
     {
     case CellsAlreadyInitialized:
-        std::cout << "ERROR [" << error << "]: Can't reinitialize vector, matrix, nor tensor. \n";
+        std::cout << error << "]: Can't reinitialize vector, matrix, nor tensor. \n";
         break;
     case CellsAreNull:
-        std::cout << "ERROR [" << error << "]: The vector, matrix, and tensor are null. \n";
+        std::cout << error << "]: The vector, matrix, and tensor are null. \n";
         break;
     case CellsMalloc:
-        std::cout << "ERROR [" << error << "]: Could not allocate memory for either vector, matrix, or tensor. \n";
+        std::cout << error << "]: Could not allocate memory for either vector, matrix, or tensor. \n";
         break;
     case InvalidCellState:
-        std::cout << "ERROR [" << error << "]: Invalid cell state given. Must be greater than equal to 2. \n";
+        std::cout << error << "]: Invalid cell state given. Must be greater than equal to 2. \n";
         break;
     case InvalidCellStateCondition:
-        std::cout << "ERROR [" << error << "]: Invalid cell state condition given. Must be less than the set number of states. \n";
+        std::cout << error << "]: Invalid cell state condition given. Must be less than the set number of states. \n";
         break;
     case InvalidRadius:
-        std::cout << "ERROR [" << error << "]: Invalid boundary radius given. \n";
+        std::cout << error << "]: Invalid boundary radius given. \n";
         break;
     case InvalidNumStates:
-        std::cout << "ERROR [" << error << "]: Invalid number of states given. \n";
+        std::cout << error << "]: Invalid number of states given. \n";
         break;
     case NeighborhoodCellsMalloc:
-        std::cout << "ERROR [" << error << "]: Could not allocate memory for neighborhood array. \n";
+        std::cout << error << "]: Could not allocate memory for neighborhood array. \n";
         break;
     case CustomRuleIsNull:
-        std::cout << "ERROR [" << error << "]: Custom rule function is null (none given). \n";
+        std::cout << error << "]: Custom rule function is null (none given). \n";
         break;
     }
 }
@@ -790,7 +836,7 @@ void CellularAutomata::generate_periodic_neighborhood_1d(int *cell_index, int *n
 
     for (int di = -boundary_radius; di <= boundary_radius; di++)
     {
-        periodic_i = get_periodic_index_axis(i, di, axis1_dim);
+        periodic_i = get_periodic_index(i, di, axis1_dim);
         // add state to flattened array
         neighborhood_cells[neighborhood_index] = vector[periodic_i];
         neighborhood_index++;
@@ -844,7 +890,7 @@ void CellularAutomata::generate_periodic_neighborhood_2d(int *cell_index, int *n
     {
         for (int di = -boundary_radius; di <= boundary_radius; di++)
         {
-            periodic_i = get_periodic_index_axis(i, di, axis1_dim);
+            periodic_i = get_periodic_index(i, di, axis1_dim);
             for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
             {
                 // exclude diagonal cells from neighborhood when VonNeumann is selected
@@ -853,7 +899,7 @@ void CellularAutomata::generate_periodic_neighborhood_2d(int *cell_index, int *n
                     // current di,dj cell is a diagonal neighbor so exclude it
                     continue;
                 }
-                periodic_j = get_periodic_index_axis(j, dj, axis2_dim);
+                periodic_j = get_periodic_index(j, dj, axis2_dim);
                 // add state to flattened array
                 neighborhood_cells[neighborhood_index] = matrix[periodic_i][periodic_j];
                 neighborhood_index++;
@@ -864,10 +910,10 @@ void CellularAutomata::generate_periodic_neighborhood_2d(int *cell_index, int *n
     {
         for (int di = -boundary_radius; di <= boundary_radius; di++)
         {
-            periodic_i = get_periodic_index_axis(i, di, axis1_dim);
+            periodic_i = get_periodic_index(i, di, axis1_dim);
             for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
             {
-                periodic_j = get_periodic_index_axis(j, dj, axis2_dim);
+                periodic_j = get_periodic_index(j, dj, axis2_dim);
                 // add state to flattened array
                 neighborhood_cells[neighborhood_index] = matrix[periodic_i][periodic_j];
                 neighborhood_index++;
@@ -960,10 +1006,10 @@ void CellularAutomata::generate_periodic_neighborhood_3d(int *cell_index, int *n
     {
         for (int di = -boundary_radius; di <= boundary_radius; di++)
         {
-            periodic_i = get_periodic_index_axis(i, di, axis1_dim);
+            periodic_i = get_periodic_index(i, di, axis1_dim);
             for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
             {
-                periodic_j = get_periodic_index_axis(j, dj, axis2_dim);
+                periodic_j = get_periodic_index(j, dj, axis2_dim);
                 for (int dk = -boundary_radius; dk <= boundary_radius; dk++)
                 {
                     // exclude diagonal cells from neighborhood when VonNeumann is selected
@@ -972,7 +1018,7 @@ void CellularAutomata::generate_periodic_neighborhood_3d(int *cell_index, int *n
                         // current di,dj,dk cell is a diagonal neighbor so exclude it
                         continue;
                     }
-                    periodic_k = get_periodic_index_axis(k, dk, axis3_dim);
+                    periodic_k = get_periodic_index(k, dk, axis3_dim);
                     // add state to flattened array
                     neighborhood_cells[neighborhood_index] = tensor[periodic_i][periodic_j][periodic_k];
                     neighborhood_index++;
@@ -984,13 +1030,13 @@ void CellularAutomata::generate_periodic_neighborhood_3d(int *cell_index, int *n
     {
         for (int di = -boundary_radius; di <= boundary_radius; di++)
         {
-            periodic_i = get_periodic_index_axis(i, di, axis1_dim);
+            periodic_i = get_periodic_index(i, di, axis1_dim);
             for (int dj = -boundary_radius; dj <= boundary_radius; dj++)
             {
-                periodic_j = get_periodic_index_axis(j, dj, axis2_dim);
+                periodic_j = get_periodic_index(j, dj, axis2_dim);
                 for (int dk = -boundary_radius; dk <= boundary_radius; dk++)
                 {
-                    periodic_k = get_periodic_index_axis(k, dk, axis3_dim);
+                    periodic_k = get_periodic_index(k, dk, axis3_dim);
                     // add state to flattened array
                     neighborhood_cells[neighborhood_index] = tensor[periodic_i][periodic_j][periodic_k];
                     neighborhood_index++;
@@ -1077,6 +1123,12 @@ void CellularAutomata::generate_cutoff_neighborhood_3d(int *cell_index, int *nei
     }
 }
 
+/**
+ * @brief Dynamically allocates an array that will contain the neighborhood cell states.
+ *
+ * @param rank rank of the cells data
+ * @return int* pointer to the dynamic array
+ */
 int *CellularAutomata::malloc_neighborhood_array(int rank)
 {
     /*

@@ -19,3 +19,7 @@
     The step function supports the ability to pass a custom rule function to allow the user to implement their own rules.
     Added guard clauses to various methods so that the class properly handles failure modes. 
     Also defined a method for printing an error message depending on the error code given.
+
+    12/10/2022: Emmanuel: Added parallelization with the aid of OpenMP directives. 
+    Updated makefiles to create new parallelized targets. The makefiles support Linux and Mac OSX OpenMP systems.
+    Class implementation and utility object files are now combined into a single library object file.

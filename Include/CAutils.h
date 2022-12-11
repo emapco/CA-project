@@ -109,4 +109,4 @@ bool less_than_votes(const std::pair<int, int> &a, const std::pair<int, int> &b)
  * @param axis_dim dimension of i-th axis
  * @return int
  */
-int get_periodic_index_axis(int i, int di, int axis_dim);
+int get_periodic_index(int i, int di, int axis_dim);

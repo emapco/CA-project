@@ -672,6 +672,12 @@ CellsMalloc: couldn't allocate memory for the specified tensor size<br  />
 <dl class="section return"><dt>Returns</dt><dd>int - error code<br  />
  Error codes returned by get_state_from_neighborhood_Xd methods<br  />
  0: no error </dd></dl>
+<p >Return error code when omp is not enabled otherwise the above pragma will exit out of the for loop(s)</p>
+<p >The two following statements allow for dynamic systems to be modeled. If the cell does not move then we properly update it in the second statement. If the cell moves then the old cell index is zeroed and the new cell index will contain the newly computed cell state.</p>
+<p >Return error code when omp is not enabled otherwise the above pragma will exit out of the for loop(s)</p>
+<p >The two following statements allow for dynamic systems to be modeled. If the cell does not move then we properly update it in the second statement. If the cell moves then the old cell index is zeroed and the new cell index will contain the newly computed cell state.</p>
+<p >Return error code when omp is not enabled otherwise the above pragma will exit out of the for loop(s)</p>
+<p >The two following statements allow for dynamic systems to be modeled. If the cell does not move then we properly update it in the second statement. If the cell moves then the old cell index is zeroed and the new cell index will contain the newly computed cell state.</p>
 
 </div>
 </div>

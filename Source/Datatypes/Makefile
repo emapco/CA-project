@@ -10,6 +10,12 @@ CPP         = g++
 
 # compiler flags -g debug, -O3 optimized version -c create a library object
 CPPFLAGS    =-Wall -Wextra -O0 -c -g
+OMPFLAGS    =-fopenmp -DENABLE_OMP
+
+# Add additional flags for Mac OS X
+ifeq ($(detected_OS),Darwin)
+OMPFLAGS    +=-Xclang 
+endif
 
 # The directory where the include files needed to create the library objects are
 INC_DIR = ../../Include
@@ -19,11 +25,15 @@ LIB_DIR     = ../../Libdir
 BIN_DIR     = ../../Bindir
 
 # The next line contains the list of object files created by this Makefile.
-DATATYPES = cellularautomata.o
+DATATYPES = cellularautomata.o cellularautomata_omp.o
 
 cellularautomata.o:
 	$(CPP) $(CPPFLAGS) -I$(INC_DIR) cellularautomata.cpp 
 	mv cellularautomata.o $(LIB_DIR)
+
+cellularautomata_omp.o:
+	$(CPP) $(CPPFLAGS) $(OMPFLAGS) -I$(INC_DIR) cellularautomata.cpp -o cellularautomata_omp.o
+	mv cellularautomata_omp.o $(LIB_DIR)
 
 all: $(DATATYPES)
 

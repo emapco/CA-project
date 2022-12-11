@@ -100,7 +100,7 @@ bool less_than_votes(const std::pair<int, int> &a, const std::pair<int, int> &b)
     return a.second < b.second;
 }
 
-int get_periodic_index_axis(int i, int di, int axis_dim)
+int get_periodic_index(int i, int di, int axis_dim)
 {
     return (i + di + axis_dim) % axis_dim;
 }
