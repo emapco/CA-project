@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['get_5fneighborhood_5fsize_0',['get_neighborhood_size',['../CAutils_8h.html#a4e444a742a4d56c96fa12a175cdd64c0',1,'CA_utils.cpp']]],
-  ['get_5fperiodic_5findex_1',['get_periodic_index',['../CAutils_8h.html#ab7e1a8fce16e8abbb80d5b79fe0fc443',1,'CA_utils.cpp']]]
+  ['cellularautomata_0',['CellularAutomata',['../classCellularAutomata.html#ae5f71d81025763115b7b7642569053be',1,'CellularAutomata::CellularAutomata()'],['../classCellularAutomata_3_01int_01_4.html#a9e1b96ab413503ed01a5d144f4165796',1,'CellularAutomata&lt; int &gt;::CellularAutomata()']]],
+  ['custom_5frule_1',['custom_rule',['../test__CA_8cpp.html#ab30ee0f9170dcdd71f3e57222c0163ac',1,'test_CA.cpp']]]
 ];

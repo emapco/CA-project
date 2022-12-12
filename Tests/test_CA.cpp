@@ -7,8 +7,8 @@
  * tests the basic functionality to prove correctness
  * @date 2022-12-03
  */
+#include "CAdatatypes.h"
 #include <iostream>
-#include <CAdatatypes.h>
 #include <array>
 
 /**
@@ -32,7 +32,7 @@ void custom_rule(int *cell_index, const int index_size,
  *
  * @param CA the CellularAutomata instance
  */
-void test_CA_init(CellularAutomata &CA)
+void test_CA_init(CellularAutomata<int> &CA)
 {
     // initialize the first grid state using a value for x_state and a probability
     std::cout << "Initializing " << CA.axis1_dim
@@ -55,7 +55,7 @@ void test_CA_init(CellularAutomata &CA)
  *
  * @param CA the CellularAutomata instance
  */
-void test_CA_step(CellularAutomata &CA)
+void test_CA_step(CellularAutomata<int> &CA)
 {
     for (int i = 0; i < 1; i++)
     {
@@ -69,7 +69,7 @@ void test_CA_step(CellularAutomata &CA)
  *
  * @param CA the CellularAutomata instance
  */
-void test_CA(CellularAutomata &CA)
+void test_CA(CellularAutomata<int> &CA)
 {
     test_CA_init(CA);
     test_CA_step(CA);
@@ -84,22 +84,22 @@ void test_CA_vector()
     {
         std::cout << "**** Testing Vector CellularAutomata: PERIODIC PARITY ****\n";
         // initialize a CA object with default constructor
-        CellularAutomata CA = CellularAutomata();
-        CA.setup_dimensions(10);
-        CA.setup_rule(CellularAutomata::Parity);
+        CellularAutomata<int> CA = CellularAutomata<int>();
+        CA.setup_dimensions_1d(30);
+        CA.setup_rule(CAEnums::Rule::Parity);
         test_CA(CA);
     }
     {
         std::cout << "**** Testing Vector CellularAutomata: PERIODIC MAJORITY ****\n";
-        CellularAutomata CA = CellularAutomata();
-        CA.setup_dimensions(10);
+        CellularAutomata<int> CA = CellularAutomata<int>();
+        CA.setup_dimensions_1d(30);
         test_CA(CA);
     }
     {
         std::cout << "**** Testing Vector CellularAutomata: PERIODIC CUSTOM ****\n";
-        CellularAutomata CA = CellularAutomata();
-        CA.setup_dimensions(10);
-        CA.setup_rule(CellularAutomata::Custom);
+        CellularAutomata<int> CA = CellularAutomata<int>();
+        CA.setup_dimensions_1d(30);
+        CA.setup_rule(CAEnums::Rule::Custom);
         test_CA(CA);
     }
 }
@@ -113,22 +113,22 @@ void test_CA_matrix()
     {
         std::cout << "\n**** Testing Matrix CellularAutomata: PERIODIC PARITY ****\n";
         // initialize a CA object with default constructor
-        CellularAutomata CA = CellularAutomata();
-        CA.setup_dimensions(5, 10);
-        CA.setup_rule(CellularAutomata::Parity);
+        CellularAutomata<int> CA = CellularAutomata<int>();
+        CA.setup_dimensions_2d(5, 10);
+        CA.setup_rule(CAEnums::Rule::Parity);
         test_CA(CA);
     }
     {
         std::cout << "\n**** Testing Matrix CellularAutomata: PERIODIC MAJORITY ****\n";
-        CellularAutomata CA = CellularAutomata();
-        CA.setup_dimensions(5, 10);
+        CellularAutomata<int> CA = CellularAutomata<int>();
+        CA.setup_dimensions_2d(5, 10);
         test_CA(CA);
     }
     {
         std::cout << "**** Testing Vector CellularAutomata: PERIODIC CUSTOM ****\n";
-        CellularAutomata CA = CellularAutomata();
-        CA.setup_dimensions(5, 10);
-        CA.setup_rule(CellularAutomata::Custom);
+        CellularAutomata<int> CA = CellularAutomata<int>();
+        CA.setup_dimensions_2d(5, 10);
+        CA.setup_rule(CAEnums::Rule::Custom);
         test_CA(CA);
     }
 }
@@ -142,22 +142,23 @@ void test_CA_tensor()
     {
         std::cout << "\n**** Testing Tensor CellularAutomata: PERIODIC PARITY ****\n";
         // initialize a CA object with default constructor
-        CellularAutomata CA = CellularAutomata();
-        CA.setup_dimensions(5, 5, 10);
-        CA.setup_rule(CellularAutomata::Parity);
+        CellularAutomata<int> CA = CellularAutomata<int>();
+        CA.setup_dimensions_3d(5, 5, 10);
+        CA.setup_rule(CAEnums::Rule::Parity);
         test_CA(CA);
     }
     {
         std::cout << "\n**** Testing Tensor CellularAutomata: PERIODIC MAJORITY ****\n";
-        CellularAutomata CA = CellularAutomata();
-        CA.setup_dimensions(5, 5, 10);
+        CellularAutomata<int> CA = CellularAutomata<int>();
+        // CA.setup_dimensions(50, 50, 50);
+        CA.setup_dimensions_3d(5, 5, 10);
         test_CA(CA);
     }
     {
         std::cout << "**** Testing Vector CellularAutomata: PERIODIC CUSTOM ****\n";
-        CellularAutomata CA = CellularAutomata();
-        CA.setup_dimensions(5, 5, 10);
-        CA.setup_rule(CellularAutomata::Custom);
+        CellularAutomata<int> CA = CellularAutomata<int>();
+        CA.setup_dimensions_3d(5, 5, 10);
+        CA.setup_rule(CAEnums::Rule::Custom);
         test_CA(CA);
     }
 }

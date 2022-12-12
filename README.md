@@ -23,3 +23,6 @@
     12/10/2022: Emmanuel: Added parallelization with the aid of OpenMP directives. 
     Updated makefiles to create new parallelized targets. The makefiles support Linux and Mac OSX OpenMP systems.
     Class implementation and utility object files are now combined into a single library object file.
+
+    12/11/2022: Emmanuel: Added templates to CellularAutomata class. Also created a specialized template class for `int` data type.
+    Added utility functions to CAutils.h that are general and will useful for our galaxy model.

@@ -1,9 +1,12 @@
 var searchData=
 [
-  ['test_5fca_0',['test_CA',['../test__CA_8cpp.html#aaa5b73fc1cd9c80dbf83f04f5cc8ba31',1,'test_CA.cpp']]],
-  ['test_5fca_5finit_1',['test_CA_init',['../test__CA_8cpp.html#a92f888ac68daaa66c0b217c9e11224fc',1,'test_CA.cpp']]],
-  ['test_5fca_5fmatrix_2',['test_CA_matrix',['../test__CA_8cpp.html#a68b8f1eeac315dc2c1b80efe29ec43d1',1,'test_CA.cpp']]],
-  ['test_5fca_5fstep_3',['test_CA_step',['../test__CA_8cpp.html#a84733fac4b4eb0a9df1dcf028e34902e',1,'test_CA.cpp']]],
-  ['test_5fca_5ftensor_4',['test_CA_tensor',['../test__CA_8cpp.html#adcb40cecab4f616ce8b75bdd54cd816f',1,'test_CA.cpp']]],
-  ['test_5fca_5fvector_5',['test_CA_vector',['../test__CA_8cpp.html#a741f1208f412e8c0b6ef3adbb7c83bf9',1,'test_CA.cpp']]]
+  ['setup_5fboundary_0',['setup_boundary',['../classBaseCellularAutomata.html#ada383da099b30fcac4d4a713eed15c0e',1,'BaseCellularAutomata']]],
+  ['setup_5fcell_5fstates_1',['setup_cell_states',['../classBaseCellularAutomata.html#aebcf2a3687a3075e4293d071b88b9cf6',1,'BaseCellularAutomata']]],
+  ['setup_5fdimensions_5f1d_2',['setup_dimensions_1d',['../classCellularAutomata.html#a161c67df36bf4096437a835a5b77c391',1,'CellularAutomata::setup_dimensions_1d()'],['../classCellularAutomata_3_01int_01_4.html#aaa65f086a342189e3642f4de70ca1d90',1,'CellularAutomata&lt; int &gt;::setup_dimensions_1d()']]],
+  ['setup_5fdimensions_5f2d_3',['setup_dimensions_2d',['../classCellularAutomata.html#a5d11e8e04e99bf6df60977e710dcb656',1,'CellularAutomata::setup_dimensions_2d()'],['../classCellularAutomata_3_01int_01_4.html#a0f0354dc51361d6d74ead2beaaab3ac7',1,'CellularAutomata&lt; int &gt;::setup_dimensions_2d()']]],
+  ['setup_5fdimensions_5f3d_4',['setup_dimensions_3d',['../classCellularAutomata.html#a7e54aaf8e8242a92ac4cd53870a709b7',1,'CellularAutomata::setup_dimensions_3d()'],['../classCellularAutomata_3_01int_01_4.html#a935dc5b3f71e8985b3f4ee21f80b784a',1,'CellularAutomata&lt; int &gt;::setup_dimensions_3d()']]],
+  ['setup_5fneighborhood_5',['setup_neighborhood',['../classBaseCellularAutomata.html#ac6ee6bb5aab4e20e9b2643b9431243a5',1,'BaseCellularAutomata']]],
+  ['setup_5frule_6',['setup_rule',['../classBaseCellularAutomata.html#a7e032a330b64159e4c511c511f3813ce',1,'BaseCellularAutomata']]],
+  ['step_7',['step',['../classCellularAutomata.html#abaea49757383896905906c02aea63243',1,'CellularAutomata::step(void(custom_rule)(int *, int, T *, int, T &amp;))'],['../classCellularAutomata.html#a25bad260ce2de18c2692dff4466789d0',1,'CellularAutomata::step()'],['../classCellularAutomata_3_01int_01_4.html#a75bec37a6d25b4631aa0d391181d7046',1,'CellularAutomata&lt; int &gt;::step(void(custom_rule)(int *, int, int *, int, int &amp;))'],['../classCellularAutomata_3_01int_01_4.html#a6bd0afc822d904e1631a3ca4d65a9a36',1,'CellularAutomata&lt; int &gt;::step()']]],
+  ['swap_5fstates_8',['swap_states',['../CAutils_8h.html#ab1171f9ba84eda6ffb192c3ef516b2ba',1,'swap_states(int *vector, int *next_vector, int axis1_dim):&#160;CA_utils.cpp'],['../CAutils_8h.html#ab968d7c4197e5726b0f09debc550e449',1,'swap_states(int **matrix, int **next_matrix, int axis1_dim, int axis2_dim):&#160;CA_utils.cpp'],['../CAutils_8h.html#a2523dc4738ff7f1d34e62e66cbdafc50',1,'swap_states(int ***tensor, int ***next_tensor, int axis1_dim, int axis2_dim, int axis3_dim):&#160;CA_utils.cpp']]]
 ];

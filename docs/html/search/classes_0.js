@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['cellularautomata_0',['CellularAutomata',['../classCellularAutomata.html',1,'']]]
+  ['basecellularautomata_0',['BaseCellularAutomata',['../classBaseCellularAutomata.html',1,'']]]
 ];

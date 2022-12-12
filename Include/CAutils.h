@@ -46,7 +46,7 @@ void swap_states(int ***tensor, int ***next_tensor, int axis1_dim, int axis2_dim
  * @param neighborhood_type the type of neighborhood
  * @return int
  */
-int get_neighborhood_size(int rank, int radius, CellularAutomata::neighborhood neighborhood_type);
+int get_neighborhood_size(int rank, int radius, CAEnums::Neighborhood neighborhood_type);
 
 /**
  * @brief determines if a cell is diagonal to the central cell\n
@@ -110,3 +110,37 @@ bool less_than_votes(const std::pair<int, int> &a, const std::pair<int, int> &b)
  * @return int
  */
 int get_periodic_index(int i, int di, int axis_dim);
+
+/**
+ * @brief Get the periodic Moore neighbor index [x, y, z] from a flattened neighborhood array index.
+ *
+ * @param rank cell data rank
+ * @param radius neighborhood radius
+ * @param neighborhood_array_index flat array index to be converted to [x, y, z]
+ * @param neighbor_index int array containing x, y and z coordinates
+ */
+void get_periodic_moore_neighbor_index(int rank, int radius, int neighborhood_array_index, int *neighbor_index);
+
+/**
+ * @brief Get the periodic Von  Neumann neighbor index [x, y, z] from a flattened neighborhood array index.
+ *
+ * @param rank cell data rank
+ * @param radius neighborhood radius
+ * @param neighborhood_array_index flat array index to be converted to [x, y, z]
+ * @param neighbor_index int array containing x, y and z coordinates
+ */
+void get_periodic_von_neumann_neighbor_index(int rank, int radius, int neighborhood_array_index, int *neighbor_index);
+
+/**
+ * @brief Get the middle cell from periodic neighborhood array
+ *
+ * @tparam T class or struct object
+ * @param rank cell data rank
+ * @param radius neighborhood radius
+ * @param cell_of_interest the cell we want to copy data to
+ * @param neighborhood array of T instance that contains the cell_of_interest
+ */
+template <typename T>
+void get_middle_cell_from_periodic_neighborhood(int rank, int radius,
+                                                CAEnums::Neighborhood neighborhood_type,
+                                                T &cell_of_interest, T *neighborhood);
