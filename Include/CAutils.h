@@ -6,11 +6,7 @@
  * @brief This header files contains utility functions used by CellularAutomata class.
  * @date 2022-12-06
  */
-#pragma once
-#include <utility> // pair
-#ifdef ENABLE_OMP
-#include <omp.h>
-#endif
+#include "CAdatatypes.h"
 
 /**
  * @brief swaps the computed next_vector to the current vector
@@ -19,15 +15,7 @@
  * @param next_vector cellular automata next vector state
  * @param axis1_dim vector dimension
  */
-template <typename T>
-void swap_states(T *vector, T *next_vector, int axis1_dim)
-{
-#pragma omp parallel for
-    for (int i = 0; i < axis1_dim; i++)
-    {
-        std::swap(vector[i], next_vector[i]);
-    }
-}
+void swap_states(int *vector, int *next_vector, int axis1_dim);
 
 /**
  * @brief swaps the computed next_matrix to the current matrix
@@ -37,18 +25,7 @@ void swap_states(T *vector, T *next_vector, int axis1_dim)
  * @param axis1_dim first matrix dimension
  * @param axis2_dim second matrix dimension
  */
-template <typename T>
-void swap_states(T **matrix, T **next_matrix, int axis1_dim, int axis2_dim)
-{
-#pragma omp parallel for collapse(2)
-    for (int i = 0; i < axis1_dim; i++)
-    {
-        for (int j = 0; j < axis2_dim; j++)
-        {
-            std::swap(matrix[i][j], next_matrix[i][j]);
-        }
-    }
-}
+void swap_states(int **matrix, int **next_matrix, int axis1_dim, int axis2_dim);
 
 /**
  * @brief swaps the computed next_tensor to the current tensor
@@ -59,21 +36,17 @@ void swap_states(T **matrix, T **next_matrix, int axis1_dim, int axis2_dim)
  * @param axis2_dim second tensor dimension
  * @param axis3_dim third tensor dimension
  */
-template <typename T>
-void swap_states(T ***tensor, T ***next_tensor, int axis1_dim, int axis2_dim, int axis3_dim)
-{
-#pragma omp parallel for collapse(3)
-    for (int i = 0; i < axis1_dim; i++)
-    {
-        for (int j = 0; j < axis2_dim; j++)
-        {
-            for (int k = 0; k < axis3_dim; k++)
-            {
-                std::swap(tensor[i][j][k], next_tensor[i][j][k]);
-            }
-        }
-    }
-}
+void swap_states(int ***tensor, int ***next_tensor, int axis1_dim, int axis2_dim, int axis3_dim);
+
+/**
+ * @brief calculates the neighborhood size using the rank, radius and neighborhood type
+ *
+ * @param rank rank of the cell's tensor
+ * @param radius radius of the neighborhood
+ * @param neighborhood_type the type of neighborhood
+ * @return int
+ */
+int get_neighborhood_size(int rank, int radius, CAEnums::Neighborhood neighborhood_type);
 
 /**
  * @brief determines if a cell is diagonal to the central cell\n
@@ -110,6 +83,14 @@ bool is_diagonal_neighboring_cell_2d(int i, int j);
  * @return false: cell is not diagonal
  */
 bool is_diagonal_neighboring_cell_3d(int i, int j, int k);
+
+/**
+ * @brief initializes a MajorityCounter instance utilized by Majority rule
+ *
+ * @param counter object to keep number of votes for each particular cell state
+ * @param num_states number of different cell states
+ */
+void initialize_majority_rule_counter(MajorityCounter &counter, int num_states);
 
 /**
  * @brief Determines if a has less votes than b.
@@ -149,3 +130,17 @@ void get_periodic_moore_neighbor_index(int rank, int radius, int neighborhood_ar
  * @param neighbor_index int array containing x, y and z coordinates
  */
 void get_periodic_von_neumann_neighbor_index(int rank, int radius, int neighborhood_array_index, int *neighbor_index);
+
+/**
+ * @brief Get the middle cell from periodic neighborhood array
+ *
+ * @tparam T class or struct object
+ * @param rank cell data rank
+ * @param radius neighborhood radius
+ * @param cell_of_interest the cell we want to copy data to
+ * @param neighborhood array of T instance that contains the cell_of_interest
+ */
+template <typename T>
+void get_middle_cell_from_periodic_neighborhood(int rank, int radius,
+                                                CAEnums::Neighborhood neighborhood_type,
+                                                T &cell_of_interest, T *neighborhood);

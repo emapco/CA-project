@@ -1,5 +1,5 @@
 /**
- * @file CA_utils.cpp
+ * @file cautils.cpp
  * @author Emmanuel Cortes (ecortes@berkeley.edu)
  *
  * <b>Contributor(s)</b> <br> &emsp;&emsp;
@@ -11,6 +11,57 @@
 #include "CAdatatypes.h"
 #include <utility> // swap, pair
 #include <cmath>   // pow
+#ifdef ENABLE_OMP
+#include <omp.h>
+#endif
+
+void swap_states(int *vector, int *next_vector, int axis1_dim)
+{
+#pragma omp parallel for
+    for (int i = 0; i < axis1_dim; i++)
+    {
+        std::swap(vector[i], next_vector[i]);
+    }
+}
+
+void swap_states(int **matrix, int **next_matrix, int axis1_dim, int axis2_dim)
+{
+#pragma omp parallel for collapse(2)
+    for (int i = 0; i < axis1_dim; i++)
+    {
+        for (int j = 0; j < axis2_dim; j++)
+        {
+            std::swap(matrix[i][j], next_matrix[i][j]);
+        }
+    }
+}
+
+void swap_states(int ***tensor, int ***next_tensor, int axis1_dim, int axis2_dim, int axis3_dim)
+{
+#pragma omp parallel for collapse(3)
+    for (int i = 0; i < axis1_dim; i++)
+    {
+        for (int j = 0; j < axis2_dim; j++)
+        {
+            for (int k = 0; k < axis3_dim; k++)
+            {
+                std::swap(tensor[i][j][k], next_tensor[i][j][k]);
+            }
+        }
+    }
+}
+
+int get_neighborhood_size(int rank, int radius, CAEnums::Neighborhood neighborhood_type)
+{
+    if (neighborhood_type == CAEnums::VonNeumann)
+    {
+        return (2 * rank * radius) + 1; // +1 to include cell of interest
+    }
+    else // CAEnums::Moore neighborhood
+    {
+        return pow((2 * radius + 1), rank);
+    }
+}
 
 bool is_diagonal_neighboring_cell_2d(int i, int j)
 {
@@ -23,22 +74,30 @@ bool is_diagonal_neighboring_cell_2d(int i, int j)
 
 bool is_diagonal_neighboring_cell_3d(int i, int j, int k)
 {
-    // assumes that the middle matrix has the index i = 0
-    if (i == 0)
+    if (k == 0)
     {
         // diagram of slice: 1 = diagonal cell
         // 1 0 1
         // 0 0 0
         // 1 0 1
-        return (k != 0 && j != 0);
+        return (i != 0 && j != 0);
     }
-    else // assumes that non-zero matrices are have i != 0
-    {    // (i.e. i = -1; i = 2)
+    else // k != 0
+    {
         // diagram of slice: 1 = diagonal cell
         // 1 1 1
         // 1 0 1
         // 1 1 1
-        return (k != 0 || j != 0);
+        return (i != 0 || j != 0);
+    }
+}
+
+void initialize_majority_rule_counter(MajorityCounter &counter, int num_states)
+{
+    // sets the counter for every cell state type to 0
+    for (int j = 0; j < num_states; j++)
+    {
+        counter.insert(std::make_pair(j, 0));
     }
 }
 
@@ -208,4 +267,14 @@ void get_periodic_von_neumann_neighbor_index(int rank, int radius, int neighborh
         }
         break;
     }
+}
+
+template <typename T>
+void get_middle_cell_from_periodic_neighborhood(int rank, int radius,
+                                                CAEnums::Neighborhood neighborhood_type,
+                                                T &cell_of_interest, T *neighborhood)
+{
+    int length = get_neighborhood_size(rank, radius, neighborhood_type);
+    int middle_cell_index = length / 2;
+    cell_of_interest = neighborhood[middle_cell_index];
 }
