@@ -6,7 +6,8 @@
  * @brief This header files contains utility functions used by CellularAutomata class.
  * @date 2022-12-06
  */
-#include "CAdatatypes.h"
+#pragma once
+#include <utility>   // pair
 
 /**
  * @brief swaps the computed next_vector to the current vector
@@ -37,16 +38,6 @@ void swap_states(int **matrix, int **next_matrix, int axis1_dim, int axis2_dim);
  * @param axis3_dim third tensor dimension
  */
 void swap_states(int ***tensor, int ***next_tensor, int axis1_dim, int axis2_dim, int axis3_dim);
-
-/**
- * @brief calculates the neighborhood size using the rank, radius and neighborhood type
- *
- * @param rank rank of the cell's tensor
- * @param radius radius of the neighborhood
- * @param neighborhood_type the type of neighborhood
- * @return int
- */
-int get_neighborhood_size(int rank, int radius, CAEnums::Neighborhood neighborhood_type);
 
 /**
  * @brief determines if a cell is diagonal to the central cell\n
@@ -83,14 +74,6 @@ bool is_diagonal_neighboring_cell_2d(int i, int j);
  * @return false: cell is not diagonal
  */
 bool is_diagonal_neighboring_cell_3d(int i, int j, int k);
-
-/**
- * @brief initializes a MajorityCounter instance utilized by Majority rule
- *
- * @param counter object to keep number of votes for each particular cell state
- * @param num_states number of different cell states
- */
-void initialize_majority_rule_counter(MajorityCounter &counter, int num_states);
 
 /**
  * @brief Determines if a has less votes than b.
@@ -130,17 +113,3 @@ void get_periodic_moore_neighbor_index(int rank, int radius, int neighborhood_ar
  * @param neighbor_index int array containing x, y and z coordinates
  */
 void get_periodic_von_neumann_neighbor_index(int rank, int radius, int neighborhood_array_index, int *neighbor_index);
-
-/**
- * @brief Get the middle cell from periodic neighborhood array
- *
- * @tparam T class or struct object
- * @param rank cell data rank
- * @param radius neighborhood radius
- * @param cell_of_interest the cell we want to copy data to
- * @param neighborhood array of T instance that contains the cell_of_interest
- */
-template <typename T>
-void get_middle_cell_from_periodic_neighborhood(int rank, int radius,
-                                                CAEnums::Neighborhood neighborhood_type,
-                                                T &cell_of_interest, T *neighborhood);
