@@ -166,10 +166,12 @@ public:
 /**
  * @brief A CellularAutomata class for simulating cellular automata models.
  * This templated class supports structs/class objects or integer states.
- * 
+ *
  * The object must contain a .state property that the CellularAutomata class updates.
- * The object must also define a move operator to ensure well defined swapping of states (current state and next state).
- * The object must also define an assignment operator to ensure proper copying happen when assigning one object to another.
+ * The object must have a defined a move operator to ensure well defined swapping of states (current state and next state).
+ * The object must have a defined assignment operator to ensure proper copying happen when assigning one object to another.
+ * The object must have a defined != operator for the comparison of cell states.
+ *
  * If these requirements are not satisfied then the class will produce undefined behavior.
  *
  * @tparam T : struct/class with a .state property, move operator and assignment operator.<br>
@@ -203,7 +205,7 @@ private:
      */
     int set_new_cell_state(int *cell_index, int index_size,
                            T *neighborhood_cells, int neighborhood_size,
-                           T &new_cell_state, void(custom_rule)(int *, int, T *, int, T &))
+                           T &new_cell_state, void(custom_rule)(int *, int, T *, int, T &, const CellularAutomata<T> &))
     {
         int sum = 0;                         // sum of cells within boundary_radius for Parity rule
         MajorityCounter state_votes_counter; // counter to keep track of votes for Majority rule
@@ -225,14 +227,14 @@ private:
             else
             {
                 // custom_rule should set the new_cell_state
-                custom_rule(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state);
+                custom_rule(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state, *this);
             }
             break;
         case CAEnums::Parity:
             for (int i = 0; i < neighborhood_size; i++)
             {
                 // update sum with current cell value
-                sum += neighborhood_cells[i];
+                sum += neighborhood_cells[i].state;
             }
             new_cell_state.state = sum % num_states; // store the parity state as the new state
             break;
@@ -268,7 +270,7 @@ private:
      * 0: no error
      */
     int get_state_from_neighborhood_1d(int *cell_index, int index_size, T &new_cell_state,
-                                       void(custom_rule)(int *, int, T *, int, T &))
+                                       void(custom_rule)(int *, int, T *, int, T &, const CellularAutomata<T> &))
     {
         int error_code = 0;         // store error code return by other methods
         int i = cell_index[0];      // get i-th index from array
@@ -318,7 +320,7 @@ private:
      * 0: no error
      */
     int get_state_from_neighborhood_2d(int *cell_index, int index_size, T &new_cell_state,
-                                       void(custom_rule)(int *, int, T *, int, T &))
+                                       void(custom_rule)(int *, int, T *, int, T &, const CellularAutomata<T> &))
     {
         int error_code = 0;         // store error code return by other methods
         int i = cell_index[0];      // get i-th index from array
@@ -368,7 +370,7 @@ private:
      * 0: no error
      */
     int get_state_from_neighborhood_3d(int *cell_index, int index_size, T &new_cell_state,
-                                       void(custom_rule)(int *, int, T *, int, T &))
+                                       void(custom_rule)(int *, int, T *, int, T &, const CellularAutomata<T> &))
     {
         int error_code = 0;         // store error code return by other methods
         int i = cell_index[0];      // get i-th index from array
@@ -723,7 +725,7 @@ private:
          */
         int max_neighborhood_size = get_neighborhood_size(rank, boundary_radius, neighborhood_type);
         // allocate memory and check if operation was successful
-        int *neighborhood_cells = new (std::nothrow) T[max_neighborhood_size];
+        T *neighborhood_cells = new (std::nothrow) T[max_neighborhood_size];
         return neighborhood_cells;
     }
 
@@ -1009,28 +1011,31 @@ public:
      *
      * This method supports the use of a custom rule type.
      *
+     * If cell states move on the grid, the user is responsible for handling clashes.
+     * If two cells move to the same cell position, the grid will retain the most
+     * recent cell assignment (new will replace the old).
+     *
      * @param custom_rule function that is called when a Custom rule type is specified
      *@return int - error code\n
      * Error codes returned by get_state_from_neighborhood_Xd methods\n
      * 0: no error
      */
-    int step(void(custom_rule)(int *, int, T *, int, T &))
+    int step(void(custom_rule)(int *, int, T *, int, T &, const CellularAutomata<T> &))
     {
-        int error_code = 0;         // store error code return by other methods
-        T new_cell_state;           // stores the cell's new state
-        T empty_cell_state;         // cell state for zeroing out old states
-        empty_cell_state.state = 0; // ensure the state property is set to zero
-        int index_size;             // number of indices required to address the cell
+        int error_code = 0; // store error code return by other methods
+        T new_cell_state;   // stores the cell's new state
+        T empty_cell_state; // cell state for zeroing out old states
+        int index_size;     // number of indices required to address the cell
 
         if (vector != nullptr)
         {
             // store the main cell's index in cell_index for custom rule type
             index_size = 1;
-            int cell_index[index_size];
-#pragma omp parallel for firstprivate(error_code) private(new_cell_state, cell_index)
+#pragma omp parallel for firstprivate(error_code) private(new_cell_state)
             for (int i = 0; i < axis1_dim; i++)
             {
-                cell_index[0] = i; // store the i-th index
+                int cell_index[index_size] = {i};
+                new_cell_state = vector[i];
                 error_code = get_state_from_neighborhood_1d(cell_index, index_size, new_cell_state, custom_rule);
                 if (error_code < 0)
                 {
@@ -1044,29 +1049,30 @@ public:
 #endif
                 }
                 /*
-                 * The two following statements allow for dynamic systems to be modeled.
-                 * If the cell does not move then we properly update it in the second statement.
-                 * If the cell moves then the old cell index is zeroed
-                 * and the new cell index will contain the newly computed cell state.
+                 * The update cell if new_cell_state is no empty_state.
+                 * Avoids overwriting the motion of cells.
                  */
-                next_vector[i] = empty_cell_state;
-                next_vector[cell_index[0]] = new_cell_state;
+                if (new_cell_state != empty_cell_state)
+                {
+                    next_vector[cell_index[0]] = new_cell_state;
+                }
             }
             // store next cell state to the current cell state for the next time step
-            swap_states(vector, next_vector, axis1_dim);
+            swap_states<T>(vector, next_vector, axis1_dim);
         }
         else if (matrix != nullptr)
         {
             // store the main cell's index in cell_index for custom rule type
             index_size = 2;
             int cell_index[index_size];
-#pragma omp parallel for firstprivate(error_code) private(new_cell_state, cell_index)
+#pragma omp parallel for firstprivate(error_code) private(new_cell_state)
             for (int i = 0; i < axis1_dim; i++)
             {
                 cell_index[0] = i; // store the i-th index
                 for (int j = 0; j < axis2_dim; j++)
                 {
-                    cell_index[1] = j; // store the j-th index
+                    int cell_index[index_size] = {i, j};
+                    new_cell_state = matrix[i][j];
                     error_code = get_state_from_neighborhood_2d(cell_index, index_size, new_cell_state, custom_rule);
                     if (error_code < 0)
                     {
@@ -1080,33 +1086,30 @@ public:
 #endif
                     }
                     /*
-                     * The two following statements allow for dynamic systems to be modeled.
-                     * If the cell does not move then we properly update it in the second statement.
-                     * If the cell moves then the old cell index is zeroed
-                     * and the new cell index will contain the newly computed cell state.
+                     * The update cell if new_cell_state is no empty_state.
+                     * Avoids overwriting the motion of cells.
                      */
-                    next_matrix[i][j] = empty_cell_state;
-                    next_matrix[cell_index[0]][cell_index[1]] = new_cell_state;
+                    if (new_cell_state != empty_cell_state)
+                    {
+                        next_matrix[cell_index[0]][cell_index[1]] = new_cell_state;
+                    }
                 }
             }
             // store next cell state to the current cell state for the next time step
-            swap_states(matrix, next_matrix, axis1_dim, axis2_dim);
+            swap_states<T>(matrix, next_matrix, axis1_dim, axis2_dim);
         }
         else if (tensor != nullptr)
         {
-            // store the main cell's index in cell_index for custom rule type
             index_size = 3;
-            int cell_index[index_size];
-#pragma omp parallel for firstprivate(error_code) private(new_cell_state, cell_index)
+#pragma omp parallel for firstprivate(error_code) private(new_cell_state)
             for (int i = 0; i < axis1_dim; i++)
             {
-                cell_index[0] = i; // store the i-th index
                 for (int j = 0; j < axis2_dim; j++)
                 {
-                    cell_index[1] = j; // store the j-th index
                     for (int k = 0; k < axis3_dim; k++)
                     {
-                        cell_index[2] = k; // store the k-th index
+                        int cell_index[index_size] = {i, j, k};
+                        new_cell_state = tensor[i][j][k];
                         error_code = get_state_from_neighborhood_3d(cell_index, index_size, new_cell_state, custom_rule);
                         if (error_code < 0)
                         {
@@ -1120,18 +1123,18 @@ public:
 #endif
                         }
                         /*
-                         * The two following statements allow for dynamic systems to be modeled.
-                         * If the cell does not move then we properly update it in the second statement.
-                         * If the cell moves then the old cell index is zeroed
-                         * and the new cell index will contain the newly computed cell state.
+                         * The update cell if new_cell_state is no empty_state.
+                         * Avoids overwriting the motion of cells.
                          */
-                        next_tensor[i][j][k] = empty_cell_state;
-                        next_tensor[cell_index[0]][cell_index[1]][cell_index[2]] = new_cell_state;
+                        if (new_cell_state != empty_cell_state)
+                        {
+                            next_tensor[cell_index[0]][cell_index[1]][cell_index[2]] = new_cell_state;
+                        }
                     }
                 }
             }
             // store next cell state to the current cell state for the next time step
-            swap_states(tensor, next_tensor, axis1_dim, axis2_dim, axis3_dim);
+            swap_states<T>(tensor, next_tensor, axis1_dim, axis2_dim, axis3_dim);
         }
         else
         {
@@ -1239,19 +1242,6 @@ public:
             counter.insert(std::make_pair(j, 0));
         }
     }
-
-    /**
-     * @brief Get the middle cell from periodic neighborhood array
-     *
-     * @tparam T class or struct object
-     * @param rank cell data rank
-     * @param radius neighborhood radius
-     * @param cell_of_interest the cell we want to copy data to
-     * @param neighborhood array of T instance that contains the cell_of_interest
-     */
-    static void get_middle_cell_from_periodic_neighborhood(int rank, int radius,
-                                                           CAEnums::Neighborhood neighborhood_type,
-                                                           T &cell_of_interest, T *neighborhood);
 };
 
 /*
@@ -1330,7 +1320,7 @@ int CellularAutomata<int>::init_condition(int x_state, double prob);
 template <>
 int CellularAutomata<int>::set_new_cell_state(int *cell_index, int index_size,
                                               int *neighborhood_cells, int neighborhood_size,
-                                              int &new_cell_state, void(custom_rule)(int *, int, int *, int, int &));
+                                              int &new_cell_state, void(custom_rule)(int *, int, int *, int, int &, const CellularAutomata<int> &));
 
 /**
  * @brief Print the current state of the grid.
@@ -1348,21 +1338,14 @@ int CellularAutomata<int>::print_grid();
  *
  * This method supports the use of a custom rule type.
  *
+ * If cell states move on the grid, the user is responsible for handling clashes.
+ * If two cells move to the same cell position, the grid will retain the most
+ * recent cell assignment (new will replace the old).
+ *
  * @param custom_rule function that is called when a Custom rule type is specified
  *@return int - error code\n
  * Error codes returned by get_state_from_neighborhood_Xd methods\n
  * 0: no error
  */
 template <>
-int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &));
-
-/**
- * @brief Simulates a cellular automata step.
- * A new state is generated and stored as the new state for subsequent calls to step method.
- *
- *@return int - error code\n
- * Error codes returned by get_state_from_neighborhood_Xd methods\n
- * 0: no error
- */
-template <>
-int CellularAutomata<int>::step();
+int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &, const CellularAutomata<int> &));

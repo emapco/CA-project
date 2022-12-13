@@ -7,7 +7,10 @@
  * @date 2022-12-06
  */
 #pragma once
-#include <utility>   // pair
+#include <utility> // pair
+#ifdef ENABLE_OMP
+#include <omp.h>
+#endif
 
 /**
  * @brief swaps the computed next_vector to the current vector
@@ -16,7 +19,15 @@
  * @param next_vector cellular automata next vector state
  * @param axis1_dim vector dimension
  */
-void swap_states(int *vector, int *next_vector, int axis1_dim);
+template <typename T>
+void swap_states(T *vector, T *next_vector, int axis1_dim)
+{
+#pragma omp parallel for
+    for (int i = 0; i < axis1_dim; i++)
+    {
+        std::swap(vector[i], next_vector[i]);
+    }
+}
 
 /**
  * @brief swaps the computed next_matrix to the current matrix
@@ -26,7 +37,18 @@ void swap_states(int *vector, int *next_vector, int axis1_dim);
  * @param axis1_dim first matrix dimension
  * @param axis2_dim second matrix dimension
  */
-void swap_states(int **matrix, int **next_matrix, int axis1_dim, int axis2_dim);
+template <typename T>
+void swap_states(T **matrix, T **next_matrix, int axis1_dim, int axis2_dim)
+{
+#pragma omp parallel for collapse(2)
+    for (int i = 0; i < axis1_dim; i++)
+    {
+        for (int j = 0; j < axis2_dim; j++)
+        {
+            std::swap(matrix[i][j], next_matrix[i][j]);
+        }
+    }
+}
 
 /**
  * @brief swaps the computed next_tensor to the current tensor
@@ -37,7 +59,21 @@ void swap_states(int **matrix, int **next_matrix, int axis1_dim, int axis2_dim);
  * @param axis2_dim second tensor dimension
  * @param axis3_dim third tensor dimension
  */
-void swap_states(int ***tensor, int ***next_tensor, int axis1_dim, int axis2_dim, int axis3_dim);
+template <typename T>
+void swap_states(T ***tensor, T ***next_tensor, int axis1_dim, int axis2_dim, int axis3_dim)
+{
+#pragma omp parallel for collapse(3)
+    for (int i = 0; i < axis1_dim; i++)
+    {
+        for (int j = 0; j < axis2_dim; j++)
+        {
+            for (int k = 0; k < axis3_dim; k++)
+            {
+                std::swap(tensor[i][j][k], next_tensor[i][j][k]);
+            }
+        }
+    }
+}
 
 /**
  * @brief determines if a cell is diagonal to the central cell\n

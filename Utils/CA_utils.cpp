@@ -11,45 +11,6 @@
 #include "CAdatatypes.h"
 #include <utility> // swap, pair
 #include <cmath>   // pow
-#ifdef ENABLE_OMP
-#include <omp.h>
-#endif
-
-void swap_states(int *vector, int *next_vector, int axis1_dim)
-{
-#pragma omp parallel for
-    for (int i = 0; i < axis1_dim; i++)
-    {
-        std::swap(vector[i], next_vector[i]);
-    }
-}
-
-void swap_states(int **matrix, int **next_matrix, int axis1_dim, int axis2_dim)
-{
-#pragma omp parallel for collapse(2)
-    for (int i = 0; i < axis1_dim; i++)
-    {
-        for (int j = 0; j < axis2_dim; j++)
-        {
-            std::swap(matrix[i][j], next_matrix[i][j]);
-        }
-    }
-}
-
-void swap_states(int ***tensor, int ***next_tensor, int axis1_dim, int axis2_dim, int axis3_dim)
-{
-#pragma omp parallel for collapse(3)
-    for (int i = 0; i < axis1_dim; i++)
-    {
-        for (int j = 0; j < axis2_dim; j++)
-        {
-            for (int k = 0; k < axis3_dim; k++)
-            {
-                std::swap(tensor[i][j][k], next_tensor[i][j][k]);
-            }
-        }
-    }
-}
 
 bool is_diagonal_neighboring_cell_2d(int i, int j)
 {
