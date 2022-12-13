@@ -51,18 +51,6 @@ void swap_states(int ***tensor, int ***next_tensor, int axis1_dim, int axis2_dim
     }
 }
 
-int get_neighborhood_size(int rank, int radius, CAEnums::Neighborhood neighborhood_type)
-{
-    if (neighborhood_type == CAEnums::VonNeumann)
-    {
-        return (2 * rank * radius) + 1; // +1 to include cell of interest
-    }
-    else // CAEnums::Moore neighborhood
-    {
-        return pow((2 * radius + 1), rank);
-    }
-}
-
 bool is_diagonal_neighboring_cell_2d(int i, int j)
 {
     // diagram of slice: 1 = diagonal cell
@@ -74,30 +62,22 @@ bool is_diagonal_neighboring_cell_2d(int i, int j)
 
 bool is_diagonal_neighboring_cell_3d(int i, int j, int k)
 {
-    if (k == 0)
+    // assumes that the middle matrix has the index i = 0
+    if (i == 0)
     {
         // diagram of slice: 1 = diagonal cell
         // 1 0 1
         // 0 0 0
         // 1 0 1
-        return (i != 0 && j != 0);
+        return (k != 0 && j != 0);
     }
-    else // k != 0
-    {
+    else // assumes that non-zero matrices are have i != 0
+    {    // (i.e. i = -1; i = 2)
         // diagram of slice: 1 = diagonal cell
         // 1 1 1
         // 1 0 1
         // 1 1 1
-        return (i != 0 || j != 0);
-    }
-}
-
-void initialize_majority_rule_counter(MajorityCounter &counter, int num_states)
-{
-    // sets the counter for every cell state type to 0
-    for (int j = 0; j < num_states; j++)
-    {
-        counter.insert(std::make_pair(j, 0));
+        return (k != 0 || j != 0);
     }
 }
 
@@ -267,14 +247,4 @@ void get_periodic_von_neumann_neighbor_index(int rank, int radius, int neighborh
         }
         break;
     }
-}
-
-template <typename T>
-void get_middle_cell_from_periodic_neighborhood(int rank, int radius,
-                                                CAEnums::Neighborhood neighborhood_type,
-                                                T &cell_of_interest, T *neighborhood)
-{
-    int length = get_neighborhood_size(rank, radius, neighborhood_type);
-    int middle_cell_index = length / 2;
-    cell_of_interest = neighborhood[middle_cell_index];
 }
