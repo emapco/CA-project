@@ -273,7 +273,7 @@ int CellularAutomata<int>::init_condition(int x_state, double prob)
 template <>
 int CellularAutomata<int>::set_new_cell_state(int *cell_index, int index_size,
                                               int *neighborhood_cells, int neighborhood_size,
-                                              int &new_cell_state, void(custom_rule)(int *, int, int *, int, int &, const CellularAutomata<int> &))
+                                              int &new_cell_state, void(custom_rule)(int *, int, int *, int, int &, CellularAutomata<int> &))
 {
     int sum = 0;                         // sum of cells within boundary_radius for Parity rule
     MajorityCounter state_votes_counter; // counter to keep track of votes for Majority rule
@@ -370,7 +370,7 @@ int CellularAutomata<int>::print_grid()
 }
 
 template <>
-int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &, const CellularAutomata<int> &))
+int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &, CellularAutomata<int> &))
 {
     int error_code = 0;       // store error code return by other methods
     int new_cell_state;       // stores the cell's new state

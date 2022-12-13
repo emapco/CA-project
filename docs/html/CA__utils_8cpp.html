@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Cellular Automata CHEM274B Group Project: Include/CAutils.h File Reference</title>
+<title>Cellular Automata CHEM274B Group Project: Utils/CA_utils.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -70,68 +70,56 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_856524284ebe840938865dc061f982fb.html">Include</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_0a824aa1f70ce3b829ef378253b085da.html">Utils</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">CAutils.h File Reference</div></div>
+  <div class="headertitle"><div class="title">CA_utils.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>This header files contains utility functions used by <a class="el" href="classCellularAutomata.html" title="A CellularAutomata class for simulating cellular automata models.">CellularAutomata</a> class.  
+<p>Implementation file for the utility functions utilized by <a class="el" href="classCellularAutomata.html" title="A CellularAutomata class for simulating cellular automata models.">CellularAutomata</a> class defined in <a class="el" href="CAutils_8h.html" title="This header files contains utility functions used by CellularAutomata class.">CAutils.h</a>.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;utility&gt;</code><br />
-</div>
-<p><a href="CAutils_8h_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
+<div class="textblock"><code>#include &quot;<a class="el" href="CAdatatypes_8h_source.html">CAdatatypes.h</a>&quot;</code><br />
+<code>#include &lt;utility&gt;</code><br />
+<code>#include &lt;cmath&gt;</code><br />
+</div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aac405862f0f86c8cc5589224fee131bd"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:aac405862f0f86c8cc5589224fee131bd"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="CAutils_8h.html#aac405862f0f86c8cc5589224fee131bd">swap_states</a> (T *vector, T *next_vector, int axis1_dim)</td></tr>
-<tr class="memdesc:aac405862f0f86c8cc5589224fee131bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">swaps the computed next_vector to the current vector  <a href="CAutils_8h.html#aac405862f0f86c8cc5589224fee131bd">More...</a><br /></td></tr>
-<tr class="separator:aac405862f0f86c8cc5589224fee131bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a696f681ffff46ea85560e4136167840d"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a696f681ffff46ea85560e4136167840d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="CAutils_8h.html#a696f681ffff46ea85560e4136167840d">swap_states</a> (T **matrix, T **next_matrix, int axis1_dim, int axis2_dim)</td></tr>
-<tr class="memdesc:a696f681ffff46ea85560e4136167840d"><td class="mdescLeft">&#160;</td><td class="mdescRight">swaps the computed next_matrix to the current matrix  <a href="CAutils_8h.html#a696f681ffff46ea85560e4136167840d">More...</a><br /></td></tr>
-<tr class="separator:a696f681ffff46ea85560e4136167840d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96843f4442180953fb7b6f5a98c45401"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a96843f4442180953fb7b6f5a98c45401"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="CAutils_8h.html#a96843f4442180953fb7b6f5a98c45401">swap_states</a> (T ***tensor, T ***next_tensor, int axis1_dim, int axis2_dim, int axis3_dim)</td></tr>
-<tr class="memdesc:a96843f4442180953fb7b6f5a98c45401"><td class="mdescLeft">&#160;</td><td class="mdescRight">swaps the computed next_tensor to the current tensor  <a href="CAutils_8h.html#a96843f4442180953fb7b6f5a98c45401">More...</a><br /></td></tr>
-<tr class="separator:a96843f4442180953fb7b6f5a98c45401"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a802efea522fe04800af9a538ef12faa2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CAutils_8h.html#a802efea522fe04800af9a538ef12faa2">is_diagonal_neighboring_cell_2d</a> (int i, int j)</td></tr>
+<tr class="memitem:a802efea522fe04800af9a538ef12faa2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CA__utils_8cpp.html#a802efea522fe04800af9a538ef12faa2">is_diagonal_neighboring_cell_2d</a> (int i, int j)</td></tr>
 <tr class="memdesc:a802efea522fe04800af9a538ef12faa2"><td class="mdescLeft">&#160;</td><td class="mdescRight">determines if a cell is diagonal to the central cell<br  />
 diagram of slice: 1 = diagonal cell<br  />
 1 0 1<br  />
 0 0 0<br  />
 1 0 1<br  />
- <a href="CAutils_8h.html#a802efea522fe04800af9a538ef12faa2">More...</a><br /></td></tr>
+ <a href="CA__utils_8cpp.html#a802efea522fe04800af9a538ef12faa2">More...</a><br /></td></tr>
 <tr class="separator:a802efea522fe04800af9a538ef12faa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4961330f8753f96ba585b4821742ef19"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CAutils_8h.html#a4961330f8753f96ba585b4821742ef19">is_diagonal_neighboring_cell_3d</a> (int i, int j, int k)</td></tr>
+<tr class="memitem:a4961330f8753f96ba585b4821742ef19"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CA__utils_8cpp.html#a4961330f8753f96ba585b4821742ef19">is_diagonal_neighboring_cell_3d</a> (int i, int j, int k)</td></tr>
 <tr class="memdesc:a4961330f8753f96ba585b4821742ef19"><td class="mdescLeft">&#160;</td><td class="mdescRight">determines if a cell is diagonal to the central cell<br  />
 if k == 0 then both i and j have be non-zero<br  />
 diagram of slice: 1 = diagonal cell<br  />
 1 0 1<br  />
 0 0 0<br  />
 1 0 1<br  />
- <a href="CAutils_8h.html#a4961330f8753f96ba585b4821742ef19">More...</a><br /></td></tr>
+ <a href="CA__utils_8cpp.html#a4961330f8753f96ba585b4821742ef19">More...</a><br /></td></tr>
 <tr class="separator:a4961330f8753f96ba585b4821742ef19"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b65fd865bc8dc6c722fbef632384b0c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CAutils_8h.html#a6b65fd865bc8dc6c722fbef632384b0c">less_than_votes</a> (const std::pair&lt; int, int &gt; &amp;a, const std::pair&lt; int, int &gt; &amp;b)</td></tr>
-<tr class="memdesc:a6b65fd865bc8dc6c722fbef632384b0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if a has less votes than b.  <a href="CAutils_8h.html#a6b65fd865bc8dc6c722fbef632384b0c">More...</a><br /></td></tr>
+<tr class="memitem:a6b65fd865bc8dc6c722fbef632384b0c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CA__utils_8cpp.html#a6b65fd865bc8dc6c722fbef632384b0c">less_than_votes</a> (const std::pair&lt; int, int &gt; &amp;a, const std::pair&lt; int, int &gt; &amp;b)</td></tr>
+<tr class="memdesc:a6b65fd865bc8dc6c722fbef632384b0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if a has less votes than b.  <a href="CA__utils_8cpp.html#a6b65fd865bc8dc6c722fbef632384b0c">More...</a><br /></td></tr>
 <tr class="separator:a6b65fd865bc8dc6c722fbef632384b0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7e1a8fce16e8abbb80d5b79fe0fc443"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CAutils_8h.html#ab7e1a8fce16e8abbb80d5b79fe0fc443">get_periodic_index</a> (int i, int di, int axis_dim)</td></tr>
-<tr class="memdesc:ab7e1a8fce16e8abbb80d5b79fe0fc443"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the periodic index used for finding periodic boundary neighbors  <a href="CAutils_8h.html#ab7e1a8fce16e8abbb80d5b79fe0fc443">More...</a><br /></td></tr>
+<tr class="memitem:ab7e1a8fce16e8abbb80d5b79fe0fc443"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CA__utils_8cpp.html#ab7e1a8fce16e8abbb80d5b79fe0fc443">get_periodic_index</a> (int i, int di, int axis_dim)</td></tr>
+<tr class="memdesc:ab7e1a8fce16e8abbb80d5b79fe0fc443"><td class="mdescLeft">&#160;</td><td class="mdescRight">get the periodic index used for finding periodic boundary neighbors  <a href="CA__utils_8cpp.html#ab7e1a8fce16e8abbb80d5b79fe0fc443">More...</a><br /></td></tr>
 <tr class="separator:ab7e1a8fce16e8abbb80d5b79fe0fc443"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeffd47e0bfa4937e9440463a76ef1f9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CAutils_8h.html#aeffd47e0bfa4937e9440463a76ef1f9a">get_periodic_moore_neighbor_index</a> (int rank, int radius, int neighborhood_array_index, int *neighbor_index)</td></tr>
-<tr class="memdesc:aeffd47e0bfa4937e9440463a76ef1f9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the periodic Moore neighbor index [x, y, z] from a flattened neighborhood array index.  <a href="CAutils_8h.html#aeffd47e0bfa4937e9440463a76ef1f9a">More...</a><br /></td></tr>
+<tr class="memitem:aeffd47e0bfa4937e9440463a76ef1f9a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CA__utils_8cpp.html#aeffd47e0bfa4937e9440463a76ef1f9a">get_periodic_moore_neighbor_index</a> (int rank, int radius, int neighborhood_array_index, int *neighbor_index)</td></tr>
+<tr class="memdesc:aeffd47e0bfa4937e9440463a76ef1f9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the periodic Moore neighbor index [x, y, z] from a flattened neighborhood array index.  <a href="CA__utils_8cpp.html#aeffd47e0bfa4937e9440463a76ef1f9a">More...</a><br /></td></tr>
 <tr class="separator:aeffd47e0bfa4937e9440463a76ef1f9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87951c24c61789a69b9e80d3b3dabf43"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CAutils_8h.html#a87951c24c61789a69b9e80d3b3dabf43">get_periodic_von_neumann_neighbor_index</a> (int rank, int radius, int neighborhood_array_index, int *neighbor_index)</td></tr>
-<tr class="memdesc:a87951c24c61789a69b9e80d3b3dabf43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the periodic Von Neumann neighbor index [x, y, z] from a flattened neighborhood array index.  <a href="CAutils_8h.html#a87951c24c61789a69b9e80d3b3dabf43">More...</a><br /></td></tr>
+<tr class="memitem:a87951c24c61789a69b9e80d3b3dabf43"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CA__utils_8cpp.html#a87951c24c61789a69b9e80d3b3dabf43">get_periodic_von_neumann_neighbor_index</a> (int rank, int radius, int neighborhood_array_index, int *neighbor_index)</td></tr>
+<tr class="memdesc:a87951c24c61789a69b9e80d3b3dabf43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the periodic Von Neumann neighbor index [x, y, z] from a flattened neighborhood array index.  <a href="CA__utils_8cpp.html#a87951c24c61789a69b9e80d3b3dabf43">More...</a><br /></td></tr>
 <tr class="separator:a87951c24c61789a69b9e80d3b3dabf43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >This header files contains utility functions used by <a class="el" href="classCellularAutomata.html" title="A CellularAutomata class for simulating cellular automata models.">CellularAutomata</a> class. </p>
+<div class="textblock"><p >Implementation file for the utility functions utilized by <a class="el" href="classCellularAutomata.html" title="A CellularAutomata class for simulating cellular automata models.">CellularAutomata</a> class defined in <a class="el" href="CAutils_8h.html" title="This header files contains utility functions used by CellularAutomata class.">CAutils.h</a>. </p>
 <dl class="section author"><dt>Author</dt><dd>Emmanuel Cortes (<a href="#" onclick="location.href='mai'+'lto:'+'eco'+'rt'+'es@'+'be'+'rke'+'le'+'y.e'+'du'; return false;">ecort<span class="obfuscator">.nosp@m.</span>es@b<span class="obfuscator">.nosp@m.</span>erkel<span class="obfuscator">.nosp@m.</span>ey.e<span class="obfuscator">.nosp@m.</span>du</a>)</dd></dl>
 <p><b>Contributor(s)</b> <br  />
  &emsp;&emsp; </p><dl class="section date"><dt>Date</dt><dd>2022-12-06 </dd></dl>
@@ -418,165 +406,6 @@ false: cell is not diagonal </dd></dl>
   <table class="params">
     <tr><td class="paramname">a</td><td>pair instance with the votes stored in the second property </td></tr>
     <tr><td class="paramname">b</td><td>other pair with the votes stored in the second property </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a96843f4442180953fb7b6f5a98c45401" name="a96843f4442180953fb7b6f5a98c45401"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96843f4442180953fb7b6f5a98c45401">&#9670;&#160;</a></span>swap_states() <span class="overload">[1/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void swap_states </td>
-          <td>(</td>
-          <td class="paramtype">T ***&#160;</td>
-          <td class="paramname"><em>tensor</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T ***&#160;</td>
-          <td class="paramname"><em>next_tensor</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>axis1_dim</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>axis2_dim</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>axis3_dim</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>swaps the computed next_tensor to the current tensor </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">tensor</td><td>cellular automata current tensor state </td></tr>
-    <tr><td class="paramname">next_tensor</td><td>cellular automata next tensor state </td></tr>
-    <tr><td class="paramname">axis1_dim</td><td>first tensor dimension </td></tr>
-    <tr><td class="paramname">axis2_dim</td><td>second tensor dimension </td></tr>
-    <tr><td class="paramname">axis3_dim</td><td>third tensor dimension </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a696f681ffff46ea85560e4136167840d" name="a696f681ffff46ea85560e4136167840d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a696f681ffff46ea85560e4136167840d">&#9670;&#160;</a></span>swap_states() <span class="overload">[2/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void swap_states </td>
-          <td>(</td>
-          <td class="paramtype">T **&#160;</td>
-          <td class="paramname"><em>matrix</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T **&#160;</td>
-          <td class="paramname"><em>next_matrix</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>axis1_dim</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>axis2_dim</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>swaps the computed next_matrix to the current matrix </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">matrix</td><td>cellular automata current matrix state </td></tr>
-    <tr><td class="paramname">next_matrix</td><td>cellular automata next matrix state </td></tr>
-    <tr><td class="paramname">axis1_dim</td><td>first matrix dimension </td></tr>
-    <tr><td class="paramname">axis2_dim</td><td>second matrix dimension </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="aac405862f0f86c8cc5589224fee131bd" name="aac405862f0f86c8cc5589224fee131bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac405862f0f86c8cc5589224fee131bd">&#9670;&#160;</a></span>swap_states() <span class="overload">[3/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void swap_states </td>
-          <td>(</td>
-          <td class="paramtype">T *&#160;</td>
-          <td class="paramname"><em>vector</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">T *&#160;</td>
-          <td class="paramname"><em>next_vector</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>axis1_dim</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>swaps the computed next_vector to the current vector </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">vector</td><td>cellular automata current vector state </td></tr>
-    <tr><td class="paramname">next_vector</td><td>cellular automata next vector state </td></tr>
-    <tr><td class="paramname">axis1_dim</td><td>vector dimension </td></tr>
   </table>
   </dd>
 </dl>

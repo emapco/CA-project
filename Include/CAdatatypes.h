@@ -205,7 +205,7 @@ private:
      */
     int set_new_cell_state(int *cell_index, int index_size,
                            T *neighborhood_cells, int neighborhood_size,
-                           T &new_cell_state, void(custom_rule)(int *, int, T *, int, T &, const CellularAutomata<T> &))
+                           T &new_cell_state, void(custom_rule)(int *, int, T *, int, T &, CellularAutomata<T> &))
     {
         int sum = 0;                         // sum of cells within boundary_radius for Parity rule
         MajorityCounter state_votes_counter; // counter to keep track of votes for Majority rule
@@ -270,7 +270,7 @@ private:
      * 0: no error
      */
     int get_state_from_neighborhood_1d(int *cell_index, int index_size, T &new_cell_state,
-                                       void(custom_rule)(int *, int, T *, int, T &, const CellularAutomata<T> &))
+                                       void(custom_rule)(int *, int, T *, int, T &, CellularAutomata<T> &))
     {
         int error_code = 0;         // store error code return by other methods
         int i = cell_index[0];      // get i-th index from array
@@ -320,7 +320,7 @@ private:
      * 0: no error
      */
     int get_state_from_neighborhood_2d(int *cell_index, int index_size, T &new_cell_state,
-                                       void(custom_rule)(int *, int, T *, int, T &, const CellularAutomata<T> &))
+                                       void(custom_rule)(int *, int, T *, int, T &, CellularAutomata<T> &))
     {
         int error_code = 0;         // store error code return by other methods
         int i = cell_index[0];      // get i-th index from array
@@ -370,7 +370,7 @@ private:
      * 0: no error
      */
     int get_state_from_neighborhood_3d(int *cell_index, int index_size, T &new_cell_state,
-                                       void(custom_rule)(int *, int, T *, int, T &, const CellularAutomata<T> &))
+                                       void(custom_rule)(int *, int, T *, int, T &, CellularAutomata<T> &))
     {
         int error_code = 0;         // store error code return by other methods
         int i = cell_index[0];      // get i-th index from array
@@ -730,6 +730,40 @@ private:
     }
 
 public:
+    /* 
+    * Required for galaxy model
+    */
+
+    T *get_vector()
+    {
+        return vector;
+    }
+
+    T *get_next_vector()
+    {
+        return next_vector;
+    }
+
+    T **get_matrix()
+    {
+        return matrix;
+    }
+
+    T **get_next_matrix()
+    {
+        return next_matrix;
+    }
+
+    T ***get_tensor()
+    {
+        return tensor;
+    }
+
+    T ***get_next_tensor()
+    {
+        return next_tensor;
+    }
+
     /**
      * @brief Construct a new Cellular Automata object.
      * Sets the default value to all class attributes.
@@ -1020,7 +1054,7 @@ public:
      * Error codes returned by get_state_from_neighborhood_Xd methods\n
      * 0: no error
      */
-    int step(void(custom_rule)(int *, int, T *, int, T &, const CellularAutomata<T> &))
+    int step(void(custom_rule)(int *, int, T *, int, T &, CellularAutomata<T> &))
     {
         int error_code = 0; // store error code return by other methods
         T new_cell_state;   // stores the cell's new state
@@ -1320,7 +1354,7 @@ int CellularAutomata<int>::init_condition(int x_state, double prob);
 template <>
 int CellularAutomata<int>::set_new_cell_state(int *cell_index, int index_size,
                                               int *neighborhood_cells, int neighborhood_size,
-                                              int &new_cell_state, void(custom_rule)(int *, int, int *, int, int &, const CellularAutomata<int> &));
+                                              int &new_cell_state, void(custom_rule)(int *, int, int *, int, int &, CellularAutomata<int> &));
 
 /**
  * @brief Print the current state of the grid.
@@ -1348,4 +1382,4 @@ int CellularAutomata<int>::print_grid();
  * 0: no error
  */
 template <>
-int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &, const CellularAutomata<int> &));
+int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &, CellularAutomata<int> &));
