@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['rule_0',['rule',['../classCellularAutomata.html#a6e20f602a270020168482093b028b1bb',1,'CellularAutomata']]],
-  ['rule_5ftype_1',['rule_type',['../classCellularAutomata.html#af21d184c9d9a7d0e983f330db0f68de5',1,'CellularAutomata']]]
+  ['rule_0',['Rule',['../namespaceCAEnums.html#a30c884a833d28ce027506ce56d6f9498',1,'CAEnums']]],
+  ['rule_5ftype_1',['rule_type',['../classBaseCellularAutomata.html#a37bb763719c1681c6875201a37e73920',1,'BaseCellularAutomata']]]
 ];

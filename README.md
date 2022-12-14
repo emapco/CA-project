@@ -8,7 +8,7 @@
 
     12/5/2022:  Emmanuel: Added Doxyfile for generating documentation.
 
-    12/5/2022:  Group Meeting/Trevor: Updated mydatatypes.h to CAdatatypes.h. Added doxygen comment briefs to cellularautomata.cpp methods. 
+    12/5/2022:  Trevor: Updated mydatatypes.h to CAdatatypes.h. Added doxygen comment briefs to cellularautomata.cpp methods. 
     Updated test_CA.cpp to test 3d case. And Updated CellularAutomata API.
 
     12/5/2022:  Emmanuel: Updated Doxyfile and renamed Docs/ to docs/ for GitHub Pages support. 
@@ -23,3 +23,6 @@
     12/10/2022: Emmanuel: Added parallelization with the aid of OpenMP directives. 
     Updated makefiles to create new parallelized targets. The makefiles support Linux and Mac OSX OpenMP systems.
     Class implementation and utility object files are now combined into a single library object file.
+
+    12/11/2022: Emmanuel: Added templates to CellularAutomata class. Also created a specialized template class for `int` data type.
+    Added utility functions to CAutils.h that are general and will useful for our galaxy model. Add unit tests for CA_utils.cpp.

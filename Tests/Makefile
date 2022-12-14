@@ -27,7 +27,7 @@ LIB_DIR     = ../Libdir
 BIN_DIR     = ../Bindir
 
 # The next line contains the list of object files created by this Makefile.
-EXECS = test_CA test_CA_omp
+EXECS = test_CA test_CA_omp unit_test_CA_utils
 
 test_CA:
 	$(CPP) $(CPPFLAGS) -I$(INC_DIR) test_CA.cpp -o test_CA \
@@ -38,6 +38,10 @@ test_CA_omp:
 	$(CPP) $(CPPFLAGS) $(OMPFLAGS) $(LDFLAGS) -I$(INC_DIR) test_CA.cpp \
 	-o test_CA_omp $(LIB_DIR)/cellularautomata_omp.a
 	mv test_CA_omp $(BIN_DIR)
+
+unit_test_CA_utils:
+	$(CPP) $(CPPFLAGS) -I$(INC_DIR) unit_test_CA_utils.cpp $(LIB_DIR)/cellularautomata.a -o unit_test_CA_utils
+	mv unit_test_CA_utils $(BIN_DIR)
 
 all: $(EXECS)
 

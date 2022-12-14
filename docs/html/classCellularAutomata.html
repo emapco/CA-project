@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Cellular Automata CHEM274B Group Project: CellularAutomata Class Reference</title>
+<title>Cellular Automata CHEM274B Group Project: CellularAutomata&lt; T &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -71,233 +71,368 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classCellularAutomata-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">CellularAutomata Class Reference</div></div>
+  <div class="headertitle"><div class="title">CellularAutomata&lt; T &gt; Class Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
+<p>A <a class="el" href="classCellularAutomata.html" title="A CellularAutomata class for simulating cellular automata models.">CellularAutomata</a> class for simulating cellular automata models.  
+ <a href="classCellularAutomata.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="CAdatatypes_8h_source.html">CAdatatypes.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for CellularAutomata&lt; T &gt;:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classCellularAutomata.png" usemap="#CellularAutomata_3C_20T_20_3E_map" alt=""/>
+  <map id="CellularAutomata_3C_20T_20_3E_map" name="CellularAutomata_3C_20T_20_3E_map">
+<area href="classBaseCellularAutomata.html" title="A base CellularAutomata class that contains untemplated member variables and method definitions from ..." alt="BaseCellularAutomata" shape="rect" coords="0,0,139,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a3a01bdc55c41e1aedf730efba84febe3"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a3a01bdc55c41e1aedf730efba84febe3">neighborhood</a> { <b>VonNeumann</b>
-, <b>Moore</b>
- }</td></tr>
-<tr class="memdesc:a3a01bdc55c41e1aedf730efba84febe3"><td class="mdescLeft">&#160;</td><td class="mdescRight">enum containing the different type of neighborhoods the <a class="el" href="classCellularAutomata.html">CellularAutomata</a> class supports  <a href="classCellularAutomata.html#a3a01bdc55c41e1aedf730efba84febe3">More...</a><br /></td></tr>
-<tr class="separator:a3a01bdc55c41e1aedf730efba84febe3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27edcba5daf03e7094286c1f3d133380"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a27edcba5daf03e7094286c1f3d133380">boundary</a> { <b>Periodic</b>
-, <b>Walled</b>
-, <b>CutOff</b>
- }</td></tr>
-<tr class="memdesc:a27edcba5daf03e7094286c1f3d133380"><td class="mdescLeft">&#160;</td><td class="mdescRight">enum containing the different type of boundaries the <a class="el" href="classCellularAutomata.html">CellularAutomata</a> class supports  <a href="classCellularAutomata.html#a27edcba5daf03e7094286c1f3d133380">More...</a><br /></td></tr>
-<tr class="separator:a27edcba5daf03e7094286c1f3d133380"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e20f602a270020168482093b028b1bb"><td class="memItemLeft" align="right" valign="top"><a id="a6e20f602a270020168482093b028b1bb" name="a6e20f602a270020168482093b028b1bb"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a6e20f602a270020168482093b028b1bb">rule</a> { <b>Majority</b>
-, <b>Parity</b>
-, <b>Custom</b>
- }</td></tr>
-<tr class="memdesc:a6e20f602a270020168482093b028b1bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">enum containing the different type of rules the <a class="el" href="classCellularAutomata.html">CellularAutomata</a> class supports for it's transitions <br /></td></tr>
-<tr class="separator:a6e20f602a270020168482093b028b1bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a216d76809f7a8baf6a3bae0d4cdedee4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a216d76809f7a8baf6a3bae0d4cdedee4">error_code</a> { <br />
-&#160;&#160;<b>CellsAlreadyInitialized</b> = -1
-, <b>CellsAreNull</b> = -2
-, <b>CellsMalloc</b> = -3
-, <b>InvalidCellState</b> = -4
-, <br />
-&#160;&#160;<b>InvalidCellStateCondition</b> = -5
-, <b>InvalidRadius</b> = -6
-, <b>InvalidNumStates</b> = -7
-, <b>NeighborhoodCellsMalloc</b> = -8
-, <br />
-&#160;&#160;<b>CustomRuleIsNull</b> = -9
-<br />
- }</td></tr>
-<tr class="memdesc:a216d76809f7a8baf6a3bae0d4cdedee4"><td class="mdescLeft">&#160;</td><td class="mdescRight">enum containing the various error codes the <a class="el" href="classCellularAutomata.html">CellularAutomata</a> class can return  <a href="classCellularAutomata.html#a216d76809f7a8baf6a3bae0d4cdedee4">More...</a><br /></td></tr>
-<tr class="separator:a216d76809f7a8baf6a3bae0d4cdedee4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5ced9708503f8fce1d17aab359b5fe52"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a5ced9708503f8fce1d17aab359b5fe52">CellularAutomata</a> ()</td></tr>
-<tr class="memdesc:a5ced9708503f8fce1d17aab359b5fe52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new Cellular Automata:: Cellular Automata object.  <a href="classCellularAutomata.html#a5ced9708503f8fce1d17aab359b5fe52">More...</a><br /></td></tr>
-<tr class="separator:a5ced9708503f8fce1d17aab359b5fe52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50e6daa1b843aeb3bcafc634ae219ed8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a50e6daa1b843aeb3bcafc634ae219ed8">~CellularAutomata</a> ()</td></tr>
-<tr class="memdesc:a50e6daa1b843aeb3bcafc634ae219ed8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the Cellular Automata:: Cellular Automata object.  <a href="classCellularAutomata.html#a50e6daa1b843aeb3bcafc634ae219ed8">More...</a><br /></td></tr>
-<tr class="separator:a50e6daa1b843aeb3bcafc634ae219ed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8dc93ce1fdd864f4da694987c67f379"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#af8dc93ce1fdd864f4da694987c67f379">setup_neighborhood</a> (<a class="el" href="classCellularAutomata.html#a3a01bdc55c41e1aedf730efba84febe3">neighborhood</a> <a class="el" href="classCellularAutomata.html#a9a816123c678a6077678868a8cbfcd30">neighborhood_type</a>)</td></tr>
-<tr class="memdesc:af8dc93ce1fdd864f4da694987c67f379"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup neighborhood with values from enum neighborhood.  <a href="classCellularAutomata.html#af8dc93ce1fdd864f4da694987c67f379">More...</a><br /></td></tr>
-<tr class="separator:af8dc93ce1fdd864f4da694987c67f379"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add0d19b9df330e6f8a02189badb77ad4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#add0d19b9df330e6f8a02189badb77ad4">setup_dimensions</a> (int <a class="el" href="classCellularAutomata.html#a9cf8f1d3892e85a9fe43ae65b1739310">axis1_dim</a>)</td></tr>
-<tr class="memdesc:add0d19b9df330e6f8a02189badb77ad4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classCellularAutomata.html#add0d19b9df330e6f8a02189badb77ad4" title="Construct a new CellularAutomata::setup_dimensions object.">CellularAutomata::setup_dimensions</a> object.  <a href="classCellularAutomata.html#add0d19b9df330e6f8a02189badb77ad4">More...</a><br /></td></tr>
-<tr class="separator:add0d19b9df330e6f8a02189badb77ad4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02be1f5f917960e7c2f90158b98c6011"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a02be1f5f917960e7c2f90158b98c6011">setup_dimensions</a> (int <a class="el" href="classCellularAutomata.html#a9cf8f1d3892e85a9fe43ae65b1739310">axis1_dim</a>, int <a class="el" href="classCellularAutomata.html#a66d1d426befe9a0e3abed3f5240de100">axis2_dim</a>)</td></tr>
-<tr class="memdesc:a02be1f5f917960e7c2f90158b98c6011"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classCellularAutomata.html#add0d19b9df330e6f8a02189badb77ad4" title="Construct a new CellularAutomata::setup_dimensions object.">CellularAutomata::setup_dimensions</a> object.  <a href="classCellularAutomata.html#a02be1f5f917960e7c2f90158b98c6011">More...</a><br /></td></tr>
-<tr class="separator:a02be1f5f917960e7c2f90158b98c6011"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad044ee6b8159129f17f199217642b3dc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#ad044ee6b8159129f17f199217642b3dc">setup_dimensions</a> (int <a class="el" href="classCellularAutomata.html#a9cf8f1d3892e85a9fe43ae65b1739310">axis1_dim</a>, int <a class="el" href="classCellularAutomata.html#a66d1d426befe9a0e3abed3f5240de100">axis2_dim</a>, int <a class="el" href="classCellularAutomata.html#a982ebbf77e3f8b7e7b8efba6e670c216">axis3_dim</a>)</td></tr>
-<tr class="memdesc:ad044ee6b8159129f17f199217642b3dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classCellularAutomata.html#add0d19b9df330e6f8a02189badb77ad4" title="Construct a new CellularAutomata::setup_dimensions object.">CellularAutomata::setup_dimensions</a> object.  <a href="classCellularAutomata.html#ad044ee6b8159129f17f199217642b3dc">More...</a><br /></td></tr>
-<tr class="separator:ad044ee6b8159129f17f199217642b3dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd2b88f695f40111238b61184c27b89d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#abd2b88f695f40111238b61184c27b89d">setup_boundary</a> (<a class="el" href="classCellularAutomata.html#a27edcba5daf03e7094286c1f3d133380">boundary</a> bound_type, int radius)</td></tr>
-<tr class="memdesc:abd2b88f695f40111238b61184c27b89d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup boundary with enum values from boundary and set the boundary radius.  <a href="classCellularAutomata.html#abd2b88f695f40111238b61184c27b89d">More...</a><br /></td></tr>
-<tr class="separator:abd2b88f695f40111238b61184c27b89d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a798153a91270018603dfae7f5a882273"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a798153a91270018603dfae7f5a882273">setup_cell_states</a> (int n_states)</td></tr>
-<tr class="memdesc:a798153a91270018603dfae7f5a882273"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the range of cell states to be used in the CA object.  <a href="classCellularAutomata.html#a798153a91270018603dfae7f5a882273">More...</a><br /></td></tr>
-<tr class="separator:a798153a91270018603dfae7f5a882273"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1a8f9105f1f73143e03bbcb7b0741e9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#ae1a8f9105f1f73143e03bbcb7b0741e9">init_condition</a> (int x_state, double prob)</td></tr>
-<tr class="memdesc:ae1a8f9105f1f73143e03bbcb7b0741e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the first state of the grid using random numbers.  <a href="classCellularAutomata.html#ae1a8f9105f1f73143e03bbcb7b0741e9">More...</a><br /></td></tr>
-<tr class="separator:ae1a8f9105f1f73143e03bbcb7b0741e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6b1c40a3304b2f3623c5f264e5370ae"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#ae6b1c40a3304b2f3623c5f264e5370ae">setup_rule</a> (<a class="el" href="classCellularAutomata.html#a6e20f602a270020168482093b028b1bb">rule</a> <a class="el" href="classCellularAutomata.html#af21d184c9d9a7d0e983f330db0f68de5">rule_type</a>)</td></tr>
-<tr class="memdesc:ae6b1c40a3304b2f3623c5f264e5370ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup the rule choice sed to specify the rule type to be used in CA object.  <a href="classCellularAutomata.html#ae6b1c40a3304b2f3623c5f264e5370ae">More...</a><br /></td></tr>
-<tr class="separator:ae6b1c40a3304b2f3623c5f264e5370ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e3c265c41f3d5592a3015fae5f8154d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a7e3c265c41f3d5592a3015fae5f8154d">step</a> ()</td></tr>
-<tr class="memdesc:a7e3c265c41f3d5592a3015fae5f8154d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simulates a cellular automata step.  <a href="classCellularAutomata.html#a7e3c265c41f3d5592a3015fae5f8154d">More...</a><br /></td></tr>
-<tr class="separator:a7e3c265c41f3d5592a3015fae5f8154d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f9e365eb9a33cc942224dc81ad79762"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a0f9e365eb9a33cc942224dc81ad79762">step</a> (void(<a class="el" href="test__CA_8cpp.html#ab30ee0f9170dcdd71f3e57222c0163ac">custom_rule</a>)(int *, int, int *, int, int &amp;))</td></tr>
-<tr class="memdesc:a0f9e365eb9a33cc942224dc81ad79762"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simulates a cellular automata step.  <a href="classCellularAutomata.html#a0f9e365eb9a33cc942224dc81ad79762">More...</a><br /></td></tr>
-<tr class="separator:a0f9e365eb9a33cc942224dc81ad79762"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3b7f0b29d2eb243b0ee1637f352e242"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#ad3b7f0b29d2eb243b0ee1637f352e242">print_grid</a> ()</td></tr>
-<tr class="memdesc:ad3b7f0b29d2eb243b0ee1637f352e242"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the current state of the grid.  <a href="classCellularAutomata.html#ad3b7f0b29d2eb243b0ee1637f352e242">More...</a><br /></td></tr>
-<tr class="separator:ad3b7f0b29d2eb243b0ee1637f352e242"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aecf84011bd9c0a29d76fcc8315115891"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#aecf84011bd9c0a29d76fcc8315115891">print_error_status</a> (<a class="el" href="classCellularAutomata.html#a216d76809f7a8baf6a3bae0d4cdedee4">error_code</a> error)</td></tr>
-<tr class="memdesc:aecf84011bd9c0a29d76fcc8315115891"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints an error message for the given error code.  <a href="classCellularAutomata.html#aecf84011bd9c0a29d76fcc8315115891">More...</a><br /></td></tr>
-<tr class="separator:aecf84011bd9c0a29d76fcc8315115891"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab39d7aebb56011f54a71dbef43904c22"><td class="memItemLeft" align="right" valign="top"><a id="ab39d7aebb56011f54a71dbef43904c22" name="ab39d7aebb56011f54a71dbef43904c22"></a>
+T *&#160;</td><td class="memItemRight" valign="bottom"><b>get_vector</b> ()</td></tr>
+<tr class="separator:ab39d7aebb56011f54a71dbef43904c22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f811cecc9868cc25902d9acea06aec1"><td class="memItemLeft" align="right" valign="top"><a id="a5f811cecc9868cc25902d9acea06aec1" name="a5f811cecc9868cc25902d9acea06aec1"></a>
+T *&#160;</td><td class="memItemRight" valign="bottom"><b>get_next_vector</b> ()</td></tr>
+<tr class="separator:a5f811cecc9868cc25902d9acea06aec1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11ee314c021abe2bbf142d72de9ded32"><td class="memItemLeft" align="right" valign="top"><a id="a11ee314c021abe2bbf142d72de9ded32" name="a11ee314c021abe2bbf142d72de9ded32"></a>
+T **&#160;</td><td class="memItemRight" valign="bottom"><b>get_matrix</b> ()</td></tr>
+<tr class="separator:a11ee314c021abe2bbf142d72de9ded32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af803814626ef0225fff4cb000b4f13a9"><td class="memItemLeft" align="right" valign="top"><a id="af803814626ef0225fff4cb000b4f13a9" name="af803814626ef0225fff4cb000b4f13a9"></a>
+T **&#160;</td><td class="memItemRight" valign="bottom"><b>get_next_matrix</b> ()</td></tr>
+<tr class="separator:af803814626ef0225fff4cb000b4f13a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bbf380c48f277d5b724078ae4a953e1"><td class="memItemLeft" align="right" valign="top"><a id="a0bbf380c48f277d5b724078ae4a953e1" name="a0bbf380c48f277d5b724078ae4a953e1"></a>
+T ***&#160;</td><td class="memItemRight" valign="bottom"><b>get_tensor</b> ()</td></tr>
+<tr class="separator:a0bbf380c48f277d5b724078ae4a953e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0863ebfa68151f7b24e427176b6440e9"><td class="memItemLeft" align="right" valign="top"><a id="a0863ebfa68151f7b24e427176b6440e9" name="a0863ebfa68151f7b24e427176b6440e9"></a>
+T ***&#160;</td><td class="memItemRight" valign="bottom"><b>get_next_tensor</b> ()</td></tr>
+<tr class="separator:a0863ebfa68151f7b24e427176b6440e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5f71d81025763115b7b7642569053be"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#ae5f71d81025763115b7b7642569053be">CellularAutomata</a> ()</td></tr>
+<tr class="memdesc:ae5f71d81025763115b7b7642569053be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new Cellular Automata object.  <a href="classCellularAutomata.html#ae5f71d81025763115b7b7642569053be">More...</a><br /></td></tr>
+<tr class="separator:ae5f71d81025763115b7b7642569053be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acba153d241443c4e510a712741c4b92e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#acba153d241443c4e510a712741c4b92e">~CellularAutomata</a> ()</td></tr>
+<tr class="memdesc:acba153d241443c4e510a712741c4b92e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the Cellular Automata object.  <a href="classCellularAutomata.html#acba153d241443c4e510a712741c4b92e">More...</a><br /></td></tr>
+<tr class="separator:acba153d241443c4e510a712741c4b92e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a161c67df36bf4096437a835a5b77c391"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a161c67df36bf4096437a835a5b77c391">setup_dimensions_1d</a> (int <a class="el" href="classBaseCellularAutomata.html#a0b8f2fa0cb64163e646e8272c844d95f">axis1_dim</a>, int fill_value=0)</td></tr>
+<tr class="memdesc:a161c67df36bf4096437a835a5b77c391"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up 1d array of cell states.  <a href="classCellularAutomata.html#a161c67df36bf4096437a835a5b77c391">More...</a><br /></td></tr>
+<tr class="separator:a161c67df36bf4096437a835a5b77c391"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d11e8e04e99bf6df60977e710dcb656"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a5d11e8e04e99bf6df60977e710dcb656">setup_dimensions_2d</a> (int <a class="el" href="classBaseCellularAutomata.html#a0b8f2fa0cb64163e646e8272c844d95f">axis1_dim</a>, int <a class="el" href="classBaseCellularAutomata.html#a6c609f573302738c78e77b53800577a1">axis2_dim</a>, int fill_value=0)</td></tr>
+<tr class="memdesc:a5d11e8e04e99bf6df60977e710dcb656"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up 2d matrix of cell states.  <a href="classCellularAutomata.html#a5d11e8e04e99bf6df60977e710dcb656">More...</a><br /></td></tr>
+<tr class="separator:a5d11e8e04e99bf6df60977e710dcb656"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e54aaf8e8242a92ac4cd53870a709b7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a7e54aaf8e8242a92ac4cd53870a709b7">setup_dimensions_3d</a> (int <a class="el" href="classBaseCellularAutomata.html#a0b8f2fa0cb64163e646e8272c844d95f">axis1_dim</a>, int <a class="el" href="classBaseCellularAutomata.html#a6c609f573302738c78e77b53800577a1">axis2_dim</a>, int <a class="el" href="classBaseCellularAutomata.html#a81526407a087cf25eec554d3381eb463">axis3_dim</a>, int fill_value=0)</td></tr>
+<tr class="memdesc:a7e54aaf8e8242a92ac4cd53870a709b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up 3d tensor of cell states.  <a href="classCellularAutomata.html#a7e54aaf8e8242a92ac4cd53870a709b7">More...</a><br /></td></tr>
+<tr class="separator:a7e54aaf8e8242a92ac4cd53870a709b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08fecaa001dd870666ad62f2e2b64866"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a08fecaa001dd870666ad62f2e2b64866">init_condition</a> (int x_state, double prob)</td></tr>
+<tr class="memdesc:a08fecaa001dd870666ad62f2e2b64866"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the first state of the grid using random numbers.  <a href="classCellularAutomata.html#a08fecaa001dd870666ad62f2e2b64866">More...</a><br /></td></tr>
+<tr class="separator:a08fecaa001dd870666ad62f2e2b64866"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfa1256fff71bf6ddf211fa9fcefea0e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#adfa1256fff71bf6ddf211fa9fcefea0e">step</a> (void(<a class="el" href="test__CA_8cpp.html#a4594c7b79dd83a9ffbceabc93ac3784b">custom_rule</a>)(int *, int, T *, int, T &amp;, <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; T &gt; &amp;))</td></tr>
+<tr class="memdesc:adfa1256fff71bf6ddf211fa9fcefea0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simulates a cellular automata step.  <a href="classCellularAutomata.html#adfa1256fff71bf6ddf211fa9fcefea0e">More...</a><br /></td></tr>
+<tr class="separator:adfa1256fff71bf6ddf211fa9fcefea0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25bad260ce2de18c2692dff4466789d0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a25bad260ce2de18c2692dff4466789d0">step</a> ()</td></tr>
+<tr class="memdesc:a25bad260ce2de18c2692dff4466789d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simulates a cellular automata step.  <a href="classCellularAutomata.html#a25bad260ce2de18c2692dff4466789d0">More...</a><br /></td></tr>
+<tr class="separator:a25bad260ce2de18c2692dff4466789d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33170f96740842cff712b39ab77444af"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a33170f96740842cff712b39ab77444af">print_grid</a> ()</td></tr>
+<tr class="memdesc:a33170f96740842cff712b39ab77444af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the current state of the grid.  <a href="classCellularAutomata.html#a33170f96740842cff712b39ab77444af">More...</a><br /></td></tr>
+<tr class="separator:a33170f96740842cff712b39ab77444af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c109bc5f13d9e51b4bb94d7799009f3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a6c109bc5f13d9e51b4bb94d7799009f3">setup_dimensions_1d</a> (int <a class="el" href="classBaseCellularAutomata.html#a0b8f2fa0cb64163e646e8272c844d95f">axis1_dim</a>, int fill_value)</td></tr>
+<tr class="memdesc:a6c109bc5f13d9e51b4bb94d7799009f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up 1d array of cell states.  <a href="classCellularAutomata.html#a6c109bc5f13d9e51b4bb94d7799009f3">More...</a><br /></td></tr>
+<tr class="separator:a6c109bc5f13d9e51b4bb94d7799009f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0cbc147bb801e43a42ae506d007f50b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#ac0cbc147bb801e43a42ae506d007f50b">setup_dimensions_2d</a> (int <a class="el" href="classBaseCellularAutomata.html#a0b8f2fa0cb64163e646e8272c844d95f">axis1_dim</a>, int <a class="el" href="classBaseCellularAutomata.html#a6c609f573302738c78e77b53800577a1">axis2_dim</a>, int fill_value)</td></tr>
+<tr class="memdesc:ac0cbc147bb801e43a42ae506d007f50b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up 2d matrix of cell states.  <a href="classCellularAutomata.html#ac0cbc147bb801e43a42ae506d007f50b">More...</a><br /></td></tr>
+<tr class="separator:ac0cbc147bb801e43a42ae506d007f50b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e040f032a6d6c7dcde7dfb4f29dab38"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a4e040f032a6d6c7dcde7dfb4f29dab38">setup_dimensions_3d</a> (int <a class="el" href="classBaseCellularAutomata.html#a0b8f2fa0cb64163e646e8272c844d95f">axis1_dim</a>, int <a class="el" href="classBaseCellularAutomata.html#a6c609f573302738c78e77b53800577a1">axis2_dim</a>, int <a class="el" href="classBaseCellularAutomata.html#a81526407a087cf25eec554d3381eb463">axis3_dim</a>, int fill_value)</td></tr>
+<tr class="memdesc:a4e040f032a6d6c7dcde7dfb4f29dab38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up 3d tensor of cell states.  <a href="classCellularAutomata.html#a4e040f032a6d6c7dcde7dfb4f29dab38">More...</a><br /></td></tr>
+<tr class="separator:a4e040f032a6d6c7dcde7dfb4f29dab38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedc36b408c97e2cd5a91d96675e97219"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#aedc36b408c97e2cd5a91d96675e97219">init_condition</a> (int x_state, double prob)</td></tr>
+<tr class="memdesc:aedc36b408c97e2cd5a91d96675e97219"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the first state of the grid using random numbers.  <a href="classCellularAutomata.html#aedc36b408c97e2cd5a91d96675e97219">More...</a><br /></td></tr>
+<tr class="separator:aedc36b408c97e2cd5a91d96675e97219"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50680709f9de583e787fa3b7fe67948b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a50680709f9de583e787fa3b7fe67948b">print_grid</a> ()</td></tr>
+<tr class="memdesc:a50680709f9de583e787fa3b7fe67948b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the current state of the grid.  <a href="classCellularAutomata.html#a50680709f9de583e787fa3b7fe67948b">More...</a><br /></td></tr>
+<tr class="separator:a50680709f9de583e787fa3b7fe67948b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab802d5fbb72642dcddda33e185bfc27e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#ab802d5fbb72642dcddda33e185bfc27e">step</a> (void(<a class="el" href="test__CA_8cpp.html#a4594c7b79dd83a9ffbceabc93ac3784b">custom_rule</a>)(int *, int, int *, int, int &amp;, <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; int &gt; &amp;))</td></tr>
+<tr class="memdesc:ab802d5fbb72642dcddda33e185bfc27e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simulates a cellular automata step.  <a href="classCellularAutomata.html#ab802d5fbb72642dcddda33e185bfc27e">More...</a><br /></td></tr>
+<tr class="separator:ab802d5fbb72642dcddda33e185bfc27e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c109bc5f13d9e51b4bb94d7799009f3"><td class="memItemLeft" align="right" valign="top"><a id="a6c109bc5f13d9e51b4bb94d7799009f3" name="a6c109bc5f13d9e51b4bb94d7799009f3"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>setup_dimensions_1d</b> (int <a class="el" href="classBaseCellularAutomata.html#a0b8f2fa0cb64163e646e8272c844d95f">axis1_dim</a>, int fill_value)</td></tr>
+<tr class="separator:a6c109bc5f13d9e51b4bb94d7799009f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0cbc147bb801e43a42ae506d007f50b"><td class="memItemLeft" align="right" valign="top"><a id="ac0cbc147bb801e43a42ae506d007f50b" name="ac0cbc147bb801e43a42ae506d007f50b"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>setup_dimensions_2d</b> (int <a class="el" href="classBaseCellularAutomata.html#a0b8f2fa0cb64163e646e8272c844d95f">axis1_dim</a>, int <a class="el" href="classBaseCellularAutomata.html#a6c609f573302738c78e77b53800577a1">axis2_dim</a>, int fill_value)</td></tr>
+<tr class="separator:ac0cbc147bb801e43a42ae506d007f50b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e040f032a6d6c7dcde7dfb4f29dab38"><td class="memItemLeft" align="right" valign="top"><a id="a4e040f032a6d6c7dcde7dfb4f29dab38" name="a4e040f032a6d6c7dcde7dfb4f29dab38"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>setup_dimensions_3d</b> (int <a class="el" href="classBaseCellularAutomata.html#a0b8f2fa0cb64163e646e8272c844d95f">axis1_dim</a>, int <a class="el" href="classBaseCellularAutomata.html#a6c609f573302738c78e77b53800577a1">axis2_dim</a>, int <a class="el" href="classBaseCellularAutomata.html#a81526407a087cf25eec554d3381eb463">axis3_dim</a>, int fill_value)</td></tr>
+<tr class="separator:a4e040f032a6d6c7dcde7dfb4f29dab38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedc36b408c97e2cd5a91d96675e97219"><td class="memItemLeft" align="right" valign="top"><a id="aedc36b408c97e2cd5a91d96675e97219" name="aedc36b408c97e2cd5a91d96675e97219"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>init_condition</b> (int x_state, double prob)</td></tr>
+<tr class="separator:aedc36b408c97e2cd5a91d96675e97219"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50680709f9de583e787fa3b7fe67948b"><td class="memItemLeft" align="right" valign="top"><a id="a50680709f9de583e787fa3b7fe67948b" name="a50680709f9de583e787fa3b7fe67948b"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>print_grid</b> ()</td></tr>
+<tr class="separator:a50680709f9de583e787fa3b7fe67948b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab802d5fbb72642dcddda33e185bfc27e"><td class="memItemLeft" align="right" valign="top"><a id="ab802d5fbb72642dcddda33e185bfc27e" name="ab802d5fbb72642dcddda33e185bfc27e"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>step</b> (void(<a class="el" href="test__CA_8cpp.html#a4594c7b79dd83a9ffbceabc93ac3784b">custom_rule</a>)(int *, int, int *, int, int &amp;, <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; int &gt; &amp;))</td></tr>
+<tr class="separator:ab802d5fbb72642dcddda33e185bfc27e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classBaseCellularAutomata"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classBaseCellularAutomata')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classBaseCellularAutomata.html">BaseCellularAutomata</a></td></tr>
+<tr class="memitem:a35d162ac460fa822880f6a8fd3cb5214 inherit pub_methods_classBaseCellularAutomata"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseCellularAutomata.html#a35d162ac460fa822880f6a8fd3cb5214">BaseCellularAutomata</a> ()</td></tr>
+<tr class="memdesc:a35d162ac460fa822880f6a8fd3cb5214 inherit pub_methods_classBaseCellularAutomata"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new Cellular Automata:: Cellular Automata object.  <a href="classBaseCellularAutomata.html#a35d162ac460fa822880f6a8fd3cb5214">More...</a><br /></td></tr>
+<tr class="separator:a35d162ac460fa822880f6a8fd3cb5214 inherit pub_methods_classBaseCellularAutomata"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad627ebb2b680cba94543f14ed784bda8 inherit pub_methods_classBaseCellularAutomata"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseCellularAutomata.html#ad627ebb2b680cba94543f14ed784bda8">~BaseCellularAutomata</a> ()</td></tr>
+<tr class="memdesc:ad627ebb2b680cba94543f14ed784bda8 inherit pub_methods_classBaseCellularAutomata"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the Cellular Automata:: Cellular Automata object.  <a href="classBaseCellularAutomata.html#ad627ebb2b680cba94543f14ed784bda8">More...</a><br /></td></tr>
+<tr class="separator:ad627ebb2b680cba94543f14ed784bda8 inherit pub_methods_classBaseCellularAutomata"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6ee6bb5aab4e20e9b2643b9431243a5 inherit pub_methods_classBaseCellularAutomata"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseCellularAutomata.html#ac6ee6bb5aab4e20e9b2643b9431243a5">setup_neighborhood</a> (<a class="el" href="namespaceCAEnums.html#a1a48aaec07f7234b6d1e80f66cb51fe5">CAEnums::Neighborhood</a> <a class="el" href="classBaseCellularAutomata.html#ab4b144f596bf064ed8b3e3990aec0152">neighborhood_type</a>)</td></tr>
+<tr class="memdesc:ac6ee6bb5aab4e20e9b2643b9431243a5 inherit pub_methods_classBaseCellularAutomata"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup neighborhood with values from enum neighborhood.  <a href="classBaseCellularAutomata.html#ac6ee6bb5aab4e20e9b2643b9431243a5">More...</a><br /></td></tr>
+<tr class="separator:ac6ee6bb5aab4e20e9b2643b9431243a5 inherit pub_methods_classBaseCellularAutomata"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada383da099b30fcac4d4a713eed15c0e inherit pub_methods_classBaseCellularAutomata"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseCellularAutomata.html#ada383da099b30fcac4d4a713eed15c0e">setup_boundary</a> (<a class="el" href="namespaceCAEnums.html#ab82a915ba874699a10f2e67a8ee60747">CAEnums::Boundary</a> bound_type, int radius)</td></tr>
+<tr class="memdesc:ada383da099b30fcac4d4a713eed15c0e inherit pub_methods_classBaseCellularAutomata"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup boundary with enum values from boundary and set the boundary radius.  <a href="classBaseCellularAutomata.html#ada383da099b30fcac4d4a713eed15c0e">More...</a><br /></td></tr>
+<tr class="separator:ada383da099b30fcac4d4a713eed15c0e inherit pub_methods_classBaseCellularAutomata"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebcf2a3687a3075e4293d071b88b9cf6 inherit pub_methods_classBaseCellularAutomata"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseCellularAutomata.html#aebcf2a3687a3075e4293d071b88b9cf6">setup_cell_states</a> (int n_states)</td></tr>
+<tr class="memdesc:aebcf2a3687a3075e4293d071b88b9cf6 inherit pub_methods_classBaseCellularAutomata"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the range of cell states to be used in the CA object.  <a href="classBaseCellularAutomata.html#aebcf2a3687a3075e4293d071b88b9cf6">More...</a><br /></td></tr>
+<tr class="separator:aebcf2a3687a3075e4293d071b88b9cf6 inherit pub_methods_classBaseCellularAutomata"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e032a330b64159e4c511c511f3813ce inherit pub_methods_classBaseCellularAutomata"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseCellularAutomata.html#a7e032a330b64159e4c511c511f3813ce">setup_rule</a> (<a class="el" href="namespaceCAEnums.html#a30c884a833d28ce027506ce56d6f9498">CAEnums::Rule</a> <a class="el" href="classBaseCellularAutomata.html#a37bb763719c1681c6875201a37e73920">rule_type</a>)</td></tr>
+<tr class="memdesc:a7e032a330b64159e4c511c511f3813ce inherit pub_methods_classBaseCellularAutomata"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup the rule choice to specify the rule type to be used in CA object.  <a href="classBaseCellularAutomata.html#a7e032a330b64159e4c511c511f3813ce">More...</a><br /></td></tr>
+<tr class="separator:a7e032a330b64159e4c511c511f3813ce inherit pub_methods_classBaseCellularAutomata"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5de8330113bf2cb21cfe1d6d274fca6 inherit pub_methods_classBaseCellularAutomata"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseCellularAutomata.html#ab5de8330113bf2cb21cfe1d6d274fca6">print_error_status</a> (<a class="el" href="namespaceCAEnums.html#a99d02fb92b0f4be48ddfad1d39b83189">CAEnums::ErrorCode</a> error)</td></tr>
+<tr class="memdesc:ab5de8330113bf2cb21cfe1d6d274fca6 inherit pub_methods_classBaseCellularAutomata"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prints an error message for the given error code.  <a href="classBaseCellularAutomata.html#ab5de8330113bf2cb21cfe1d6d274fca6">More...</a><br /></td></tr>
+<tr class="separator:ab5de8330113bf2cb21cfe1d6d274fca6 inherit pub_methods_classBaseCellularAutomata"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:aa8b0ddec3975d4ea3413a984900d9d7e"><td class="memItemLeft" align="right" valign="top"><a id="aa8b0ddec3975d4ea3413a984900d9d7e" name="aa8b0ddec3975d4ea3413a984900d9d7e"></a>
-<a class="el" href="classCellularAutomata.html#a27edcba5daf03e7094286c1f3d133380">boundary</a>&#160;</td><td class="memItemRight" valign="bottom"><b>boundary_type</b></td></tr>
-<tr class="memdesc:aa8b0ddec3975d4ea3413a984900d9d7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">enum code to hold boundary <br /></td></tr>
-<tr class="separator:aa8b0ddec3975d4ea3413a984900d9d7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd3112b711f817b615e20c5b648a0ecb"><td class="memItemLeft" align="right" valign="top"><a id="abd3112b711f817b615e20c5b648a0ecb" name="abd3112b711f817b615e20c5b648a0ecb"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a93dad58ed1363381c813aa0373a7c90b"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#a93dad58ed1363381c813aa0373a7c90b">get_neighborhood_size</a> (int rank, int radius, <a class="el" href="namespaceCAEnums.html#a1a48aaec07f7234b6d1e80f66cb51fe5">CAEnums::Neighborhood</a> <a class="el" href="classBaseCellularAutomata.html#ab4b144f596bf064ed8b3e3990aec0152">neighborhood_type</a>)</td></tr>
+<tr class="memdesc:a93dad58ed1363381c813aa0373a7c90b"><td class="mdescLeft">&#160;</td><td class="mdescRight">calculates the neighborhood size using the rank, radius and neighborhood type  <a href="classCellularAutomata.html#a93dad58ed1363381c813aa0373a7c90b">More...</a><br /></td></tr>
+<tr class="separator:a93dad58ed1363381c813aa0373a7c90b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa260aefdc1a3707334109987d8205094"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCellularAutomata.html#aa260aefdc1a3707334109987d8205094">initialize_majority_rule_counter</a> (<a class="el" href="CAdatatypes_8h.html#afcaeecaad0a03e216f79537596187398">MajorityCounter</a> &amp;counter, int <a class="el" href="classBaseCellularAutomata.html#a497d46acf6b57ed7511ca843cc8e9d77">num_states</a>)</td></tr>
+<tr class="memdesc:aa260aefdc1a3707334109987d8205094"><td class="mdescLeft">&#160;</td><td class="mdescRight">initializes a MajorityCounter instance utilized by Majority rule  <a href="classCellularAutomata.html#aa260aefdc1a3707334109987d8205094">More...</a><br /></td></tr>
+<tr class="separator:aa260aefdc1a3707334109987d8205094"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_attribs_classBaseCellularAutomata"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classBaseCellularAutomata')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classBaseCellularAutomata.html">BaseCellularAutomata</a></td></tr>
+<tr class="memitem:ab338f0589960fa728556d279c4eee1b0 inherit pub_attribs_classBaseCellularAutomata"><td class="memItemLeft" align="right" valign="top"><a id="ab338f0589960fa728556d279c4eee1b0" name="ab338f0589960fa728556d279c4eee1b0"></a>
+<a class="el" href="namespaceCAEnums.html#ab82a915ba874699a10f2e67a8ee60747">CAEnums::Boundary</a>&#160;</td><td class="memItemRight" valign="bottom"><b>boundary_type</b></td></tr>
+<tr class="memdesc:ab338f0589960fa728556d279c4eee1b0 inherit pub_attribs_classBaseCellularAutomata"><td class="mdescLeft">&#160;</td><td class="mdescRight">enum code to hold boundary <br /></td></tr>
+<tr class="separator:ab338f0589960fa728556d279c4eee1b0 inherit pub_attribs_classBaseCellularAutomata"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74930982e8dd0678530d54c5198b91bd inherit pub_attribs_classBaseCellularAutomata"><td class="memItemLeft" align="right" valign="top"><a id="a74930982e8dd0678530d54c5198b91bd" name="a74930982e8dd0678530d54c5198b91bd"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>boundary_radius</b></td></tr>
-<tr class="memdesc:abd3112b711f817b615e20c5b648a0ecb"><td class="mdescLeft">&#160;</td><td class="mdescRight">declare a radius for the boundary <br /></td></tr>
-<tr class="separator:abd3112b711f817b615e20c5b648a0ecb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a816123c678a6077678868a8cbfcd30"><td class="memItemLeft" align="right" valign="top"><a id="a9a816123c678a6077678868a8cbfcd30" name="a9a816123c678a6077678868a8cbfcd30"></a>
-<a class="el" href="classCellularAutomata.html#a3a01bdc55c41e1aedf730efba84febe3">neighborhood</a>&#160;</td><td class="memItemRight" valign="bottom"><b>neighborhood_type</b></td></tr>
-<tr class="memdesc:a9a816123c678a6077678868a8cbfcd30"><td class="mdescLeft">&#160;</td><td class="mdescRight">enum code to hold neighborhood type <br /></td></tr>
-<tr class="separator:a9a816123c678a6077678868a8cbfcd30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35ef1d53fc24b7c4072ebce4846e91b1"><td class="memItemLeft" align="right" valign="top"><a id="a35ef1d53fc24b7c4072ebce4846e91b1" name="a35ef1d53fc24b7c4072ebce4846e91b1"></a>
+<tr class="memdesc:a74930982e8dd0678530d54c5198b91bd inherit pub_attribs_classBaseCellularAutomata"><td class="mdescLeft">&#160;</td><td class="mdescRight">declare a radius for the boundary <br /></td></tr>
+<tr class="separator:a74930982e8dd0678530d54c5198b91bd inherit pub_attribs_classBaseCellularAutomata"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4b144f596bf064ed8b3e3990aec0152 inherit pub_attribs_classBaseCellularAutomata"><td class="memItemLeft" align="right" valign="top"><a id="ab4b144f596bf064ed8b3e3990aec0152" name="ab4b144f596bf064ed8b3e3990aec0152"></a>
+<a class="el" href="namespaceCAEnums.html#a1a48aaec07f7234b6d1e80f66cb51fe5">CAEnums::Neighborhood</a>&#160;</td><td class="memItemRight" valign="bottom"><b>neighborhood_type</b></td></tr>
+<tr class="memdesc:ab4b144f596bf064ed8b3e3990aec0152 inherit pub_attribs_classBaseCellularAutomata"><td class="mdescLeft">&#160;</td><td class="mdescRight">enum code to hold neighborhood type <br /></td></tr>
+<tr class="separator:ab4b144f596bf064ed8b3e3990aec0152 inherit pub_attribs_classBaseCellularAutomata"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a497d46acf6b57ed7511ca843cc8e9d77 inherit pub_attribs_classBaseCellularAutomata"><td class="memItemLeft" align="right" valign="top"><a id="a497d46acf6b57ed7511ca843cc8e9d77" name="a497d46acf6b57ed7511ca843cc8e9d77"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>num_states</b></td></tr>
-<tr class="memdesc:a35ef1d53fc24b7c4072ebce4846e91b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">integer code for number of states <br /></td></tr>
-<tr class="separator:a35ef1d53fc24b7c4072ebce4846e91b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af21d184c9d9a7d0e983f330db0f68de5"><td class="memItemLeft" align="right" valign="top"><a id="af21d184c9d9a7d0e983f330db0f68de5" name="af21d184c9d9a7d0e983f330db0f68de5"></a>
-<a class="el" href="classCellularAutomata.html#a6e20f602a270020168482093b028b1bb">rule</a>&#160;</td><td class="memItemRight" valign="bottom"><b>rule_type</b></td></tr>
-<tr class="memdesc:af21d184c9d9a7d0e983f330db0f68de5"><td class="mdescLeft">&#160;</td><td class="mdescRight">enum code for rule type <br /></td></tr>
-<tr class="separator:af21d184c9d9a7d0e983f330db0f68de5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9cf8f1d3892e85a9fe43ae65b1739310"><td class="memItemLeft" align="right" valign="top"><a id="a9cf8f1d3892e85a9fe43ae65b1739310" name="a9cf8f1d3892e85a9fe43ae65b1739310"></a>
+<tr class="memdesc:a497d46acf6b57ed7511ca843cc8e9d77 inherit pub_attribs_classBaseCellularAutomata"><td class="mdescLeft">&#160;</td><td class="mdescRight">integer code for number of states <br /></td></tr>
+<tr class="separator:a497d46acf6b57ed7511ca843cc8e9d77 inherit pub_attribs_classBaseCellularAutomata"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37bb763719c1681c6875201a37e73920 inherit pub_attribs_classBaseCellularAutomata"><td class="memItemLeft" align="right" valign="top"><a id="a37bb763719c1681c6875201a37e73920" name="a37bb763719c1681c6875201a37e73920"></a>
+<a class="el" href="namespaceCAEnums.html#a30c884a833d28ce027506ce56d6f9498">CAEnums::Rule</a>&#160;</td><td class="memItemRight" valign="bottom"><b>rule_type</b></td></tr>
+<tr class="memdesc:a37bb763719c1681c6875201a37e73920 inherit pub_attribs_classBaseCellularAutomata"><td class="mdescLeft">&#160;</td><td class="mdescRight">enum code for rule type <br /></td></tr>
+<tr class="separator:a37bb763719c1681c6875201a37e73920 inherit pub_attribs_classBaseCellularAutomata"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b8f2fa0cb64163e646e8272c844d95f inherit pub_attribs_classBaseCellularAutomata"><td class="memItemLeft" align="right" valign="top"><a id="a0b8f2fa0cb64163e646e8272c844d95f" name="a0b8f2fa0cb64163e646e8272c844d95f"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>axis1_dim</b></td></tr>
-<tr class="memdesc:a9cf8f1d3892e85a9fe43ae65b1739310"><td class="mdescLeft">&#160;</td><td class="mdescRight">count of cells in first dimension <br /></td></tr>
-<tr class="separator:a9cf8f1d3892e85a9fe43ae65b1739310"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66d1d426befe9a0e3abed3f5240de100"><td class="memItemLeft" align="right" valign="top"><a id="a66d1d426befe9a0e3abed3f5240de100" name="a66d1d426befe9a0e3abed3f5240de100"></a>
+<tr class="memdesc:a0b8f2fa0cb64163e646e8272c844d95f inherit pub_attribs_classBaseCellularAutomata"><td class="mdescLeft">&#160;</td><td class="mdescRight">count of cells in first dimension <br /></td></tr>
+<tr class="separator:a0b8f2fa0cb64163e646e8272c844d95f inherit pub_attribs_classBaseCellularAutomata"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c609f573302738c78e77b53800577a1 inherit pub_attribs_classBaseCellularAutomata"><td class="memItemLeft" align="right" valign="top"><a id="a6c609f573302738c78e77b53800577a1" name="a6c609f573302738c78e77b53800577a1"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>axis2_dim</b></td></tr>
-<tr class="memdesc:a66d1d426befe9a0e3abed3f5240de100"><td class="mdescLeft">&#160;</td><td class="mdescRight">count of cells in second dimension <br /></td></tr>
-<tr class="separator:a66d1d426befe9a0e3abed3f5240de100"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a982ebbf77e3f8b7e7b8efba6e670c216"><td class="memItemLeft" align="right" valign="top"><a id="a982ebbf77e3f8b7e7b8efba6e670c216" name="a982ebbf77e3f8b7e7b8efba6e670c216"></a>
+<tr class="memdesc:a6c609f573302738c78e77b53800577a1 inherit pub_attribs_classBaseCellularAutomata"><td class="mdescLeft">&#160;</td><td class="mdescRight">count of cells in second dimension <br /></td></tr>
+<tr class="separator:a6c609f573302738c78e77b53800577a1 inherit pub_attribs_classBaseCellularAutomata"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81526407a087cf25eec554d3381eb463 inherit pub_attribs_classBaseCellularAutomata"><td class="memItemLeft" align="right" valign="top"><a id="a81526407a087cf25eec554d3381eb463" name="a81526407a087cf25eec554d3381eb463"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>axis3_dim</b></td></tr>
-<tr class="memdesc:a982ebbf77e3f8b7e7b8efba6e670c216"><td class="mdescLeft">&#160;</td><td class="mdescRight">count of cells in third dimension <br /></td></tr>
-<tr class="separator:a982ebbf77e3f8b7e7b8efba6e670c216"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:a81526407a087cf25eec554d3381eb463 inherit pub_attribs_classBaseCellularAutomata"><td class="mdescLeft">&#160;</td><td class="mdescRight">count of cells in third dimension <br /></td></tr>
+<tr class="separator:a81526407a087cf25eec554d3381eb463 inherit pub_attribs_classBaseCellularAutomata"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >A <a class="el" href="classCellularAutomata.html">CellularAutomata</a> class for simulating cellular automata models </p>
-</div><h2 class="groupheader">Member Enumeration Documentation</h2>
-<a id="a27edcba5daf03e7094286c1f3d133380" name="a27edcba5daf03e7094286c1f3d133380"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a27edcba5daf03e7094286c1f3d133380">&#9670;&#160;</a></span>boundary</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename T&gt;<br />
+class CellularAutomata&lt; T &gt;</div><p >A <a class="el" href="classCellularAutomata.html" title="A CellularAutomata class for simulating cellular automata models.">CellularAutomata</a> class for simulating cellular automata models. </p>
+<p >This templated class supports structs/class objects or integer states.</p>
+<p >The object must contain a .state property that the <a class="el" href="classCellularAutomata.html" title="A CellularAutomata class for simulating cellular automata models.">CellularAutomata</a> class updates. The object must have a defined a move operator to ensure well defined swapping of states (current state and next state). The object must have a defined assignment operator to ensure proper copying happen when assigning one object to another. The object must have a defined != operator for the comparison of cell states.</p>
+<p >If these requirements are not satisfied then the class will produce undefined behavior.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>: struct/class with a .state property, move operator and assignment operator.<br  />
+ </td></tr>
+    <tr><td class="paramname">int</td><td>: when cell states are represented by an integer </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ae5f71d81025763115b7b7642569053be" name="ae5f71d81025763115b7b7642569053be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5f71d81025763115b7b7642569053be">&#9670;&#160;</a></span>CellularAutomata()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="classCellularAutomata.html#a27edcba5daf03e7094286c1f3d133380">CellularAutomata::boundary</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>enum containing the different type of boundaries the <a class="el" href="classCellularAutomata.html">CellularAutomata</a> class supports </p>
-
-</div>
-</div>
-<a id="a216d76809f7a8baf6a3bae0d4cdedee4" name="a216d76809f7a8baf6a3bae0d4cdedee4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a216d76809f7a8baf6a3bae0d4cdedee4">&#9670;&#160;</a></span>error_code</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="classCellularAutomata.html#a216d76809f7a8baf6a3bae0d4cdedee4">CellularAutomata::error_code</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>enum containing the various error codes the <a class="el" href="classCellularAutomata.html">CellularAutomata</a> class can return </p>
-
-</div>
-</div>
-<a id="a3a01bdc55c41e1aedf730efba84febe3" name="a3a01bdc55c41e1aedf730efba84febe3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a01bdc55c41e1aedf730efba84febe3">&#9670;&#160;</a></span>neighborhood</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="classCellularAutomata.html#a3a01bdc55c41e1aedf730efba84febe3">CellularAutomata::neighborhood</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>enum containing the different type of neighborhoods the <a class="el" href="classCellularAutomata.html">CellularAutomata</a> class supports </p>
-
-</div>
-</div>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a5ced9708503f8fce1d17aab359b5fe52" name="a5ced9708503f8fce1d17aab359b5fe52"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ced9708503f8fce1d17aab359b5fe52">&#9670;&#160;</a></span>CellularAutomata()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">CellularAutomata::CellularAutomata </td>
+          <td class="memname"><a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; T &gt;<a class="el" href="classCellularAutomata.html">::CellularAutomata</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Construct a new Cellular Automata:: Cellular Automata object. </p>
+<p>Construct a new Cellular Automata object. </p>
 <p >Sets the default value to all class attributes. </p>
 
 </div>
 </div>
-<a id="a50e6daa1b843aeb3bcafc634ae219ed8" name="a50e6daa1b843aeb3bcafc634ae219ed8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a50e6daa1b843aeb3bcafc634ae219ed8">&#9670;&#160;</a></span>~CellularAutomata()</h2>
+<a id="acba153d241443c4e510a712741c4b92e" name="acba153d241443c4e510a712741c4b92e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acba153d241443c4e510a712741c4b92e">&#9670;&#160;</a></span>~CellularAutomata()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">CellularAutomata::~CellularAutomata </td>
+          <td class="memname"><a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; T &gt;::~<a class="el" href="classCellularAutomata.html">CellularAutomata</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Destroy the Cellular Automata:: Cellular Automata object. </p>
+<p>Destroy the Cellular Automata object. </p>
 <p >Deallocates memory reserved for vector/matrix/tensor. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae1a8f9105f1f73143e03bbcb7b0741e9" name="ae1a8f9105f1f73143e03bbcb7b0741e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae1a8f9105f1f73143e03bbcb7b0741e9">&#9670;&#160;</a></span>init_condition()</h2>
+<a id="a93dad58ed1363381c813aa0373a7c90b" name="a93dad58ed1363381c813aa0373a7c90b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93dad58ed1363381c813aa0373a7c90b">&#9670;&#160;</a></span>get_neighborhood_size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; T &gt;::get_neighborhood_size </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rank</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>radius</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceCAEnums.html#a1a48aaec07f7234b6d1e80f66cb51fe5">CAEnums::Neighborhood</a>&#160;</td>
+          <td class="paramname"><em>neighborhood_type</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>calculates the neighborhood size using the rank, radius and neighborhood type </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rank</td><td>rank of the cell's tensor </td></tr>
+    <tr><td class="paramname">radius</td><td>radius of the neighborhood </td></tr>
+    <tr><td class="paramname">neighborhood_type</td><td>the type of neighborhood </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
+
+</div>
+</div>
+<a id="a08fecaa001dd870666ad62f2e2b64866" name="a08fecaa001dd870666ad62f2e2b64866"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08fecaa001dd870666ad62f2e2b64866">&#9670;&#160;</a></span>init_condition() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; T &gt;::init_condition </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x_state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>prob</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initializes the first state of the grid using random numbers. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x_state</td><td>choose the cell state to initialize the grid with. </td></tr>
+    <tr><td class="paramname">prob</td><td>the probability of a cell to turn to state given from x_state </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int - error code<br  />
+ CellsAreNull: tensor not initialized<br  />
+ InvalidCellStateCondition: x_state must be less than num_states<br  />
+ 0: no error </dd></dl>
+
+</div>
+</div>
+<a id="aedc36b408c97e2cd5a91d96675e97219" name="aedc36b408c97e2cd5a91d96675e97219"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedc36b408c97e2cd5a91d96675e97219">&#9670;&#160;</a></span>init_condition() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int CellularAutomata::init_condition </td>
+          <td class="memname">int <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; int &gt;::init_condition </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>x_state</em>, </td>
@@ -331,40 +466,93 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>axis3_dim</b></td></tr
 
 </div>
 </div>
-<a id="aecf84011bd9c0a29d76fcc8315115891" name="aecf84011bd9c0a29d76fcc8315115891"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aecf84011bd9c0a29d76fcc8315115891">&#9670;&#160;</a></span>print_error_status()</h2>
+<a id="aa260aefdc1a3707334109987d8205094" name="aa260aefdc1a3707334109987d8205094"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa260aefdc1a3707334109987d8205094">&#9670;&#160;</a></span>initialize_majority_rule_counter()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void CellularAutomata::print_error_status </td>
+          <td class="memname">static void <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; T &gt;::initialize_majority_rule_counter </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classCellularAutomata.html#a216d76809f7a8baf6a3bae0d4cdedee4">error_code</a>&#160;</td>
-          <td class="paramname"><em>error</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="CAdatatypes_8h.html#afcaeecaad0a03e216f79537596187398">MajorityCounter</a> &amp;&#160;</td>
+          <td class="paramname"><em>counter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>num_states</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Prints an error message for the given error code. </p>
+<p>initializes a MajorityCounter instance utilized by Majority rule </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">error</td><td>error_code enum type </td></tr>
+    <tr><td class="paramname">counter</td><td>object to keep number of votes for each particular cell state </td></tr>
+    <tr><td class="paramname">num_states</td><td>number of different cell states </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="ad3b7f0b29d2eb243b0ee1637f352e242" name="ad3b7f0b29d2eb243b0ee1637f352e242"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad3b7f0b29d2eb243b0ee1637f352e242">&#9670;&#160;</a></span>print_grid()</h2>
+<a id="a33170f96740842cff712b39ab77444af" name="a33170f96740842cff712b39ab77444af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33170f96740842cff712b39ab77444af">&#9670;&#160;</a></span>print_grid() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; T &gt;::print_grid </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Print the current state of the grid. </p>
+<dl class="section return"><dt>Returns</dt><dd>int - error code<br  />
+CellsAreNull: neither vector, matrix, nor tensor are initialized<br  />
+0: no error </dd></dl>
+
+</div>
+</div>
+<a id="a50680709f9de583e787fa3b7fe67948b" name="a50680709f9de583e787fa3b7fe67948b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50680709f9de583e787fa3b7fe67948b">&#9670;&#160;</a></span>print_grid() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int CellularAutomata::print_grid </td>
+          <td class="memname">int <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; int &gt;::print_grid </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -379,23 +567,23 @@ CellsAreNull: neither vector, matrix, nor tensor are initialized<br  />
 
 </div>
 </div>
-<a id="abd2b88f695f40111238b61184c27b89d" name="abd2b88f695f40111238b61184c27b89d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd2b88f695f40111238b61184c27b89d">&#9670;&#160;</a></span>setup_boundary()</h2>
+<a id="a6c109bc5f13d9e51b4bb94d7799009f3" name="a6c109bc5f13d9e51b4bb94d7799009f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c109bc5f13d9e51b4bb94d7799009f3">&#9670;&#160;</a></span>setup_dimensions_1d() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int CellularAutomata::setup_boundary </td>
+          <td class="memname">int <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; int &gt;::setup_dimensions_1d </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classCellularAutomata.html#a27edcba5daf03e7094286c1f3d133380">boundary</a>&#160;</td>
-          <td class="paramname"><em>bound_type</em>, </td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>axis1_dim</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>radius</em>&#160;</td>
+          <td class="paramname"><em>fill_value</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -405,69 +593,11 @@ CellsAreNull: neither vector, matrix, nor tensor are initialized<br  />
       </table>
 </div><div class="memdoc">
 
-<p>Setup boundary with enum values from boundary and set the boundary radius. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">bound_type</td><td>enum value for boundary (None, Periodic, Walled, CutOff) </td></tr>
-    <tr><td class="paramname">radius</td><td>radius for the boundary </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>int - error code<br  />
-InvalidRadius: radius can't be less than equal to 0<br  />
-0: no error </dd></dl>
-
-</div>
-</div>
-<a id="a798153a91270018603dfae7f5a882273" name="a798153a91270018603dfae7f5a882273"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a798153a91270018603dfae7f5a882273">&#9670;&#160;</a></span>setup_cell_states()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int CellularAutomata::setup_cell_states </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>num_states</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Defines the range of cell states to be used in the CA object. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">num_states</td><td>describes the range of numbers to use for cell states </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>int - error code<br  />
-InvalidNumStates: num_states can't be less than to 2<br  />
-0: no error </dd></dl>
-
-</div>
-</div>
-<a id="add0d19b9df330e6f8a02189badb77ad4" name="add0d19b9df330e6f8a02189badb77ad4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add0d19b9df330e6f8a02189badb77ad4">&#9670;&#160;</a></span>setup_dimensions() <span class="overload">[1/3]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int CellularAutomata::setup_dimensions </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>axis1_dim</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Construct a new <a class="el" href="classCellularAutomata.html#add0d19b9df330e6f8a02189badb77ad4" title="Construct a new CellularAutomata::setup_dimensions object.">CellularAutomata::setup_dimensions</a> object. </p>
+<p>Set up 1d array of cell states. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">axis1_dim</td><td>the size of a one dimensional vector </td></tr>
+    <tr><td class="paramname">fill_value</td><td>the value to set every cell state to </td></tr>
   </table>
   </dd>
 </dl>
@@ -478,14 +608,19 @@ CellsMalloc: couldn't allocate memory for the specified vector size<br  />
 
 </div>
 </div>
-<a id="a02be1f5f917960e7c2f90158b98c6011" name="a02be1f5f917960e7c2f90158b98c6011"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a02be1f5f917960e7c2f90158b98c6011">&#9670;&#160;</a></span>setup_dimensions() <span class="overload">[2/3]</span></h2>
+<a id="a161c67df36bf4096437a835a5b77c391" name="a161c67df36bf4096437a835a5b77c391"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a161c67df36bf4096437a835a5b77c391">&#9670;&#160;</a></span>setup_dimensions_1d() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int CellularAutomata::setup_dimensions </td>
+          <td class="memname">int <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; T &gt;::setup_dimensions_1d </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>axis1_dim</em>, </td>
@@ -494,7 +629,7 @@ CellsMalloc: couldn't allocate memory for the specified vector size<br  />
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>axis2_dim</em>&#160;</td>
+          <td class="paramname"><em>fill_value</em> = <code>0</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -502,31 +637,36 @@ CellsMalloc: couldn't allocate memory for the specified vector size<br  />
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Construct a new <a class="el" href="classCellularAutomata.html#add0d19b9df330e6f8a02189badb77ad4" title="Construct a new CellularAutomata::setup_dimensions object.">CellularAutomata::setup_dimensions</a> object. </p>
+<p>Set up 1d array of cell states. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">axis1_dim</td><td>The size of the first dimension </td></tr>
-    <tr><td class="paramname">axis2_dim</td><td>The size of the second dimension </td></tr>
+    <tr><td class="paramname">axis1_dim</td><td>the size of a one dimensional vector </td></tr>
+    <tr><td class="paramname">fill_value</td><td>the value to set every cell state to </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>int - error code<br  />
-CellsAlreadyInitialized: matrix was already allocated<br  />
-CellsMalloc: couldn't allocate memory for the specified matrix size<br  />
+CellsAlreadyInitialized: vector was already allocated<br  />
+CellsMalloc: couldn't allocate memory for the specified vector size<br  />
 0: no error </dd></dl>
 
 </div>
 </div>
-<a id="ad044ee6b8159129f17f199217642b3dc" name="ad044ee6b8159129f17f199217642b3dc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad044ee6b8159129f17f199217642b3dc">&#9670;&#160;</a></span>setup_dimensions() <span class="overload">[3/3]</span></h2>
+<a id="ac0cbc147bb801e43a42ae506d007f50b" name="ac0cbc147bb801e43a42ae506d007f50b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0cbc147bb801e43a42ae506d007f50b">&#9670;&#160;</a></span>setup_dimensions_2d() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int CellularAutomata::setup_dimensions </td>
+          <td class="memname">int <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; int &gt;::setup_dimensions_2d </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>axis1_dim</em>, </td>
@@ -541,7 +681,7 @@ CellsMalloc: couldn't allocate memory for the specified matrix size<br  />
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>axis3_dim</em>&#160;</td>
+          <td class="paramname"><em>fill_value</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -551,12 +691,125 @@ CellsMalloc: couldn't allocate memory for the specified matrix size<br  />
       </table>
 </div><div class="memdoc">
 
-<p>Construct a new <a class="el" href="classCellularAutomata.html#add0d19b9df330e6f8a02189badb77ad4" title="Construct a new CellularAutomata::setup_dimensions object.">CellularAutomata::setup_dimensions</a> object. </p>
+<p>Set up 2d matrix of cell states. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">axis1_dim</td><td>The size of the first dimension </td></tr>
+    <tr><td class="paramname">axis2_dim</td><td>The size of the second dimension </td></tr>
+    <tr><td class="paramname">fill_value</td><td>the value to set every cell state to </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int - error code<br  />
+CellsAlreadyInitialized: matrix was already allocated<br  />
+CellsMalloc: couldn't allocate memory for the specified matrix size<br  />
+0: no error </dd></dl>
+
+</div>
+</div>
+<a id="a5d11e8e04e99bf6df60977e710dcb656" name="a5d11e8e04e99bf6df60977e710dcb656"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d11e8e04e99bf6df60977e710dcb656">&#9670;&#160;</a></span>setup_dimensions_2d() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; T &gt;::setup_dimensions_2d </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>axis1_dim</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>axis2_dim</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fill_value</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set up 2d matrix of cell states. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">axis1_dim</td><td>The size of the first dimension </td></tr>
+    <tr><td class="paramname">axis2_dim</td><td>The size of the second dimension </td></tr>
+    <tr><td class="paramname">fill_value</td><td>the value to set every cell state to </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int - error code<br  />
+CellsAlreadyInitialized: matrix was already allocated<br  />
+CellsMalloc: couldn't allocate memory for the specified matrix size<br  />
+0: no error </dd></dl>
+
+</div>
+</div>
+<a id="a4e040f032a6d6c7dcde7dfb4f29dab38" name="a4e040f032a6d6c7dcde7dfb4f29dab38"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e040f032a6d6c7dcde7dfb4f29dab38">&#9670;&#160;</a></span>setup_dimensions_3d() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; int &gt;::setup_dimensions_3d </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>axis1_dim</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>axis2_dim</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>axis3_dim</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fill_value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set up 3d tensor of cell states. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">axis1_dim</td><td>The size of the first dimension </td></tr>
     <tr><td class="paramname">axis2_dim</td><td>The size of the second dimension </td></tr>
     <tr><td class="paramname">axis3_dim</td><td>The size of the third dimension </td></tr>
+    <tr><td class="paramname">fill_value</td><td>the value to set every cell state to </td></tr>
   </table>
   </dd>
 </dl>
@@ -567,93 +820,114 @@ CellsMalloc: couldn't allocate memory for the specified tensor size<br  />
 
 </div>
 </div>
-<a id="af8dc93ce1fdd864f4da694987c67f379" name="af8dc93ce1fdd864f4da694987c67f379"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af8dc93ce1fdd864f4da694987c67f379">&#9670;&#160;</a></span>setup_neighborhood()</h2>
+<a id="a7e54aaf8e8242a92ac4cd53870a709b7" name="a7e54aaf8e8242a92ac4cd53870a709b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e54aaf8e8242a92ac4cd53870a709b7">&#9670;&#160;</a></span>setup_dimensions_3d() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int CellularAutomata::setup_neighborhood </td>
+          <td class="memname">int <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; T &gt;::setup_dimensions_3d </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classCellularAutomata.html#a3a01bdc55c41e1aedf730efba84febe3">neighborhood</a>&#160;</td>
-          <td class="paramname"><em>neighborhood_type</em></td><td>)</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>axis1_dim</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>axis2_dim</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>axis3_dim</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>fill_value</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Setup neighborhood with values from enum neighborhood. </p>
+<p>Set up 3d tensor of cell states. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">neighborhood_type</td><td>enum value for neighborhood type (VonNeumann or Moore) </td></tr>
+    <tr><td class="paramname">axis1_dim</td><td>The size of the first dimension </td></tr>
+    <tr><td class="paramname">axis2_dim</td><td>The size of the second dimension </td></tr>
+    <tr><td class="paramname">axis3_dim</td><td>The size of the third dimension </td></tr>
+    <tr><td class="paramname">fill_value</td><td>the value to set every cell state to </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>int error code </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>int - error code<br  />
+CellsAlreadyInitialized: tensor was already allocated<br  />
+CellsMalloc: couldn't allocate memory for the specified tensor size<br  />
+0: no error </dd></dl>
 
 </div>
 </div>
-<a id="ae6b1c40a3304b2f3623c5f264e5370ae" name="ae6b1c40a3304b2f3623c5f264e5370ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae6b1c40a3304b2f3623c5f264e5370ae">&#9670;&#160;</a></span>setup_rule()</h2>
+<a id="a25bad260ce2de18c2692dff4466789d0" name="a25bad260ce2de18c2692dff4466789d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25bad260ce2de18c2692dff4466789d0">&#9670;&#160;</a></span>step() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int CellularAutomata::setup_rule </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classCellularAutomata.html#a6e20f602a270020168482093b028b1bb">rule</a>&#160;</td>
-          <td class="paramname"><em>rule_type</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Setup the rule choice sed to specify the rule type to be used in CA object. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">rule_type</td><td>enum rule representing the rule type </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>int error code </dd></dl>
-
-</div>
-</div>
-<a id="a7e3c265c41f3d5592a3015fae5f8154d" name="a7e3c265c41f3d5592a3015fae5f8154d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7e3c265c41f3d5592a3015fae5f8154d">&#9670;&#160;</a></span>step() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int CellularAutomata::step </td>
+          <td class="memname">int <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; T &gt;::step </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Simulates a cellular automata step. </p>
-<p >A new state is generated and stored stored as the new state for subsequent calls to step method.</p>
+<p >A new state is generated and stored as the new state for subsequent calls to step method.</p>
 <dl class="section return"><dt>Returns</dt><dd>int - error code<br  />
  Error codes returned by get_state_from_neighborhood_Xd methods<br  />
  0: no error </dd></dl>
 
 </div>
 </div>
-<a id="a0f9e365eb9a33cc942224dc81ad79762" name="a0f9e365eb9a33cc942224dc81ad79762"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f9e365eb9a33cc942224dc81ad79762">&#9670;&#160;</a></span>step() <span class="overload">[2/2]</span></h2>
+<a id="ab802d5fbb72642dcddda33e185bfc27e" name="ab802d5fbb72642dcddda33e185bfc27e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab802d5fbb72642dcddda33e185bfc27e">&#9670;&#160;</a></span>step() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int CellularAutomata::step </td>
+          <td class="memname">int <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; int &gt;::step </td>
           <td>(</td>
-          <td class="paramtype">void(<a class="el" href="test__CA_8cpp.html#ab30ee0f9170dcdd71f3e57222c0163ac">custom_rule</a>)(int *, int, int *, int, int &amp;)&#160;</td>
+          <td class="paramtype">void(<a class="el" href="test__CA_8cpp.html#a4594c7b79dd83a9ffbceabc93ac3784b">custom_rule</a>)(int *, int, int *, int, int &amp;, <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; int &gt; &amp;)&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -663,6 +937,7 @@ CellsMalloc: couldn't allocate memory for the specified tensor size<br  />
 <p>Simulates a cellular automata step. </p>
 <p >A new state is generated and stored stored as the new state for subsequent calls to step method.</p>
 <p >This method supports the use of a custom rule type.</p>
+<p >If cell states move on the grid, the user is responsible for handling clashes. If two cells move to the same cell position, the grid will retain the most recent cell assignment (new will replace the old).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">custom_rule</td><td>function that is called when a Custom rule type is specified </td></tr>
@@ -672,18 +947,53 @@ CellsMalloc: couldn't allocate memory for the specified tensor size<br  />
 <dl class="section return"><dt>Returns</dt><dd>int - error code<br  />
  Error codes returned by get_state_from_neighborhood_Xd methods<br  />
  0: no error </dd></dl>
-<p >Return error code when omp is not enabled otherwise the above pragma will exit out of the for loop(s)</p>
-<p >The two following statements allow for dynamic systems to be modeled. If the cell does not move then we properly update it in the second statement. If the cell moves then the old cell index is zeroed and the new cell index will contain the newly computed cell state.</p>
-<p >Return error code when omp is not enabled otherwise the above pragma will exit out of the for loop(s)</p>
-<p >The two following statements allow for dynamic systems to be modeled. If the cell does not move then we properly update it in the second statement. If the cell moves then the old cell index is zeroed and the new cell index will contain the newly computed cell state.</p>
-<p >Return error code when omp is not enabled otherwise the above pragma will exit out of the for loop(s)</p>
-<p >The two following statements allow for dynamic systems to be modeled. If the cell does not move then we properly update it in the second statement. If the cell moves then the old cell index is zeroed and the new cell index will contain the newly computed cell state.</p>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<a id="adfa1256fff71bf6ddf211fa9fcefea0e" name="adfa1256fff71bf6ddf211fa9fcefea0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfa1256fff71bf6ddf211fa9fcefea0e">&#9670;&#160;</a></span>step() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; T &gt;::step </td>
+          <td>(</td>
+          <td class="paramtype">void(<a class="el" href="test__CA_8cpp.html#a4594c7b79dd83a9ffbceabc93ac3784b">custom_rule</a>)(int *, int, T *, int, T &amp;, <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; T &gt; &amp;)&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Simulates a cellular automata step. </p>
+<p >A new state is generated and stored stored as the new state for subsequent calls to step method.</p>
+<p >This method supports the use of a custom rule type.</p>
+<p >If cell states move on the grid, the user is responsible for handling clashes. If two cells move to the same cell position, the grid will retain the most recent cell assignment (new will replace the old).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">custom_rule</td><td>function that is called when a Custom rule type is specified </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int - error code<br  />
+ Error codes returned by get_state_from_neighborhood_Xd methods<br  />
+ 0: no error </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>Include/<a class="el" href="CAdatatypes_8h_source.html">CAdatatypes.h</a></li>
-<li>Source/Datatypes/<a class="el" href="cellularautomata_8cpp.html">cellularautomata.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
