@@ -1,0 +1,50 @@
+# Chem 274B - Cellular Automata Final Project
+# Emmanuel Cortes
+# Contributor(s): 
+# Created: 12/06/2022
+# This creates an executable for our galaxy CA model
+
+
+# GNU C++ Compiler
+CPP         = g++      
+
+# compiler flags -g debug, -O3 optimized version -c create a library object
+CPPFLAGS    =-O0 -g 
+OMPFLAGS    =-fopenmp -DENABLE_OMP
+LDFLAGS     =
+
+# Add additional flags for Mac OS X
+ifeq ($(detected_OS),Darwin)
+OMPFLAGS    +=-Xclang 
+LDFLAGS     +=-L/usr/local/opt/llvm/lib -lomp
+endif
+
+# The directory where the include files needed to create the library objects are
+INC_DIR = ../Include
+
+# The directory where all object files are going to be moved after creation
+LIB_DIR     = ../Libdir
+BIN_DIR     = ../Bindir
+SRC_DIR     = ../Source/Datatypes
+UTIL_DIR    = ../Utils
+
+# The next line contains the list of object files created by this Makefile.
+EXECS = galaxy_CA galaxy_omp
+
+# CA_SRC = $(SRC_DIR)/cellularautomata.cpp $(UTIL_DIR)/CA_utils.cpp
+
+galaxy_CA:
+	$(CPP) $(CPPFLAGS) -I$(INC_DIR) galaxy.cpp -o galaxy_CA \
+	$(LIB_DIR)/cellularautomata.a
+	mv galaxy_CA $(BIN_DIR)
+
+galaxy_omp:
+	$(CPP) $(CPPFLAGS) $(OMPFLAGS) $(LDFLAGS) -I$(INC_DIR) galaxy.cpp \
+	$(LIB_DIR)/cellularautomata_omp.a -o galaxy_omp
+	mv galaxy_omp $(BIN_DIR)
+
+
+all: $(EXECS)
+
+cleanall:
+	cd $(BIN_DIR); rm $(EXECS)

@@ -26,6 +26,7 @@ void swap_states(T *vector, T *next_vector, int axis1_dim)
     for (int i = 0; i < axis1_dim; i++)
     {
         std::swap(vector[i], next_vector[i]);
+        next_vector[i] = T();
     }
 }
 
@@ -46,6 +47,7 @@ void swap_states(T **matrix, T **next_matrix, int axis1_dim, int axis2_dim)
         for (int j = 0; j < axis2_dim; j++)
         {
             std::swap(matrix[i][j], next_matrix[i][j]);
+            next_matrix[i][j] = T();
         }
     }
 }
@@ -70,6 +72,7 @@ void swap_states(T ***tensor, T ***next_tensor, int axis1_dim, int axis2_dim, in
             for (int k = 0; k < axis3_dim; k++)
             {
                 std::swap(tensor[i][j][k], next_tensor[i][j][k]);
+                next_tensor[i][j][k] = T();
             }
         }
     }
