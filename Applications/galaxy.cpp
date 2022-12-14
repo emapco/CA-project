@@ -349,7 +349,7 @@ void test_motion_rule(int *cell_index, const int index_size, GalaxyCell *neighbo
     }
 }
 
-int main(int args, char **argv)
+int main(int argc, char **argv)
 {
     CellularAutomata<GalaxyCell> galaxy = CellularAutomata<GalaxyCell>();
     galaxy.setup_boundary(CAEnums::Boundary::Periodic, 6);
