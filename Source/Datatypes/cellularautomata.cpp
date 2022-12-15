@@ -371,14 +371,14 @@ int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &)
 
     if (vector != nullptr)
     {
-        // store the main cell's index in cell_index for custom rule type
         index_size = 1;
 #ifdef ENABLE_OMP
 #pragma omp parallel for firstprivate(error_code) private(new_cell_state)
 #endif
         for (int i = 0; i < axis1_dim; i++)
         {
-            int cell_index[index_size] = {i};
+            // store the main cell's index in cell_index for custom rule type
+            int cell_index[1] = {i};
             new_cell_state = vector[i];
             error_code = get_state_from_neighborhood_1d(cell_index, index_size, new_cell_state, custom_rule);
             if (error_code < 0)
@@ -408,7 +408,6 @@ int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &)
     }
     else if (matrix != nullptr)
     {
-        // store the main cell's index in cell_index for custom rule type
         index_size = 2;
 #ifdef ENABLE_OMP
 #pragma omp parallel for firstprivate(error_code) private(new_cell_state)
@@ -417,7 +416,8 @@ int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &)
         {
             for (int j = 0; j < axis2_dim; j++)
             {
-                int cell_index[index_size] = {i, j};
+                // store the main cell's index in cell_index for custom rule type
+                int cell_index[2] = {i, j};
                 new_cell_state = matrix[i][j];
                 error_code = get_state_from_neighborhood_2d(cell_index, index_size, new_cell_state, custom_rule);
                 if (error_code < 0)
@@ -458,7 +458,8 @@ int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &)
             {
                 for (int k = 0; k < axis3_dim; k++)
                 {
-                    int cell_index[index_size] = {i, j, k};
+                    // store the main cell's index in cell_index for custom rule type
+                    int cell_index[3] = {i, j, k};
                     new_cell_state = tensor[i][j][k];
                     error_code = get_state_from_neighborhood_3d(cell_index, index_size, new_cell_state, custom_rule);
                     if (error_code < 0)
