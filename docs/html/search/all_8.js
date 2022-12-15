@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['neighborhood_0',['Neighborhood',['../namespaceCAEnums.html#a1a48aaec07f7234b6d1e80f66cb51fe5',1,'CAEnums']]],
-  ['neighborhood_5ftype_1',['neighborhood_type',['../classBaseCellularAutomata.html#ab4b144f596bf064ed8b3e3990aec0152',1,'BaseCellularAutomata']]],
-  ['num_5fstates_2',['num_states',['../classBaseCellularAutomata.html#a497d46acf6b57ed7511ca843cc8e9d77',1,'BaseCellularAutomata']]]
+  ['main_0',['main',['../galaxy__app_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'galaxy_app.cpp']]],
+  ['majoritycounter_1',['MajorityCounter',['../CAdatatypes_8h.html#afcaeecaad0a03e216f79537596187398',1,'CAdatatypes.h']]],
+  ['mass_2',['mass',['../classGalaxyCell.html#afa252f1572c8b1197024c797ac094d52',1,'GalaxyCell']]],
+  ['max_5fmass_3',['max_mass',['../classGalaxy.html#a7420280c4ac55dfd114ecb4fe4ca768c',1,'Galaxy']]],
+  ['min_5fmass_4',['min_mass',['../classGalaxy.html#a689805551005316e52e9a58df481f9ab',1,'Galaxy']]]
 ];

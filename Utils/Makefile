@@ -1,5 +1,6 @@
 # Chem 274B - Cellular Automata Final Project
 # Emmanuel Cortes
+# Contributor(s): Trevor Oldham
 # Created: 12/06/2022
 # This creates object files for utility functions in CAutils.h
 
@@ -8,12 +9,12 @@
 CPP         = g++
 
 # compiler flags -g debug, -O3 optimized version -c create a library object
-CPPFLAGS    =-Wall -Wextra -O0 -c -g
+CPPFLAGS    =-Wall -Wextra -O3 -c
 OMPFLAGS    =-fopenmp -DENABLE_OMP
 
 # Add additional flags for Mac OS X
 ifeq ($(detected_OS),Darwin)
-OMPFLAGS    +=-Xclang 
+OMPFLAGS    =-Xclang -DENABLE_OMP
 endif
 
 # The directory where the include files needed to create the library objects are
@@ -34,7 +35,11 @@ CA_utils_omp.o:
 	-o CA_utils_omp.o
 	mv CA_utils_omp.o $(LIB_DIR)
 
+sequential: CA_utils.o
+
+parallel: CA_utils_omp.o
+
 all: $(OBJS)
 
 cleanall:
-	cd $(LIB_DIR); rm $(OBJS)
+	cd $(LIB_DIR); rm -f $(OBJS)

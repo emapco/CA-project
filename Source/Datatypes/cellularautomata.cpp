@@ -37,17 +37,6 @@ int BaseCellularAutomata::setup_neighborhood(CAEnums::Neighborhood neighborhood_
     return 0;
 }
 
-int BaseCellularAutomata::setup_boundary(CAEnums::Boundary bound_type, int radius)
-{
-    if (radius <= 0)
-    {
-        return CAEnums::InvalidRadius;
-    }
-    this->boundary_type = bound_type;
-    this->boundary_radius = radius;
-    return 0;
-}
-
 int BaseCellularAutomata::setup_cell_states(int num_states)
 {
     if (num_states < 2)
@@ -66,37 +55,40 @@ int BaseCellularAutomata::setup_rule(CAEnums::Rule rule_type)
 
 void BaseCellularAutomata::print_error_status(CAEnums::ErrorCode error)
 {
-    std::cout << "ERROR [";
+    std::cout << "ERROR [" << error;
     switch (error)
     {
     case CAEnums::CellsAlreadyInitialized:
-        std::cout << error << "]: Can't reinitialize vector, matrix, nor tensor. \n";
+        std::cout << "]: Can't reinitialize vector, matrix, nor tensor.";
         break;
     case CAEnums::CellsAreNull:
-        std::cout << error << "]: The vector, matrix, and tensor are null. \n";
+        std::cout << "]: The vector, matrix, and tensor are null.";
         break;
     case CAEnums::CellsMalloc:
-        std::cout << error << "]: Could not allocate memory for either vector, matrix, or tensor. \n";
+        std::cout << "]: Could not allocate memory for either vector, matrix, or tensor.";
         break;
     case CAEnums::InvalidCellState:
-        std::cout << error << "]: Invalid cell state given. Must be greater than equal to 2. \n";
+        std::cout << "]: Invalid cell state given. Must be greater than equal to 2.";
         break;
     case CAEnums::InvalidCellStateCondition:
-        std::cout << error << "]: Invalid cell state condition given. Must be less than the set number of states. \n";
+        std::cout << "]: Invalid cell state condition given. Must be less than the set number of states.";
         break;
     case CAEnums::InvalidRadius:
-        std::cout << error << "]: Invalid boundary radius given. \n";
+        std::cout << "]: Invalid boundary radius given.";
         break;
     case CAEnums::InvalidNumStates:
-        std::cout << error << "]: Invalid number of states given. \n";
+        std::cout << "]: Invalid number of states given.";
         break;
     case CAEnums::NeighborhoodCellsMalloc:
-        std::cout << error << "]: Could not allocate memory for neighborhood array. \n";
+        std::cout << "]: Could not allocate memory for neighborhood array.";
         break;
     case CAEnums::CustomRuleIsNull:
-        std::cout << error << "]: Custom rule function is null (none given). \n";
+        std::cout << "]: Custom rule function is null (none given).";
         break;
+    case CAEnums::RadiusLargerThanDimensions:
+        std::cout << "]: Boundary radius is smaller than one of the following: axis1_dim / 2, axis2_dim / 2, and/or axis3_dim / 2";
     }
+    std::cout << "\n";
 }
 
 template <>
@@ -273,7 +265,7 @@ int CellularAutomata<int>::init_condition(int x_state, double prob)
 template <>
 int CellularAutomata<int>::set_new_cell_state(int *cell_index, int index_size,
                                               int *neighborhood_cells, int neighborhood_size,
-                                              int &new_cell_state, void(custom_rule)(int *, int, int *, int, int &, CellularAutomata<int> &))
+                                              int &new_cell_state, void(custom_rule)(int *, int, int *, int, int &))
 {
     int sum = 0;                         // sum of cells within boundary_radius for Parity rule
     MajorityCounter state_votes_counter; // counter to keep track of votes for Majority rule
@@ -295,7 +287,7 @@ int CellularAutomata<int>::set_new_cell_state(int *cell_index, int index_size,
         else
         {
             // custom_rule should set the new_cell_state
-            custom_rule(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state, *this);
+            custom_rule(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state);
         }
         break;
     case CAEnums::Parity:
@@ -370,7 +362,7 @@ int CellularAutomata<int>::print_grid()
 }
 
 template <>
-int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &, CellularAutomata<int> &))
+int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &))
 {
     int error_code = 0;       // store error code return by other methods
     int new_cell_state;       // stores the cell's new state
@@ -381,7 +373,9 @@ int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &,
     {
         // store the main cell's index in cell_index for custom rule type
         index_size = 1;
+#ifdef ENABLE_OMP
 #pragma omp parallel for firstprivate(error_code) private(new_cell_state)
+#endif
         for (int i = 0; i < axis1_dim; i++)
         {
             int cell_index[index_size] = {i};
@@ -389,7 +383,9 @@ int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &,
             error_code = get_state_from_neighborhood_1d(cell_index, index_size, new_cell_state, custom_rule);
             if (error_code < 0)
             {
+#ifdef ENABLE_OMP
 #pragma omp cancel for
+#endif
 #ifndef ENABLE_OMP
                 /*
                  * Return error code when omp is not enabled
@@ -414,11 +410,11 @@ int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &,
     {
         // store the main cell's index in cell_index for custom rule type
         index_size = 2;
-        int cell_index[index_size];
+#ifdef ENABLE_OMP
 #pragma omp parallel for firstprivate(error_code) private(new_cell_state)
+#endif
         for (int i = 0; i < axis1_dim; i++)
         {
-            cell_index[0] = i; // store the i-th index
             for (int j = 0; j < axis2_dim; j++)
             {
                 int cell_index[index_size] = {i, j};
@@ -426,7 +422,9 @@ int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &,
                 error_code = get_state_from_neighborhood_2d(cell_index, index_size, new_cell_state, custom_rule);
                 if (error_code < 0)
                 {
+#ifdef ENABLE_OMP
 #pragma omp cancel for
+#endif
 #ifndef ENABLE_OMP
                     /*
                      * Return error code when omp is not enabled
@@ -451,7 +449,9 @@ int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &,
     else if (tensor != nullptr)
     {
         index_size = 3;
+#ifdef ENABLE_OMP
 #pragma omp parallel for firstprivate(error_code) private(new_cell_state)
+#endif
         for (int i = 0; i < axis1_dim; i++)
         {
             for (int j = 0; j < axis2_dim; j++)
@@ -463,7 +463,9 @@ int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &,
                     error_code = get_state_from_neighborhood_3d(cell_index, index_size, new_cell_state, custom_rule);
                     if (error_code < 0)
                     {
+#ifdef ENABLE_OMP
 #pragma omp cancel for
+#endif
 #ifndef ENABLE_OMP
                         /*
                          * Return error code when omp is not enabled

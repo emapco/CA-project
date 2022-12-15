@@ -78,7 +78,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>A base <a class="el" href="classCellularAutomata.html" title="A CellularAutomata class for simulating cellular automata models.">CellularAutomata</a> class that contains untemplated member variables and method definitions from which templated and specialized template classes can inherit.  
+<p>A base <a class="el" href="classCellularAutomata.html" title="A CellularAutomata class for simulating cellular automata models.">CellularAutomata</a> class that contains non-templated member variables and method definitions from which templated and specialized template classes can inherit.  
  <a href="classBaseCellularAutomata.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="CAdatatypes_8h_source.html">CAdatatypes.h</a>&gt;</code></p>
@@ -88,7 +88,8 @@ Inheritance diagram for BaseCellularAutomata:</div>
  <div class="center">
   <img src="classBaseCellularAutomata.png" usemap="#BaseCellularAutomata_map" alt=""/>
   <map id="BaseCellularAutomata_map" name="BaseCellularAutomata_map">
-<area href="classCellularAutomata.html" title="A CellularAutomata class for simulating cellular automata models." alt="CellularAutomata&lt; T &gt;" shape="rect" coords="0,56,139,80"/>
+<area href="classCellularAutomata.html" alt="CellularAutomata&lt; GalaxyCell &gt;" shape="rect" coords="0,56,193,80"/>
+<area href="classCellularAutomata.html" title="A CellularAutomata class for simulating cellular automata models." alt="CellularAutomata&lt; T &gt;" shape="rect" coords="203,56,396,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -103,12 +104,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac6ee6bb5aab4e20e9b2643b9431243a5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseCellularAutomata.html#ac6ee6bb5aab4e20e9b2643b9431243a5">setup_neighborhood</a> (<a class="el" href="namespaceCAEnums.html#a1a48aaec07f7234b6d1e80f66cb51fe5">CAEnums::Neighborhood</a> <a class="el" href="classBaseCellularAutomata.html#ab4b144f596bf064ed8b3e3990aec0152">neighborhood_type</a>)</td></tr>
 <tr class="memdesc:ac6ee6bb5aab4e20e9b2643b9431243a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup neighborhood with values from enum neighborhood.  <a href="classBaseCellularAutomata.html#ac6ee6bb5aab4e20e9b2643b9431243a5">More...</a><br /></td></tr>
 <tr class="separator:ac6ee6bb5aab4e20e9b2643b9431243a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada383da099b30fcac4d4a713eed15c0e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseCellularAutomata.html#ada383da099b30fcac4d4a713eed15c0e">setup_boundary</a> (<a class="el" href="namespaceCAEnums.html#ab82a915ba874699a10f2e67a8ee60747">CAEnums::Boundary</a> bound_type, int radius)</td></tr>
-<tr class="memdesc:ada383da099b30fcac4d4a713eed15c0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup boundary with enum values from boundary and set the boundary radius.  <a href="classBaseCellularAutomata.html#ada383da099b30fcac4d4a713eed15c0e">More...</a><br /></td></tr>
-<tr class="separator:ada383da099b30fcac4d4a713eed15c0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebcf2a3687a3075e4293d071b88b9cf6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseCellularAutomata.html#aebcf2a3687a3075e4293d071b88b9cf6">setup_cell_states</a> (int n_states)</td></tr>
-<tr class="memdesc:aebcf2a3687a3075e4293d071b88b9cf6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the range of cell states to be used in the CA object.  <a href="classBaseCellularAutomata.html#aebcf2a3687a3075e4293d071b88b9cf6">More...</a><br /></td></tr>
-<tr class="separator:aebcf2a3687a3075e4293d071b88b9cf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a703c588120f3cb55ab1e10769014a1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseCellularAutomata.html#a3a703c588120f3cb55ab1e10769014a1">setup_cell_states</a> (int <a class="el" href="classBaseCellularAutomata.html#a497d46acf6b57ed7511ca843cc8e9d77">num_states</a>)</td></tr>
+<tr class="memdesc:a3a703c588120f3cb55ab1e10769014a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the range of cell states to be used in the CA object.  <a href="classBaseCellularAutomata.html#a3a703c588120f3cb55ab1e10769014a1">More...</a><br /></td></tr>
+<tr class="separator:a3a703c588120f3cb55ab1e10769014a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e032a330b64159e4c511c511f3813ce"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseCellularAutomata.html#a7e032a330b64159e4c511c511f3813ce">setup_rule</a> (<a class="el" href="namespaceCAEnums.html#a30c884a833d28ce027506ce56d6f9498">CAEnums::Rule</a> <a class="el" href="classBaseCellularAutomata.html#a37bb763719c1681c6875201a37e73920">rule_type</a>)</td></tr>
 <tr class="memdesc:a7e032a330b64159e4c511c511f3813ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup the rule choice to specify the rule type to be used in CA object.  <a href="classBaseCellularAutomata.html#a7e032a330b64159e4c511c511f3813ce">More...</a><br /></td></tr>
 <tr class="separator:a7e032a330b64159e4c511c511f3813ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -152,7 +150,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>axis3_dim</b></td></tr
 <tr class="separator:a81526407a087cf25eec554d3381eb463"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p >A base <a class="el" href="classCellularAutomata.html" title="A CellularAutomata class for simulating cellular automata models.">CellularAutomata</a> class that contains untemplated member variables and method definitions from which templated and specialized template classes can inherit. </p>
+<div class="textblock"><p >A base <a class="el" href="classCellularAutomata.html" title="A CellularAutomata class for simulating cellular automata models.">CellularAutomata</a> class that contains non-templated member variables and method definitions from which templated and specialized template classes can inherit. </p>
 <p >Default values:<br  />
  &emsp;&emsp; boundary_type = CAEnums::Periodic <br  />
  &emsp;&emsp; neighborhood_type = CAEnums::Moore <br  />
@@ -234,48 +232,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>axis3_dim</b></td></tr
 
 </div>
 </div>
-<a id="ada383da099b30fcac4d4a713eed15c0e" name="ada383da099b30fcac4d4a713eed15c0e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada383da099b30fcac4d4a713eed15c0e">&#9670;&#160;</a></span>setup_boundary()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int BaseCellularAutomata::setup_boundary </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceCAEnums.html#ab82a915ba874699a10f2e67a8ee60747">CAEnums::Boundary</a>&#160;</td>
-          <td class="paramname"><em>bound_type</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>radius</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Setup boundary with enum values from boundary and set the boundary radius. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">bound_type</td><td>enum value for boundary (None, Periodic, Walled, CutOff) </td></tr>
-    <tr><td class="paramname">radius</td><td>radius for the boundary </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>int - error code<br  />
-InvalidRadius: radius can't be less than equal to 0<br  />
-0: no error </dd></dl>
-
-</div>
-</div>
-<a id="aebcf2a3687a3075e4293d071b88b9cf6" name="aebcf2a3687a3075e4293d071b88b9cf6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aebcf2a3687a3075e4293d071b88b9cf6">&#9670;&#160;</a></span>setup_cell_states()</h2>
+<a id="a3a703c588120f3cb55ab1e10769014a1" name="a3a703c588120f3cb55ab1e10769014a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a703c588120f3cb55ab1e10769014a1">&#9670;&#160;</a></span>setup_cell_states()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -284,7 +242,7 @@ InvalidRadius: radius can't be less than equal to 0<br  />
           <td class="memname">int BaseCellularAutomata::setup_cell_states </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>n_states</em></td><td>)</td>
+          <td class="paramname"><em>num_states</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -357,9 +315,8 @@ InvalidNumStates: num_states can't be less than to 2<br  />
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li>Include/<a class="el" href="CAdatatypes_8h_source.html">CAdatatypes.h</a></li>
-<li>Source/Datatypes/<a class="el" href="cellularautomata_8cpp.html">cellularautomata.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

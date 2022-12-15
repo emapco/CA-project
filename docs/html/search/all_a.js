@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['rule_0',['Rule',['../namespaceCAEnums.html#a30c884a833d28ce027506ce56d6f9498',1,'CAEnums']]],
-  ['rule_5ftype_1',['rule_type',['../classBaseCellularAutomata.html#a37bb763719c1681c6875201a37e73920',1,'BaseCellularAutomata']]]
+  ['operator_21_3d_0',['operator!=',['../classGalaxyCell.html#a5f2f601f068803435fa00421c1e8a11b',1,'GalaxyCell']]],
+  ['operator_3d_1',['operator=',['../classGalaxyCell.html#a72c164e9cbc7926015993bae9f708e07',1,'GalaxyCell']]]
 ];
