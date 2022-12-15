@@ -9,13 +9,13 @@
 CPP         = g++      
 
 # compiler flags -g debug, -O3 optimized version -c create a library object
-CPPFLAGS    =-O0 -g 
+CPPFLAGS    =-O3
 OMPFLAGS    =-fopenmp -DENABLE_OMP
 LDFLAGS     =
 
 # Add additional flags for Mac OS X
 ifeq ($(detected_OS),Darwin)
-OMPFLAGS    +=-Xclang 
+OMPFLAGS    =-Xclang -DENABLE_OMP
 LDFLAGS     +=-L/usr/local/opt/llvm/lib -lomp
 endif
 
@@ -43,7 +43,11 @@ unit_test_CA_utils:
 	$(CPP) $(CPPFLAGS) -I$(INC_DIR) unit_test_CA_utils.cpp $(LIB_DIR)/cellularautomata.a -o unit_test_CA_utils
 	mv unit_test_CA_utils $(BIN_DIR)
 
+sequential: test_CA unit_test_CA_utils
+
+parallel: test_CA_omp
+
 all: $(EXECS)
 
 cleanall:
-	cd $(BIN_DIR); rm $(EXECS)
+	cd $(BIN_DIR); rm -f $(EXECS)

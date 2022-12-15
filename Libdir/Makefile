@@ -1,5 +1,6 @@
 # Chem 274B - Cellular Automata Final Project
 # Emmanuel Cortes
+# Contributor(s): Trevor Oldham
 # Created: 12/10/2022
 # This makefile creates library object files that containing all
 # cellular automata functionality. 
@@ -22,8 +23,12 @@ cellularautomata_omp.a: cleanall
 	ranlib $(CA_OMP_LIB) 
 	rm -f $(CA_OMP_OBJS)
 
+sequential: $(CA_LIB)
+
+parallel: $(CA_OMP_LIB)
+
 all: $(CA_LIB) $(CA_OMP_LIB)
 
 cleanall:
-	rm $(CA_LIB)
-	rm $(CA_OMP_LIB)
+	rm -f $(CA_LIB)
+	rm -f $(CA_OMP_LIB)

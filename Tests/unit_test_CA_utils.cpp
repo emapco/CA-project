@@ -139,7 +139,7 @@ void test_get_periodic_von_neumann_neighbor_index(int radius)
  * @brief Calls get_neighborhood_size and asserts that the returned value
  * equals the expected value.
  *
- * @param tests_and_answer Vector of pairs where first is radius test case and second is the expect value
+ * @param test_arg_and_expected_value Vector of pairs where first is radius test case and second is the expect value
  * @param rank cell data rank
  * @param nt neighborhood type
  */
