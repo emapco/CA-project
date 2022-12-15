@@ -80,12 +80,13 @@ namespace CAEnums
         InvalidRadius = -6,
         InvalidNumStates = -7,
         NeighborhoodCellsMalloc = -8,
-        CustomRuleIsNull = -9
+        CustomRuleIsNull = -9,
+        RadiusLargerThanDimensions = -10
     };
 }
 
 /**
- * @brief A base CellularAutomata class that contains untemplated member variables and method definitions
+ * @brief A base CellularAutomata class that contains non-templated member variables and method definitions
  * from which templated and specialized template classes can inherit.
  * Default values:<br>
  * &emsp;&emsp; boundary_type = CAEnums::Periodic <br>
@@ -127,17 +128,6 @@ public:
     int setup_neighborhood(CAEnums::Neighborhood neighborhood_type);
 
     /**
-     * @brief Setup boundary with enum values from boundary and set the boundary radius.
-     *
-     * @param bound_type enum value for boundary (None, Periodic, Walled, CutOff)
-     * @param radius radius for the boundary
-     * @return int - error code\n
-     * InvalidRadius: radius can't be less than equal to 0\n
-     * 0: no error
-     */
-    int setup_boundary(CAEnums::Boundary bound_type, int radius);
-
-    /**
      * @brief Defines the range of cell states to be used in the CA object.
      *
      * @param num_states describes the range of numbers to use for cell states
@@ -145,7 +135,7 @@ public:
      * InvalidNumStates: num_states can't be less than to 2\n
      * 0: no error
      */
-    int setup_cell_states(int n_states);
+    int setup_cell_states(int num_states);
 
     /**
      * @brief Setup the rule choice to specify the rule type to be used in CA object.
@@ -167,10 +157,10 @@ public:
  * @brief A CellularAutomata class for simulating cellular automata models.
  * This templated class supports structs/class objects or integer states.
  *
- * The object must contain a .state property that the CellularAutomata class updates.
- * The object must have a defined a move operator to ensure well defined swapping of states (current state and next state).
- * The object must have a defined assignment operator to ensure proper copying happen when assigning one object to another.
- * The object must have a defined != operator for the comparison of cell states.
+ * The object must contain a .state property that the CellularAutomata class updates.<br>
+ * The object must have a default constructor or default initialzed values.<br>
+ * The object must meet the requirements of CopyConstructible and CopyAssignable (until C++11)MoveConstructible and MoveAssignable (since C++11)<br>
+ * The object must have a defined != operator for the comparison of cell states.<br>
  *
  * If these requirements are not satisfied then the class will produce undefined behavior.
  *
@@ -205,7 +195,7 @@ private:
      */
     int set_new_cell_state(int *cell_index, int index_size,
                            T *neighborhood_cells, int neighborhood_size,
-                           T &new_cell_state, void(custom_rule)(int *, int, T *, int, T &, CellularAutomata<T> &))
+                           T &new_cell_state, void(custom_rule)(int *, int, T *, int, T &))
     {
         int sum = 0;                         // sum of cells within boundary_radius for Parity rule
         MajorityCounter state_votes_counter; // counter to keep track of votes for Majority rule
@@ -227,7 +217,7 @@ private:
             else
             {
                 // custom_rule should set the new_cell_state
-                custom_rule(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state, *this);
+                custom_rule(cell_index, index_size, neighborhood_cells, neighborhood_size, new_cell_state);
             }
             break;
         case CAEnums::Parity:
@@ -270,14 +260,14 @@ private:
      * 0: no error
      */
     int get_state_from_neighborhood_1d(int *cell_index, int index_size, T &new_cell_state,
-                                       void(custom_rule)(int *, int, T *, int, T &, CellularAutomata<T> &))
+                                       void(custom_rule)(int *, int, T *, int, T &))
     {
         int error_code = 0;         // store error code return by other methods
         int i = cell_index[0];      // get i-th index from array
         int neighborhood_index = 0; // keep track of neighborhood array as we iterate through CA cells
 
         // allocate memory and check if operation was successful
-        T *neighborhood_cells = malloc_neighborhood_array(index_size); // index_size == rank
+        T *neighborhood_cells = malloc_neighborhood_array(index_size);
         if (neighborhood_cells == nullptr)
         {
             return CAEnums::NeighborhoodCellsMalloc;
@@ -320,7 +310,7 @@ private:
      * 0: no error
      */
     int get_state_from_neighborhood_2d(int *cell_index, int index_size, T &new_cell_state,
-                                       void(custom_rule)(int *, int, T *, int, T &, CellularAutomata<T> &))
+                                       void(custom_rule)(int *, int, T *, int, T &))
     {
         int error_code = 0;         // store error code return by other methods
         int i = cell_index[0];      // get i-th index from array
@@ -328,7 +318,7 @@ private:
         int neighborhood_index = 0; // keep track of neighborhood array as we iterate through CA cells
 
         // allocate memory and check if operation was successful
-        T *neighborhood_cells = malloc_neighborhood_array(index_size); // index_size == rank
+        T *neighborhood_cells = malloc_neighborhood_array(index_size);
         if (neighborhood_cells == nullptr)
         {
             return CAEnums::NeighborhoodCellsMalloc;
@@ -370,7 +360,7 @@ private:
      * 0: no error
      */
     int get_state_from_neighborhood_3d(int *cell_index, int index_size, T &new_cell_state,
-                                       void(custom_rule)(int *, int, T *, int, T &, CellularAutomata<T> &))
+                                       void(custom_rule)(int *, int, T *, int, T &))
     {
         int error_code = 0;         // store error code return by other methods
         int i = cell_index[0];      // get i-th index from array
@@ -730,38 +720,107 @@ private:
     }
 
 public:
-    /* 
-    * Required for galaxy model
-    */
-
+    /**
+     * @brief Get the vector cell grid
+     *
+     * @return T*
+     */
     T *get_vector()
     {
         return vector;
     }
 
+    /**
+     * @brief Get the next state vector cell grid
+     *
+     * @return T*
+     */
     T *get_next_vector()
     {
         return next_vector;
     }
 
+    /**
+     * @brief Get the matrix cell grid
+     *
+     * @return T*
+     */
     T **get_matrix()
     {
         return matrix;
     }
 
+    /**
+     * @brief Get the next state matrix cell grid
+     *
+     * @return T*
+     */
     T **get_next_matrix()
     {
         return next_matrix;
     }
 
+    /**
+     * @brief Get the tensor cell grid
+     *
+     * @return T*
+     */
     T ***get_tensor()
     {
         return tensor;
     }
 
+    /**
+     * @brief Get the next state tensor cell grid
+     *
+     * @return T*
+     */
     T ***get_next_tensor()
     {
         return next_tensor;
+    }
+
+    /**
+     * @brief Setup boundary with enum values from boundary and set the boundary radius.
+     *
+     * @param bound_type enum value for boundary (None, Periodic, Walled, CutOff)
+     * @param radius radius for the boundary
+     * @return int - error code\n
+     * InvalidRadius: radius can't be less than equal to 0\n
+     * RadiusLargerThanDimensions: radius must be smaller than half of the dimensions' size.
+     * 0: no error
+     */
+    int setup_boundary(CAEnums::Boundary bound_type, int radius)
+    {
+        if (radius <= 0)
+        {
+            return CAEnums::InvalidRadius;
+        }
+        if (vector != nullptr)
+        {
+            if (radius > axis1_dim / 2)
+            {
+                return CAEnums::RadiusLargerThanDimensions;
+            }
+        }
+        else if (matrix != nullptr)
+        {
+            if (radius > axis1_dim / 2 || radius > axis2_dim / 2)
+            {
+                return CAEnums::RadiusLargerThanDimensions;
+            }
+        }
+        else if (tensor != nullptr)
+        {
+            if (radius > axis2_dim / 2 || radius > axis3_dim / 2)
+            {
+                return CAEnums::RadiusLargerThanDimensions;
+            }
+        }
+
+        this->boundary_type = bound_type;
+        this->boundary_radius = radius;
+        return 0;
     }
 
     /**
@@ -1054,7 +1113,7 @@ public:
      * Error codes returned by get_state_from_neighborhood_Xd methods\n
      * 0: no error
      */
-    int step(void(custom_rule)(int *, int, T *, int, T &, CellularAutomata<T> &))
+    int step(void(custom_rule)(int *, int, T *, int, T &))
     {
         int error_code = 0; // store error code return by other methods
         T new_cell_state;   // stores the cell's new state
@@ -1065,7 +1124,9 @@ public:
         {
             // store the main cell's index in cell_index for custom rule type
             index_size = 1;
+#ifdef ENABLE_OMP
 #pragma omp parallel for firstprivate(error_code) private(new_cell_state)
+#endif
             for (int i = 0; i < axis1_dim; i++)
             {
                 int cell_index[index_size] = {i};
@@ -1073,7 +1134,9 @@ public:
                 error_code = get_state_from_neighborhood_1d(cell_index, index_size, new_cell_state, custom_rule);
                 if (error_code < 0)
                 {
+#ifdef ENABLE_OMP
 #pragma omp cancel for
+#endif
 #ifndef ENABLE_OMP
                     /*
                      * Return error code when omp is not enabled
@@ -1099,7 +1162,9 @@ public:
             // store the main cell's index in cell_index for custom rule type
             index_size = 2;
             int cell_index[index_size];
+#ifdef ENABLE_OMP
 #pragma omp parallel for firstprivate(error_code) private(new_cell_state)
+#endif
             for (int i = 0; i < axis1_dim; i++)
             {
                 cell_index[0] = i; // store the i-th index
@@ -1110,7 +1175,9 @@ public:
                     error_code = get_state_from_neighborhood_2d(cell_index, index_size, new_cell_state, custom_rule);
                     if (error_code < 0)
                     {
+#ifdef ENABLE_OMP
 #pragma omp cancel for
+#endif
 #ifndef ENABLE_OMP
                         /*
                          * Return error code when omp is not enabled
@@ -1135,7 +1202,9 @@ public:
         else if (tensor != nullptr)
         {
             index_size = 3;
+#ifdef ENABLE_OMP
 #pragma omp parallel for firstprivate(error_code) private(new_cell_state)
+#endif
             for (int i = 0; i < axis1_dim; i++)
             {
                 for (int j = 0; j < axis2_dim; j++)
@@ -1147,7 +1216,9 @@ public:
                         error_code = get_state_from_neighborhood_3d(cell_index, index_size, new_cell_state, custom_rule);
                         if (error_code < 0)
                         {
+#ifdef ENABLE_OMP
 #pragma omp cancel for
+#endif
 #ifndef ENABLE_OMP
                             /*
                              * Return error code when omp is not enabled
@@ -1278,9 +1349,7 @@ public:
     }
 };
 
-/*
- * Declare specialized int methods. Methods are defined in cellularautomata.cpp
- */
+// Declare specialized int methods. Methods are defined in cellularautomata.cpp
 
 /**
  * @brief Set up 1d array of cell states.
@@ -1354,7 +1423,7 @@ int CellularAutomata<int>::init_condition(int x_state, double prob);
 template <>
 int CellularAutomata<int>::set_new_cell_state(int *cell_index, int index_size,
                                               int *neighborhood_cells, int neighborhood_size,
-                                              int &new_cell_state, void(custom_rule)(int *, int, int *, int, int &, CellularAutomata<int> &));
+                                              int &new_cell_state, void(custom_rule)(int *, int, int *, int, int &));
 
 /**
  * @brief Print the current state of the grid.
@@ -1382,4 +1451,4 @@ int CellularAutomata<int>::print_grid();
  * 0: no error
  */
 template <>
-int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &, CellularAutomata<int> &));
+int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &));

@@ -22,7 +22,9 @@
 template <typename T>
 void swap_states(T *vector, T *next_vector, int axis1_dim)
 {
+#ifdef ENABLE_OMP
 #pragma omp parallel for
+#endif
     for (int i = 0; i < axis1_dim; i++)
     {
         std::swap(vector[i], next_vector[i]);
@@ -41,7 +43,9 @@ void swap_states(T *vector, T *next_vector, int axis1_dim)
 template <typename T>
 void swap_states(T **matrix, T **next_matrix, int axis1_dim, int axis2_dim)
 {
+#ifdef ENABLE_OMP
 #pragma omp parallel for collapse(2)
+#endif
     for (int i = 0; i < axis1_dim; i++)
     {
         for (int j = 0; j < axis2_dim; j++)
@@ -64,7 +68,9 @@ void swap_states(T **matrix, T **next_matrix, int axis1_dim, int axis2_dim)
 template <typename T>
 void swap_states(T ***tensor, T ***next_tensor, int axis1_dim, int axis2_dim, int axis3_dim)
 {
+#ifdef ENABLE_OMP
 #pragma omp parallel for collapse(3)
+#endif
     for (int i = 0; i < axis1_dim; i++)
     {
         for (int j = 0; j < axis2_dim; j++)

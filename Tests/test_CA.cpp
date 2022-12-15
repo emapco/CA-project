@@ -22,7 +22,7 @@
  */
 void custom_rule(int *cell_index, const int index_size,
                  int *neighborhood_cells, const int neighborhood_size,
-                 int &new_cell_state, CellularAutomata<int>&)
+                 int &new_cell_state)
 {
     new_cell_state = 1;
 }

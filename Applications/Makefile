@@ -1,6 +1,6 @@
 # Chem 274B - Cellular Automata Final Project
 # Emmanuel Cortes
-# Contributor(s): 
+# Contributor(s): Trevor Oldham
 # Created: 12/06/2022
 # This creates an executable for our galaxy CA model
 
@@ -8,14 +8,14 @@
 # GNU C++ Compiler
 CPP         = g++      
 
-# compiler flags -g debug, -O3 optimized version -c create a library object
-CPPFLAGS    =-O0 -g 
+# compiler flags -g debug, -O3 optimized version
+CPPFLAGS    =-O3
 OMPFLAGS    =-fopenmp -DENABLE_OMP
 LDFLAGS     =
 
 # Add additional flags for Mac OS X
 ifeq ($(detected_OS),Darwin)
-OMPFLAGS    +=-Xclang 
+OMPFLAGS    =-Xclang -DENABLE_OMP
 LDFLAGS     +=-L/usr/local/opt/llvm/lib -lomp
 endif
 
@@ -29,22 +29,25 @@ SRC_DIR     = ../Source/Datatypes
 UTIL_DIR    = ../Utils
 
 # The next line contains the list of object files created by this Makefile.
-EXECS = galaxy_CA galaxy_omp
+EXECS = galaxy_model galaxy_model_omp
 
-# CA_SRC = $(SRC_DIR)/cellularautomata.cpp $(UTIL_DIR)/CA_utils.cpp
+galaxy_model:
+	$(CPP) $(CPPFLAGS) -I$(INC_DIR) \
+	$(LIB_DIR)/galaxy.o $(LIB_DIR)/cellularautomata.a \
+	galaxy_app.cpp -o galaxy_model
+	mv galaxy_model $(BIN_DIR)
 
-galaxy_CA:
-	$(CPP) $(CPPFLAGS) -I$(INC_DIR) galaxy.cpp -o galaxy_CA \
-	$(LIB_DIR)/cellularautomata.a
-	mv galaxy_CA $(BIN_DIR)
+galaxy_model_omp:
+	$(CPP) $(CPPFLAGS) $(OMPFLAGS) $(LDFLAGS) -I$(INC_DIR) \
+	$(LIB_DIR)/galaxy.o $(LIB_DIR)/cellularautomata_omp.a \
+	galaxy_app.cpp -o galaxy_model_omp
+	mv galaxy_model_omp $(BIN_DIR)
 
-galaxy_omp:
-	$(CPP) $(CPPFLAGS) $(OMPFLAGS) $(LDFLAGS) -I$(INC_DIR) galaxy.cpp \
-	$(LIB_DIR)/cellularautomata_omp.a -o galaxy_omp
-	mv galaxy_omp $(BIN_DIR)
+sequential: galaxy_model
 
+parallel: galaxy_model_omp
 
 all: $(EXECS)
 
 cleanall:
-	cd $(BIN_DIR); rm $(EXECS)
+	cd $(BIN_DIR); rm -f $(EXECS)

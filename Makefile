@@ -10,6 +10,20 @@ UTILS_DIR = Utils
 LIB_DIR = Libdir
 APP_DIR = Applications
 
+sequential:
+	cd $(SOURCE_DIR); make sequential
+	cd $(UTILS_DIR); make sequential
+	cd $(LIB_DIR); make sequential
+	cd $(TEST_DIR); make sequential
+	cd $(APP_DIR); make sequential
+
+parallel:
+	cd $(SOURCE_DIR); make parallel
+	cd $(UTILS_DIR); make parallel
+	cd $(LIB_DIR); make parallel
+	cd $(TEST_DIR); make parallel
+	cd $(APP_DIR); make parallel
+
 all:                       
 	cd $(SOURCE_DIR); make all
 	cd $(UTILS_DIR); make all
