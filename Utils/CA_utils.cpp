@@ -12,6 +12,10 @@
 #include <utility> // swap, pair
 #include <cmath>   // pow
 
+#include <string>
+#include <map>
+#include <fstream>
+
 bool is_diagonal_neighboring_cell_2d(int i, int j)
 {
     // diagram of slice: 1 = diagonal cell
@@ -207,5 +211,73 @@ void get_periodic_von_neumann_neighbor_index(int rank, int radius, int neighborh
             }
         }
         break;
+    }
+}
+
+void get_density(std::ifstream& data, std::ofstream& result)
+{
+    // Starts with dim_3 -> dim_2 -> dim_1
+    int n_states, dim[3], n_steps, i, datapoint;
+    std::string line, word, rule;
+    std::stringstream str;
+    std::map<int,int> step;
+    std::map<int,int>::iterator itr;
+
+    if (data.is_open())
+    {
+        // First line: n_states
+        getline(data,line);
+        n_states = std::stoi(line);
+        for (i=0;i<n_states;i++)
+        {
+            step.insert(i,0);
+        }
+        result << n_states << "\n";
+        
+        // Third line: dims
+        getline(data,line);
+        str(line);
+        i = 0; // Iterator
+        while(getline(str,word,','))
+        {
+            dim[i] = std::stoi(word);
+        }
+        for (i=0;i<3;i++)
+        {
+            result << dim[i] << ",";
+        }
+        result << "\n";
+
+        // Lines after: log
+        while(getline(data,line))
+        {
+            // Making the map zeroed
+            for (i=0;i<n_states;i++)
+            {
+                itr = step.find(i);
+                if (itr != step.end())
+                {
+                    itr->second = 0;
+                }
+            }
+
+            str(line);
+            while(getline(str,word,','))
+            {
+                datapoint = std::stoi(word);
+                itr = step.find(datapoint);
+                if (itr != step.end())
+                {
+                    itr->second += 1;
+                }
+            }
+            
+            for (itr = step.begin();itr!=step.end();++itr)
+            {
+                result << itr->second << ",";
+            }
+            result << "\n";
+            n_steps += 1;
+        }
     }
 }

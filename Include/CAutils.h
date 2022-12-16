@@ -158,3 +158,12 @@ void get_periodic_moore_neighbor_index(int rank, int radius, int neighborhood_ar
  * @param neighbor_index int array containing x, y and z coordinates
  */
 void get_periodic_von_neumann_neighbor_index(int rank, int radius, int neighborhood_array_index, int *neighbor_index);
+
+
+/**
+ * @brief Get the density result output to the result file
+ * 
+ * @param data 
+ * @param result Line1 n_states; Line2 dims; Line3 counts of states of each step.
+ */
+void get_density(std::ifstream& data, std::ofstream& result);
