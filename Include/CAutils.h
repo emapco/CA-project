@@ -2,15 +2,13 @@
  * @file CAutils.h
  * @author Emmanuel Cortes (ecortes@berkeley.edu)
  *
- * <b>Contributor(s)</b> <br> &emsp;&emsp;
+ * <b>Contributor(s)</b> <br> &emsp;&emsp; Chongye Feng 
  * @brief This header files contains utility functions used by CellularAutomata class.
  * @date 2022-12-06
  */
 #pragma once
 #include <utility> // pair
-#ifdef ENABLE_OMP
-#include <omp.h>
-#endif
+#include <fstream>
 
 /**
  * @brief swaps the computed next_vector to the current vector
@@ -22,9 +20,6 @@
 template <typename T>
 void swap_states(T *vector, T *next_vector, int axis1_dim)
 {
-#ifdef ENABLE_OMP
-#pragma omp parallel for
-#endif
     for (int i = 0; i < axis1_dim; i++)
     {
         std::swap(vector[i], next_vector[i]);
@@ -43,9 +38,6 @@ void swap_states(T *vector, T *next_vector, int axis1_dim)
 template <typename T>
 void swap_states(T **matrix, T **next_matrix, int axis1_dim, int axis2_dim)
 {
-#ifdef ENABLE_OMP
-#pragma omp parallel for collapse(2)
-#endif
     for (int i = 0; i < axis1_dim; i++)
     {
         for (int j = 0; j < axis2_dim; j++)
@@ -68,9 +60,6 @@ void swap_states(T **matrix, T **next_matrix, int axis1_dim, int axis2_dim)
 template <typename T>
 void swap_states(T ***tensor, T ***next_tensor, int axis1_dim, int axis2_dim, int axis3_dim)
 {
-#ifdef ENABLE_OMP
-#pragma omp parallel for collapse(3)
-#endif
     for (int i = 0; i < axis1_dim; i++)
     {
         for (int j = 0; j < axis2_dim; j++)
@@ -158,3 +147,11 @@ void get_periodic_moore_neighbor_index(int rank, int radius, int neighborhood_ar
  * @param neighbor_index int array containing x, y and z coordinates
  */
 void get_periodic_von_neumann_neighbor_index(int rank, int radius, int neighborhood_array_index, int *neighbor_index);
+
+/**
+ * @brief Get the density result output to the result file
+ * 
+ * @param data 
+ * @param result Line1 n_states; Line2 dims; Line3 counts of states of each step.
+ */
+void get_density(std::ifstream& data, std::ofstream& result);
