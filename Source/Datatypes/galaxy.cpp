@@ -2,7 +2,7 @@
  * @file galaxy.cpp
  * @author Emmanuel Cortes (ecortes@berkeley.edu)
  *
- * <b>Contributor(s)</b> <br> &emsp;&emsp; Trevor Oldham, Chongye Feng
+ * <b>Contributor(s)</b> <br> &emsp;&emsp;
  * @brief The file contains the implementations for the various
  * classes defined in galaxydatatypes.h
  * @date 2022-12-13
@@ -207,42 +207,46 @@ void Galaxy::galaxy_formation_rule(int *cell_index, const int index_size,
         return; // empty cell
     }
 
-    std::vector<double> total_force_vector = {3, 0};
-
-    // our neighborhood_cells also include our cell of interest
-    int cell_of_interest_index = neighborhood_size / 2;
+    // accumulates all forces acting upon our cell of interest
+    std::vector<double> total_force_vector(3, 0);
 
     // compute total vector
     for (int i = 0; i < neighborhood_size; i++)
     {
-        // don't include the cell of interest in our force calculation
-        if (cell_of_interest_index == i)
+        std::vector<int> neighbor_position(index_size, 0);
+        get_periodic_von_neumann_neighbor_index(index_size, CA.boundary_radius, i, neighbor_position.data());
+
+        // don't include the cell of interest in our force calculation (0, 0, 0)
+        if (neighbor_position[0] == 0 &&
+            neighbor_position[1] == 0 &&
+            neighbor_position[2] == 0)
         {
             continue;
         }
 
-        std::vector<int> neighbor_position(index_size, 0);
-        get_periodic_von_neumann_neighbor_index(index_size, CA.boundary_radius, i, neighbor_position.data());
-
-        // std::vector<double> force_vector = compute_gravitational_force(new_cell_state,
-        //                                                                neighborhood_cells[i],
-        //                                                                neighbor_position);
-        // for (int j = 0; j < vector_size; j++)
-        // {
-        //     total_force_vector.at(j) += force_vector.at(j);
-        // }
+        std::vector<double> force_vector = compute_gravitational_force(new_cell_state,
+                                                                       neighborhood_cells[i],
+                                                                       neighbor_position);
+        for (int j = 0; j < index_size; j++)
+        {
+            total_force_vector.at(j) += force_vector.at(j);
+        }
     }
 
-    // std::vector<double> accel_vector = compute_accel(total_force_vector, new_cell_state.mass);
-    // std::vector<double> velocity_vector = compute_velocity(accel_vector, time_step);
-    // std::vector<double> displacement_vector = compute_displacement(velocity_vector, new_cell_state, time_step);
-    std::vector<double> velocity_vector = {0.1, 0.1, 0.1};
-    std::vector<double> displacement_vector = {3.1, 1.0, 2.2};
+    // total force is zero thus it doesn't move
+    if (total_force_vector[0] == 0.0 &&
+        total_force_vector[1] == 0.0 &&
+        total_force_vector[2] == 0.0)
+    {
+        return;
+    }
 
-    // update velocity vector
-    // set_new_position will updated new_cell_state.velocity if a collision occurs
+    std::vector<double> accel_vector = compute_accel(total_force_vector, new_cell_state.mass);
+    std::vector<double> velocity_vector = compute_velocity(accel_vector, new_cell_state, time_step);
+    std::vector<double> displacement_vector = compute_displacement(velocity_vector, new_cell_state, time_step);
+
+    // update velocity vector; set_new_position will updated new_cell_state.velocity if a collision occurs
     std::copy(velocity_vector.begin(), velocity_vector.end(), new_cell_state.velocity);
-
     set_new_position(cell_index, new_cell_state, displacement_vector);
 }
 
@@ -254,11 +258,19 @@ void Galaxy::set_new_position(int *cell_index, GalaxyCell &new_cell_state,
 
     std::vector<int> offset_index(3, 0);
 
-    // std::cout << "init old index: " << cell_index[0] << ", " << cell_index[1] << ", " << cell_index[2] << "\n";
-
     dx = round_int(displacement_vector.at(0));
     dy = round_int(displacement_vector.at(1));
     dz = round_int(displacement_vector.at(2));
+    if (dx == 0 && dy == 0 && dz == 0)
+    {
+        // zero displacement when round thus cell does not move
+        return;
+    }
+
+    // scale total displacement with corresponding dimension size
+    dx %= CA.axis1_dim;
+    dy %= CA.axis2_dim;
+    dz %= CA.axis3_dim;
 
     x_inc = (dx < 0) ? -1 : 1;
     l = abs(dx);
@@ -362,9 +374,6 @@ void Galaxy::set_new_position(int *cell_index, GalaxyCell &new_cell_state,
     std::vector<int> periodic_vec = get_periodic_vector(cell_index, offset_index);
     std::copy(periodic_vec.begin(), periodic_vec.end(), cell_index);
 
-    // std::cout << "no collision\n";
-    // std::cout << "curr offset: " << offset_index[0] << ", " << offset_index[1] << ", " << offset_index[2] << "\n";
-    // std::cout << "new index: " << periodic_vec[0] << ", " << periodic_vec[1] << ", " << periodic_vec[2] << "\n";
     return;
 }
 
@@ -377,7 +386,7 @@ void Galaxy::update_velocity_after_collision(GalaxyCell &new_cell, GalaxyCell co
         m2 = collied_cell.mass;
         v1 = new_cell.velocity[i];
         v2 = collied_cell.velocity[i];
-        new_cell.velocity[i] = (m1 * v1 + m2 * v1) / (m1 + m2);
+        new_cell.velocity[i] = (m1 * v1 + m2 * v2) / (m1 + m2);
     }
 }
 
@@ -418,6 +427,67 @@ bool Galaxy::did_galaxies_collide(int *cell_index, const std::vector<int> &offse
         return true;
     }
     return false;
+}
+
+std::vector<double> Galaxy::compute_gravitational_force(const GalaxyCell &cell_of_interest, const GalaxyCell &neighbor_cell, const std::vector<int> &neighbor_index)
+{
+    double neighbor_cell_index_norm = compute_vector_norm(neighbor_index);
+    double force_scalar_values = -cell_of_interest.mass * neighbor_cell.mass / neighbor_cell_index_norm;
+
+    std::vector<double> force;
+    for (auto &r : neighbor_index)
+    {
+        force.push_back(force_scalar_values * -r / neighbor_cell_index_norm);
+    }
+    return force;
+}
+
+std::vector<double> Galaxy::compute_accel(const std::vector<double> &total_force, double mass)
+{
+    std::vector<double> accel;
+    for (auto &f : total_force)
+    {
+        accel.push_back(f / mass);
+    }
+    return accel;
+}
+
+std::vector<double> Galaxy::compute_velocity(const std::vector<double> &accel, const GalaxyCell &cell_of_interest, double time_step)
+{
+    std::vector<double> velocity;
+    auto size = accel.size();
+    for (auto i = 0; i < size; i++)
+    {
+        velocity.push_back(cell_of_interest.velocity[i] + accel.at(i) * time_step);
+    }
+    return velocity;
+}
+
+std::vector<double> Galaxy::compute_displacement(const std::vector<double> &velocity, const GalaxyCell &cell_of_interest, double time_step)
+{
+    std::vector<double> displacement;
+    auto size = velocity.size();
+    for (auto i = 0; i < size; i++)
+    {
+        displacement.push_back(0.5 * (cell_of_interest.velocity[i] + velocity.at(i)) * time_step);
+    }
+    return displacement;
+}
+
+double Galaxy::compute_vector_norm(const std::vector<int> &vector)
+{
+    return sqrt(pow(vector.at(0), 2) + pow(vector.at(1), 2) + pow(vector.at(2), 2));
+}
+
+std::vector<double> Galaxy::compute_vector_difference(const std::vector<double> &vec1, const std::vector<double> &vec2)
+{
+    std::vector<double> diff;
+    auto size = vec1.size();
+    for (auto i = 0; i < size; i++)
+    {
+        diff.push_back(vec2.at(i) - vec1.at(i));
+    }
+    return diff;
 }
 
 bool GalaxyCell::operator!=(const GalaxyCell &other)

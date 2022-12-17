@@ -9,7 +9,7 @@
 CPP         = g++      
 
 # compiler flags -g debug, -O3 optimized version
-CPPFLAGS    =-O3
+CPPFLAGS    =-O3 -std=c++11
 OMPFLAGS    =-fopenmp -DENABLE_OMP
 LDFLAGS     =
 
@@ -39,7 +39,7 @@ galaxy_model:
 
 galaxy_model_omp:
 	$(CPP) $(CPPFLAGS) $(OMPFLAGS) $(LDFLAGS) -I$(INC_DIR) \
-	$(LIB_DIR)/galaxy.o $(LIB_DIR)/cellularautomata_omp.a \
+	$(LIB_DIR)/galaxy_omp.o $(LIB_DIR)/cellularautomata_omp.a \
 	galaxy_app.cpp -o galaxy_model_omp
 	mv galaxy_model_omp $(BIN_DIR)
 

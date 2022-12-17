@@ -120,7 +120,7 @@ int main()
     std::stringstream ss_min_mass;
 
     // get grid dimensions
-    axis1_dim = get_numeric_value("Input the desired z dimension size (>= 1): ", 1, -1);
+    axis1_dim = get_numeric_value("Input the desired z dimension size (>= 3): ", 3, -1);
     axis2_dim = get_numeric_value("Input the desired x dimension size (>= 3): ", 3, -1);
     axis3_dim = get_numeric_value("Input the desired y dimension size (>= 3): ", 3, -1);
 

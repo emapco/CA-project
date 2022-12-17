@@ -120,7 +120,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memdesc:a435fd437c114cc539b3d30db37a0cf32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the new_cell_state's new position.  <a href="classGalaxy.html#a435fd437c114cc539b3d30db37a0cf32">More...</a><br /></td></tr>
 <tr class="separator:a435fd437c114cc539b3d30db37a0cf32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf8f8d469554b15765f7b002aa3574d4"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGalaxy.html#abf8f8d469554b15765f7b002aa3574d4">did_galaxies_collide</a> (int *cell_index, const std::vector&lt; int &gt; &amp;offset_index, <a class="el" href="classGalaxyCell.html">GalaxyCell</a> &amp;new_cell_state)</td></tr>
-<tr class="memdesc:abf8f8d469554b15765f7b002aa3574d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if the new_cell_state collides with a cell at the position at cell_index + offset_index If there is a collision then we set the new_cell_state index to the previous offset (cell_index + prev_offset).  <a href="classGalaxy.html#abf8f8d469554b15765f7b002aa3574d4">More...</a><br /></td></tr>
+<tr class="memdesc:abf8f8d469554b15765f7b002aa3574d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines if the new_cell_state collides with a cell at the current position: cell_index + offset_index.  <a href="classGalaxy.html#abf8f8d469554b15765f7b002aa3574d4">More...</a><br /></td></tr>
 <tr class="separator:abf8f8d469554b15765f7b002aa3574d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a948f4dfca22569ce355b09fa66ed51e8"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGalaxy.html#a948f4dfca22569ce355b09fa66ed51e8">update_velocity_after_collision</a> (<a class="el" href="classGalaxyCell.html">GalaxyCell</a> &amp;new_cell, <a class="el" href="classGalaxyCell.html">GalaxyCell</a> collied_cell)</td></tr>
 <tr class="memdesc:a948f4dfca22569ce355b09fa66ed51e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">compute the velocity after an inelastic collision <a href="https://www.plasmaphysics.org.uk/collision3d.htm">https://www.plasmaphysics.org.uk/collision3d.htm</a>  <a href="classGalaxy.html#a948f4dfca22569ce355b09fa66ed51e8">More...</a><br /></td></tr>
@@ -134,6 +134,24 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a0547a058d577c7e3deeb52ec22c552b9"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGalaxy.html#a0547a058d577c7e3deeb52ec22c552b9">round_int</a> (double dbl)</td></tr>
 <tr class="memdesc:a0547a058d577c7e3deeb52ec22c552b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rounds a double to an int.  <a href="classGalaxy.html#a0547a058d577c7e3deeb52ec22c552b9">More...</a><br /></td></tr>
 <tr class="separator:a0547a058d577c7e3deeb52ec22c552b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0901426916483964ee0f583cd834400"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGalaxy.html#aa0901426916483964ee0f583cd834400">compute_gravitational_force</a> (const <a class="el" href="classGalaxyCell.html">GalaxyCell</a> &amp;cell_of_interest, const <a class="el" href="classGalaxyCell.html">GalaxyCell</a> &amp;neighbor_cell, const std::vector&lt; int &gt; &amp;neighbor_index)</td></tr>
+<tr class="memdesc:aa0901426916483964ee0f583cd834400"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the force between cell of interest and neighbor_index Note: cell of interest is at (0, 0, 0)  <a href="classGalaxy.html#aa0901426916483964ee0f583cd834400">More...</a><br /></td></tr>
+<tr class="separator:aa0901426916483964ee0f583cd834400"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25e15d5ef3527239dd502145a6c536de"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGalaxy.html#a25e15d5ef3527239dd502145a6c536de">compute_accel</a> (const std::vector&lt; double &gt; &amp;total_force, double mass)</td></tr>
+<tr class="memdesc:a25e15d5ef3527239dd502145a6c536de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the acceleration vector A = F/M.  <a href="classGalaxy.html#a25e15d5ef3527239dd502145a6c536de">More...</a><br /></td></tr>
+<tr class="separator:a25e15d5ef3527239dd502145a6c536de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af60cb6db3f6707c53ca551035932b944"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGalaxy.html#af60cb6db3f6707c53ca551035932b944">compute_velocity</a> (const std::vector&lt; double &gt; &amp;accel, const <a class="el" href="classGalaxyCell.html">GalaxyCell</a> &amp;cell_of_interest, double <a class="el" href="classGalaxy.html#a23a3d2b12804df856a5ce28a1e03fb9c">time_step</a>)</td></tr>
+<tr class="memdesc:af60cb6db3f6707c53ca551035932b944"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the velocity vector.  <a href="classGalaxy.html#af60cb6db3f6707c53ca551035932b944">More...</a><br /></td></tr>
+<tr class="separator:af60cb6db3f6707c53ca551035932b944"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af78e649929cdebe8faef70ef70bf4722"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGalaxy.html#af78e649929cdebe8faef70ef70bf4722">compute_displacement</a> (const std::vector&lt; double &gt; &amp;velocity, const <a class="el" href="classGalaxyCell.html">GalaxyCell</a> &amp;cell_of_interest, double <a class="el" href="classGalaxy.html#a23a3d2b12804df856a5ce28a1e03fb9c">time_step</a>)</td></tr>
+<tr class="memdesc:af78e649929cdebe8faef70ef70bf4722"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the displacement vector.  <a href="classGalaxy.html#af78e649929cdebe8faef70ef70bf4722">More...</a><br /></td></tr>
+<tr class="separator:af78e649929cdebe8faef70ef70bf4722"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b04bf1df7ec821cb606042719d23698"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGalaxy.html#a4b04bf1df7ec821cb606042719d23698">compute_vector_norm</a> (const std::vector&lt; int &gt; &amp;vector)</td></tr>
+<tr class="memdesc:a4b04bf1df7ec821cb606042719d23698"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the norm of a vector.  <a href="classGalaxy.html#a4b04bf1df7ec821cb606042719d23698">More...</a><br /></td></tr>
+<tr class="separator:a4b04bf1df7ec821cb606042719d23698"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a573700edfc7e470b45d828cea25f6317"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classGalaxy.html#a573700edfc7e470b45d828cea25f6317">compute_vector_difference</a> (const std::vector&lt; double &gt; &amp;vec1, const std::vector&lt; double &gt; &amp;vec2)</td></tr>
+<tr class="memdesc:a573700edfc7e470b45d828cea25f6317"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the difference in vector for determining the direction and magnitude of the force vector.  <a href="classGalaxy.html#a573700edfc7e470b45d828cea25f6317">More...</a><br /></td></tr>
+<tr class="separator:a573700edfc7e470b45d828cea25f6317"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -316,6 +334,297 @@ static <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a25e15d5ef3527239dd502145a6c536de" name="a25e15d5ef3527239dd502145a6c536de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25e15d5ef3527239dd502145a6c536de">&#9670;&#160;</a></span>compute_accel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::vector&lt; double &gt; Galaxy::compute_accel </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>total_force</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>mass</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the acceleration vector A = F/M. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">total_force</td><td>Sum of all forces in component form </td></tr>
+    <tr><td class="paramname">mass</td><td>cell of interet's mass </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;double&gt; </dd></dl>
+
+</div>
+</div>
+<a id="af78e649929cdebe8faef70ef70bf4722" name="af78e649929cdebe8faef70ef70bf4722"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af78e649929cdebe8faef70ef70bf4722">&#9670;&#160;</a></span>compute_displacement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::vector&lt; double &gt; Galaxy::compute_displacement </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>velocity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classGalaxyCell.html">GalaxyCell</a> &amp;&#160;</td>
+          <td class="paramname"><em>cell_of_interest</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>time_step</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the displacement vector. </p>
+<p >D = 1/2 * (velocity_i + velocity_f) * time_step</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">velocity</td><td>current step velocity </td></tr>
+    <tr><td class="paramname">cell_of_interest</td><td>contains initial velocity </td></tr>
+    <tr><td class="paramname">time_step</td><td>simulation time step </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;double&gt; </dd></dl>
+
+</div>
+</div>
+<a id="aa0901426916483964ee0f583cd834400" name="aa0901426916483964ee0f583cd834400"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0901426916483964ee0f583cd834400">&#9670;&#160;</a></span>compute_gravitational_force()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::vector&lt; double &gt; Galaxy::compute_gravitational_force </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classGalaxyCell.html">GalaxyCell</a> &amp;&#160;</td>
+          <td class="paramname"><em>cell_of_interest</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classGalaxyCell.html">GalaxyCell</a> &amp;&#160;</td>
+          <td class="paramname"><em>neighbor_cell</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>neighbor_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the force between cell of interest and neighbor_index Note: cell of interest is at (0, 0, 0) </p>
+<p >F = - m_1 * m_2 / | r_12 | * r_hat <br  />
+ r_hat = r_12 / | r_12 |</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cell_of_interest</td><td></td></tr>
+    <tr><td class="paramname">neighbor_cell</td><td></td></tr>
+    <tr><td class="paramname">neighbor_index</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;double&gt; </dd></dl>
+
+</div>
+</div>
+<a id="a573700edfc7e470b45d828cea25f6317" name="a573700edfc7e470b45d828cea25f6317"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a573700edfc7e470b45d828cea25f6317">&#9670;&#160;</a></span>compute_vector_difference()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::vector&lt; double &gt; Galaxy::compute_vector_difference </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vec1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vec2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the difference in vector for determining the direction and magnitude of the force vector. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vec1</td><td>Initial vector </td></tr>
+    <tr><td class="paramname">vec2</td><td>Final vector </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;double&gt; </dd></dl>
+
+</div>
+</div>
+<a id="a4b04bf1df7ec821cb606042719d23698" name="a4b04bf1df7ec821cb606042719d23698"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b04bf1df7ec821cb606042719d23698">&#9670;&#160;</a></span>compute_vector_norm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double Galaxy::compute_vector_norm </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vector</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the norm of a vector. </p>
+<p >Used by compute_gravitational_force.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">vector</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>double </dd></dl>
+
+</div>
+</div>
+<a id="af60cb6db3f6707c53ca551035932b944" name="af60cb6db3f6707c53ca551035932b944"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af60cb6db3f6707c53ca551035932b944">&#9670;&#160;</a></span>compute_velocity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::vector&lt; double &gt; Galaxy::compute_velocity </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>accel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classGalaxyCell.html">GalaxyCell</a> &amp;&#160;</td>
+          <td class="paramname"><em>cell_of_interest</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>time_step</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the velocity vector. </p>
+<p >V = velocity_i + acceleration_i * time_step</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">accel</td><td>current step acceleration </td></tr>
+    <tr><td class="paramname">cell_of_interest</td><td>contains initial velocity </td></tr>
+    <tr><td class="paramname">time_step</td><td>simulation time step </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;double&gt; </dd></dl>
+
+</div>
+</div>
 <a id="abf8f8d469554b15765f7b002aa3574d4" name="abf8f8d469554b15765f7b002aa3574d4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abf8f8d469554b15765f7b002aa3574d4">&#9670;&#160;</a></span>did_galaxies_collide()</h2>
 
@@ -356,8 +665,8 @@ static <a class="el" href="classCellularAutomata.html">CellularAutomata</a>&lt; 
 </table>
 </div><div class="memdoc">
 
-<p>Determines if the new_cell_state collides with a cell at the position at cell_index + offset_index If there is a collision then we set the new_cell_state index to the previous offset (cell_index + prev_offset). </p>
-<p >Else we copy the current offset to previous offset.</p>
+<p>Determines if the new_cell_state collides with a cell at the current position: cell_index + offset_index. </p>
+<p >If there is a collision then we set the new_cell_state index to the current position. And also increases the cell state by one to represent the number of collision. The mass and velocity properties are also updated using the laws of physics. Else return false.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">cell_index</td><td>new_cell_state position </td></tr>
@@ -630,7 +939,7 @@ Error codes returned by <a class="el" href="classCellularAutomata.html" title="A
 
 <p>Set the new_cell_state's new position. </p>
 <p >This function uses the Bresenham's line algorithm for computing the path from cell_index to cell_index + displacement_vector. This method accounts for the possibility that cells might collied.</p>
-<p >Public domain algorithm and open source 3d implementation Reference: <a href="https://antofthy.gitlab.io/info/graphics/bresenham.procs">https://antofthy.gitlab.io/info/graphics/bresenham.procs</a></p>
+<p >Public domain algorithm and open source 3d implementation reference: <a href="https://antofthy.gitlab.io/info/graphics/bresenham.procs">https://antofthy.gitlab.io/info/graphics/bresenham.procs</a></p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">cell_index</td><td>new_cell_state position </td></tr>

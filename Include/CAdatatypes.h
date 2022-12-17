@@ -60,6 +60,7 @@ namespace CAEnums
     /**
      * @brief enum containing the different type of rules
      * the CellularAutomata class supports for it's transitions
+     * 
      */
     enum Rule
     {
