@@ -9,7 +9,7 @@
 CPP         = g++
 
 # compiler flags -g debug, -O3 optimized version -c create a library object
-CPPFLAGS    =-Wall -Wextra -O3 -c
+CPPFLAGS    =-O3 -c -std=c++11
 OMPFLAGS    =-fopenmp -DENABLE_OMP
 
 # Add additional flags for Mac OS X
@@ -31,7 +31,7 @@ CA_utils.o:
 	mv CA_utils.o $(LIB_DIR)
 
 CA_utils_omp.o:
-	$(CPP) $(CPPFLAGS) $(OMPFLAGS) $(LDFLAGS) -I$(INC_DIR) CA_utils.cpp \
+	$(CPP) $(CPPFLAGS) -I$(INC_DIR) CA_utils.cpp \
 	-o CA_utils_omp.o
 	mv CA_utils_omp.o $(LIB_DIR)
 

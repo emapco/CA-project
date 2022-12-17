@@ -9,7 +9,7 @@
 CPP         = g++      
 
 # compiler flags -g debug, -O3 optimized version -c create a library object
-CPPFLAGS    =-O3
+CPPFLAGS    =-O3 -std=c++11
 OMPFLAGS    =-fopenmp -DENABLE_OMP
 LDFLAGS     =
 

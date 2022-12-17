@@ -9,7 +9,7 @@
 CPP         = g++      
 
 # compiler flags -g debug, -O3 optimized version -c create a library object
-CPPFLAGS    =-Wall -Wextra -O3 -c
+CPPFLAGS    =-O3 -c -std=c++11
 OMPFLAGS    =-fopenmp -DENABLE_OMP
 
 # Add additional flags for Mac OS X
@@ -25,7 +25,7 @@ LIB_DIR     = ../../Libdir
 BIN_DIR     = ../../Bindir
 
 # The next line contains the list of object files created by this Makefile.
-DATATYPES = cellularautomata.o cellularautomata_omp.o galaxy.o
+DATATYPES = cellularautomata.o cellularautomata_omp.o galaxy.o galaxy_omp.o
 
 cellularautomata.o:
 	$(CPP) $(CPPFLAGS) -I$(INC_DIR) cellularautomata.cpp 
@@ -38,6 +38,10 @@ cellularautomata_omp.o:
 galaxy.o:
 	$(CPP) $(CPPFLAGS) -I$(INC_DIR) galaxy.cpp 
 	mv galaxy.o $(LIB_DIR)
+
+galaxy_omp.o:
+	$(CPP) $(CPPFLAGS) $(OMPFLAGS) -I$(INC_DIR) galaxy.cpp -o galaxy_omp.o
+	mv galaxy_omp.o $(LIB_DIR)
 
 sequential: cellularautomata.o galaxy.o
 

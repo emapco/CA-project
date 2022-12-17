@@ -2,7 +2,7 @@
  * @file CA_utils.cpp
  * @author Emmanuel Cortes (ecortes@berkeley.edu)
  *
- * <b>Contributor(s)</b> <br> &emsp;&emsp;
+ * <b>Contributor(s)</b> <br> &emsp;&emsp;  Chongye Feng
  * @brief Implementation file for the utility functions utilized
  * by CellularAutomata class
  * defined in CAutils.h
@@ -11,6 +11,10 @@
 #include "CAdatatypes.h"
 #include <utility> // swap, pair
 #include <cmath>   // pow
+#include <string>
+#include <map>
+#include <sstream>
+#include <fstream>
 
 bool is_diagonal_neighboring_cell_2d(int i, int j)
 {
@@ -207,5 +211,77 @@ void get_periodic_von_neumann_neighbor_index(int rank, int radius, int neighborh
             }
         }
         break;
+    }
+}
+
+void get_density(std::ifstream &data, std::ofstream &result)
+{
+    // Starts with dim_3 -> dim_2 -> dim_1
+    int n_states, dim[3], n_steps, i, datapoint;
+    std::string line, word, rule;
+    std::stringstream str;
+    std::map<int, int> step;
+    std::map<int, int>::iterator itr;
+
+    if (data.is_open())
+    {
+        // First line: n_states
+        std::getline(data, line);
+        n_states = std::stoi(line);
+        for (i = 0; i < n_states; i++)
+        {
+            step.insert(std::make_pair(i, 0));
+        }
+        result << n_states << "\n";
+
+        // Second line: rules and functions
+        std::getline(data, line);
+        rule = line;
+
+        // Third line: dims
+        std::getline(data, line);
+        str << line;
+        i = 0; // Iterator
+        while (std::getline(str, word, ','))
+        {
+            dim[i] = std::stoi(word);
+        }
+        for (i = 0; i < 3; i++)
+        {
+            result << dim[i] << ",";
+        }
+        result << "\n";
+
+        // Lines after: log
+        while (std::getline(data, line))
+        {
+            // Making the map zeroed
+            for (i = 0; i < n_states; i++)
+            {
+                itr = step.find(i);
+                if (itr != step.end())
+                {
+                    itr->second = 0;
+                }
+            }
+
+            str << line;
+            while (std::getline(str, word, ','))
+            {
+                datapoint = std::stoi(word);
+                itr = step.find(datapoint);
+                if (itr != step.end())
+                {
+                    itr->second += 1;
+                }
+            }
+
+            for (itr = step.begin(); itr != step.end(); ++itr)
+            {
+                result << itr->second << ",";
+            }
+            result << "\n";
+            n_steps += 1;
+        }
     }
 }

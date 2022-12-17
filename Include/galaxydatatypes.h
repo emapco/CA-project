@@ -2,7 +2,7 @@
  * @file galaxydatatypes.h
  * @author Emmanuel Cortes (ecortes@berkeley.edu)
  *
- * <b>Contributor(s)</b> <br> &emsp;&emsp; Trevor Oldham, Chongye Feng
+ * <b>Contributor(s)</b> <br> &emsp;&emsp;
  * @brief Header file with datatypes for creating a galaxy formation
  * cellular automata model.
  * @date 2022-12-13
@@ -158,8 +158,7 @@ public:
      * from cell_index to cell_index + displacement_vector.
      * This method accounts for the possibility that cells might collied.
      *
-     * Public domain algorithm and open source 3d implementation
-     * Reference: https://antofthy.gitlab.io/info/graphics/bresenham.procs
+     * Public domain algorithm and open source 3d implementation reference: https://antofthy.gitlab.io/info/graphics/bresenham.procs
      *
      * @param cell_index new_cell_state position
      * @param new_cell_state cell that contains mass and velocity
@@ -169,9 +168,10 @@ public:
                                  const std::vector<double> &displacement_vector);
 
     /**
-     * @brief Determines if the new_cell_state collides with a cell at the position at cell_index + offset_index
-     * If there is a collision then we set the new_cell_state index to the previous offset (cell_index + prev_offset).
-     * Else we copy the current offset to previous offset.
+     * @brief Determines if the new_cell_state collides with a cell at the current position: cell_index + offset_index.
+     * If there is a collision then we set the new_cell_state index to the current position. 
+     * And also increases the cell state by one to represent the number of collision. The mass and velocity properties are also updated using the laws of physics.
+     * Else return false.
      *
      * @param cell_index new_cell_state position
      * @param offset_index keep track of path the cell takes
@@ -216,4 +216,69 @@ public:
      * @return int
      */
     static int round_int(double dbl);
+
+    /**
+     * @brief Computes the force between cell of interest and neighbor_index
+     * Note: cell of interest is at (0, 0, 0)
+     *
+     * F = - m_1 * m_2 / | r_12 | * r_hat <br>
+     * r_hat = r_12 / | r_12 |
+     *
+     * @param cell_of_interest
+     * @param neighbor_cell
+     * @param neighbor_index
+     * @return std::vector<double>
+     */
+    static std::vector<double> compute_gravitational_force(const GalaxyCell &cell_of_interest, const GalaxyCell &neighbor_cell, const std::vector<int> &neighbor_index);
+
+    /**
+     * @brief Computes the acceleration vector
+     * A = F/M
+     *
+     * @param total_force Sum of all forces in component form
+     * @param mass cell of interet's mass
+     * @return std::vector<double>
+     */
+    static std::vector<double> compute_accel(const std::vector<double> &total_force, double mass);
+
+    /**
+     * @brief Computes the velocity vector
+     * 
+     * V = velocity_i + acceleration_i * time_step
+     *
+     * @param accel current step acceleration
+     * @param cell_of_interest contains initial velocity
+     * @param time_step simulation time step
+     * @return std::vector<double>
+     */
+    static std::vector<double> compute_velocity(const std::vector<double> &accel, const GalaxyCell &cell_of_interest, double time_step);
+
+    /**
+     * @brief Computes the displacement vector
+     * 
+     * D = 1/2 * (velocity_i + velocity_f) * time_step
+     *
+     * @param velocity current step velocity
+     * @param cell_of_interest contains initial velocity
+     * @param time_step simulation time step
+     * @return std::vector<double>
+     */
+    static std::vector<double> compute_displacement(const std::vector<double> &velocity, const GalaxyCell &cell_of_interest, double time_step);
+
+    /**
+     * @brief Computes the norm of a vector. Used by compute_gravitational_force.
+     *
+     * @param vector
+     * @return double
+     */
+    static double compute_vector_norm(const std::vector<int> &vector);
+
+    /**
+     * @brief Computes the difference in vector for determining the direction and magnitude of the force vector.
+     *
+     * @param vec1 Initial vector
+     * @param vec2 Final vector
+     * @return std::vector<double>
+     */
+    static std::vector<double> compute_vector_difference(const std::vector<double> &vec1, const std::vector<double> &vec2);
 };

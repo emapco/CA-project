@@ -83,6 +83,7 @@ $(function() {
 <p>This header files contains utility functions used by <a class="el" href="classCellularAutomata.html" title="A CellularAutomata class for simulating cellular automata models.">CellularAutomata</a> class.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;utility&gt;</code><br />
+<code>#include &lt;fstream&gt;</code><br />
 </div>
 <p><a href="CAutils_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -129,13 +130,53 @@ diagram of slice: 1 = diagonal cell<br  />
 <tr class="memitem:a87951c24c61789a69b9e80d3b3dabf43"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CAutils_8h.html#a87951c24c61789a69b9e80d3b3dabf43">get_periodic_von_neumann_neighbor_index</a> (int rank, int radius, int neighborhood_array_index, int *neighbor_index)</td></tr>
 <tr class="memdesc:a87951c24c61789a69b9e80d3b3dabf43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the periodic Von Neumann neighbor index [x, y, z] from a flattened neighborhood array index.  <a href="CAutils_8h.html#a87951c24c61789a69b9e80d3b3dabf43">More...</a><br /></td></tr>
 <tr class="separator:a87951c24c61789a69b9e80d3b3dabf43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd358a09274931cfe0d07975542eba9c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CAutils_8h.html#acd358a09274931cfe0d07975542eba9c">get_density</a> (std::ifstream &amp;data, std::ofstream &amp;result)</td></tr>
+<tr class="memdesc:acd358a09274931cfe0d07975542eba9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the density result output to the result file.  <a href="CAutils_8h.html#acd358a09274931cfe0d07975542eba9c">More...</a><br /></td></tr>
+<tr class="separator:acd358a09274931cfe0d07975542eba9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >This header files contains utility functions used by <a class="el" href="classCellularAutomata.html" title="A CellularAutomata class for simulating cellular automata models.">CellularAutomata</a> class. </p>
 <dl class="section author"><dt>Author</dt><dd>Emmanuel Cortes (<a href="#" onclick="location.href='mai'+'lto:'+'eco'+'rt'+'es@'+'be'+'rke'+'le'+'y.e'+'du'; return false;">ecort<span class="obfuscator">.nosp@m.</span>es@b<span class="obfuscator">.nosp@m.</span>erkel<span class="obfuscator">.nosp@m.</span>ey.e<span class="obfuscator">.nosp@m.</span>du</a>)</dd></dl>
 <p><b>Contributor(s)</b> <br  />
- &emsp;&emsp; </p><dl class="section date"><dt>Date</dt><dd>2022-12-06 </dd></dl>
+ &emsp;&emsp; Chongye Feng </p><dl class="section date"><dt>Date</dt><dd>2022-12-06 </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="acd358a09274931cfe0d07975542eba9c" name="acd358a09274931cfe0d07975542eba9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd358a09274931cfe0d07975542eba9c">&#9670;&#160;</a></span>get_density()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void get_density </td>
+          <td>(</td>
+          <td class="paramtype">std::ifstream &amp;&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::ofstream &amp;&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the density result output to the result file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td></td></tr>
+    <tr><td class="paramname">result</td><td>Line1 n_states; Line2 dims; Line3 counts of states of each step. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="ab7e1a8fce16e8abbb80d5b79fe0fc443" name="ab7e1a8fce16e8abbb80d5b79fe0fc443"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab7e1a8fce16e8abbb80d5b79fe0fc443">&#9670;&#160;</a></span>get_periodic_index()</h2>
 

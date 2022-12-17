@@ -2,7 +2,7 @@
  * @file CAdatatypes.h
  * @author Trevor Oldham (trevoldham@berkeley.edu)
  *
- * <b>Contributor(s)</b> <br> &emsp;&emsp; Emmanuel Cortes
+ * <b>Contributor(s)</b> <br> &emsp;&emsp; Emmanuel Cortes, Chongye Feng
  * @brief  This file contains the custom datatypes used
  * in the Cellular Automata project
  * @date 2022-12-03
@@ -18,6 +18,9 @@
 #include <algorithm> // max_element
 #include <utility>   // pair
 #include <cmath>     // pow
+
+// File path of the output data log
+const std::string FILE_PATH = "Data/data.csv";
 
 /**
  * @brief counter type for determining which cell state is the majority
@@ -57,6 +60,7 @@ namespace CAEnums
     /**
      * @brief enum containing the different type of rules
      * the CellularAutomata class supports for it's transitions
+     * 
      */
     enum Rule
     {
@@ -719,6 +723,75 @@ private:
         return neighborhood_cells;
     }
 
+    /**
+     * @brief The universal method that writing the output data in a log file
+     *
+     * @return int - error code\n
+     * CellsAreNull: neither vector, matrix, nor tensor are initialized\n
+     * 0: no error
+     */
+    int append_log()
+    {
+        std::ofstream file;
+        file.open(FILE_PATH, std::ios::app);
+
+        if (vector != nullptr)
+        {
+            for (int i = 0; i < axis1_dim; i++)
+            {
+                file << vector[i].state << ",";
+            }
+        }
+        else if (matrix != nullptr)
+        {
+            for (int j = 0; j < axis1_dim; j++)
+            {
+                for (int k = 0; k < axis2_dim; k++)
+                {
+                    file << matrix[j][k].state << ",";
+                }
+            }
+        }
+        else if (tensor != nullptr)
+        {
+            for (int i = 0; i < axis1_dim; i++)
+            {
+                for (int j = 0; j < axis2_dim; j++)
+                {
+                    for (int k = 0; k < axis3_dim; k++)
+                    {
+                        file << tensor[i][j][k].state << ",";
+                    }
+                }
+            }
+        }
+        else
+        {
+            return CAEnums::CellsAreNull;
+        }
+        file << "\n";
+        file.close();
+        return (0);
+    }
+
+    /**
+     * @brief Create a log file (.csv) for data output
+     *
+     */
+    int create_log(void)
+    {
+        std::ofstream file;
+        file.open(FILE_PATH, std::ios::trunc | std::ios::out); // If it is pre-existing content, it should be erased
+
+        file << this->num_states << ",\n"; // First Line: Number of the states.
+        // Rule and function
+        file << this->axis1_dim << ","
+             << this->axis2_dim << ","
+             << this->axis3_dim << ",\n"; // Second Line: Dimensions of each axis.
+        file.close();
+        return 0;
+    }
+
 public:
     /**
      * @brief Get the vector cell grid
@@ -921,6 +994,7 @@ public:
             next_vector[j].state = fill_value;
         }
 
+        create_log();
         return 0;
     }
 
@@ -968,6 +1042,7 @@ public:
             }
         }
 
+        create_log();
         return 0;
     }
 
@@ -1026,6 +1101,7 @@ public:
             }
         }
 
+        create_log();
         return 0;
     }
 
@@ -1161,13 +1237,11 @@ public:
         {
             // store the main cell's index in cell_index for custom rule type
             index_size = 2;
-            int cell_index[index_size];
 #ifdef ENABLE_OMP
 #pragma omp parallel for firstprivate(error_code) private(new_cell_state)
 #endif
             for (int i = 0; i < axis1_dim; i++)
             {
-                cell_index[0] = i; // store the i-th index
                 for (int j = 0; j < axis2_dim; j++)
                 {
                     int cell_index[index_size] = {i, j};
@@ -1247,6 +1321,8 @@ public:
         }
 
         steps_taken++;
+        // Appending the step to the file log
+        error_code = append_log();
         return error_code;
     }
 
@@ -1434,6 +1510,16 @@ int CellularAutomata<int>::set_new_cell_state(int *cell_index, int index_size,
  */
 template <>
 int CellularAutomata<int>::print_grid();
+
+/**
+ * @brief The universal method that writing the output data in a log file
+ *
+ * @return int - error code\n
+ * CellsAreNull: neither vector, matrix, nor tensor are initialized\n
+ * 0: no error
+ */
+template <>
+int CellularAutomata<int>::append_log();
 
 /**
  * @brief Simulates a cellular automata step.

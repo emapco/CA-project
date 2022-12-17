@@ -2,13 +2,15 @@
  * @file cellularautomata.cpp
  * @author Trevor Oldham (trevoldham@berkeley.edu)
  *
- * <b>Contributor(s)</b> <br> &emsp;&emsp; Emmanuel Cortes
+ * <b>Contributor(s)</b> <br> &emsp;&emsp; Emmanuel Cortes, Chongye Feng
  * @brief This file contains the class CellularAutomata functions declared in CAdatatypes.h
  * @date 2022-12-03
  */
 #include "CAdatatypes.h"
 #include "CAutils.h"
 #include <iostream>
+#include <fstream>
+#include <string> // for log file output
 #include <array>
 #include <random>        // srand, rand
 #include <ctime>         // time
@@ -115,6 +117,7 @@ int CellularAutomata<int>::setup_dimensions_1d(int axis1_dim, int fill_value)
         next_vector[j] = fill_value;
     }
 
+    create_log();
     return 0;
 }
 
@@ -152,6 +155,7 @@ int CellularAutomata<int>::setup_dimensions_2d(int axis1_dim, int axis2_dim, int
         }
     }
 
+    create_log();
     return 0;
 }
 
@@ -199,6 +203,7 @@ int CellularAutomata<int>::setup_dimensions_3d(int axis1_dim, int axis2_dim, int
         }
     }
 
+    create_log();
     return 0;
 }
 
@@ -362,6 +367,51 @@ int CellularAutomata<int>::print_grid()
 }
 
 template <>
+int CellularAutomata<int>::append_log()
+{
+    std::ofstream file;
+    file.open(FILE_PATH, std::ios::app);
+
+    if (vector != nullptr)
+    {
+        for (int i = 0; i < axis1_dim; i++)
+        {
+            file << vector[i] << ",";
+        }
+    }
+    else if (matrix != nullptr)
+    {
+        for (int j = 0; j < axis1_dim; j++)
+        {
+            for (int k = 0; k < axis2_dim; k++)
+            {
+                file << matrix[j][k] << ",";
+            }
+        }
+    }
+    else if (tensor != nullptr)
+    {
+        for (int i = 0; i < axis1_dim; i++)
+        {
+            for (int j = 0; j < axis2_dim; j++)
+            {
+                for (int k = 0; k < axis3_dim; k++)
+                {
+                    file << tensor[i][j][k] << ",";
+                }
+            }
+        }
+    }
+    else
+    {
+        return CAEnums::CellsAreNull;
+    }
+    file << "\n";
+    file.close();
+    return (0);
+}
+
+template <>
 int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &))
 {
     int error_code = 0;       // store error code return by other methods
@@ -494,5 +544,7 @@ int CellularAutomata<int>::step(void(custom_rule)(int *, int, int *, int, int &)
     }
 
     steps_taken++;
+    // Appending the step to the file log
+    error_code = append_log();
     return error_code;
 }
