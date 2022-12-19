@@ -15,16 +15,15 @@ def plot_last(log_file: str):
         # Read the second line (which contains the shape of the tensor)
         shape_line = next(reader)
         # Convert the shape line to a list of integers
-        shape = [int(x) for x in shape_line]
+        shape = [int(x) for x in shape_line[0:3]]
+        size = shape[0] * shape[1] * shape[2]
         data_line = None
         for line in reader:
             data_line = line
         # Convert the data line to a NumPy array
-        data = np.array(data_line)
+        data = np.array(data_line[:size])
         # Reshape the data into a tensor with the specified shape
         tensor = np.reshape(data, shape)
-        # Select all elements of the tensor that are not equal to 0
-        tensor = tensor[tensor != 0]
     # Get the x, y, and z coordinates for each element in the tensor
     x, y, z = np.indices((shape[0], shape[1], shape[2]))
     # Flatten the coordinates into 1D arrays
@@ -47,8 +46,8 @@ def plot_step(result_file: str):
     n_steps = 0
     with open(result_file,'r') as f:
         reader = csv.reader(f)
-        # We do not need the n_state in this function
-        n_states = next(reader)
+        # We need the number of states in the CA
+        n_states = int(next(reader)[0])
         for i in range(n_states):
             sublist = []
             data.append(sublist)
@@ -58,9 +57,12 @@ def plot_step(result_file: str):
             for i in range(n_states):
                 data[i].append(line[i])
     fig, ax = plt.subplots()
+    x = []
+    for i in range(n_steps):
+        x.append(i)
     # Plot the lines
     for i in range(n_states):
-        ax.plot(n_steps, data[0], label=f'Line {i}')
+        ax.plot(x,data[i], label=f'Line {i}')
     ax.legend(loc='upper left')
     plt.show()
 
@@ -76,16 +78,15 @@ def plot_last_galaxy(log_file: str):
         # Read the second line (which contains the shape of the tensor)
         shape_line = next(reader)
         # Convert the shape line to a list of integers
-        shape = [int(x) for x in shape_line]
+        shape = [int(x) for x in shape_line[0:3]]
+        size = shape[0] * shape[1] * shape[2]
         data_line = None
         for line in reader:
             data_line = line
         # Convert the data line to a NumPy array
-        data = np.array(data_line)
+        data = np.array(data_line[:size])
         # Reshape the data into a tensor with the specified shape
         tensor = np.reshape(data, shape)
-        # Select all elements of the tensor that are not equal to 0
-        tensor = tensor[tensor != 0]
     # Get the x, y, and z coordinates for each element in the tensor
     x, y, z = np.indices((shape[0], shape[1], shape[2]))
     # Flatten the coordinates into 1D arrays
